@@ -1,7 +1,8 @@
-from Elements import RobotPhase
-from Elements import Position
+from RoboticArmControl.Elements import RobotPhase
+from RoboticArmControl.Elements import Position as pos
 import numpy as np
-from BrickModule import Brick
+from RoboticArmControl.BrickModule import Brick
+import RoboticArmControl.CalArmPath as cal
 
 class Robot:
 
@@ -9,18 +10,23 @@ class Robot:
         self.phase = RobotPhase.STOP
         self.working = None
         self.next = None
-        self.angles = [0.0, 0.0, 0.0]
+        self.curAngles = [0.0, 0.0, 0.0]
+        self.nextAngles = [0.0, 0.0, 0.0]
         self.center = None
+        self.curPos=pos()
+        self.nextPos=pos()
 
-    def lift(self):
-        self.calAngles()
+    def lift(self,pos):
+        self.nextPos=pos
+        angles=cal.calNextAngle(self.curPos,self.nextPos);
+        self.curPos=pos
+
         # communicate with robot arm
-        self.center = self.working.src
+        # send robot arm the next Angle
 
     def move(self):
         # communicate with robot arm
         self.center = self.working.dst
 
-    def calAngles(self):
+    def setNextAngle(self):
         pass
-

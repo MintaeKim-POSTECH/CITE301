@@ -1,3 +1,4 @@
+import RoboticArmControl as rc
 from RoboticArmControl.Elements import Phase
 from RoboticArmControl.Elements import Position
 
