@@ -5,4 +5,4 @@ l2=140.0
 cor=29.0
 
 def calNextAngle(curPos,nextPos):
-    pass
+    return [0.0,0.0,0.0]

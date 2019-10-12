@@ -1,3 +1,5 @@
 import numpy as np
 
-def
+class armClient:
+    def __init__(self):
+        pass
