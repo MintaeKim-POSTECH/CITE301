@@ -1,7 +1,7 @@
 import numpy as np
-from BrickModule import Brick
-from Elements import Position as Pos
-from Elements import Phase
+from RoboticArmControl.BrickModule import Brick
+from RoboticArmControl.Elements import Position as Pos
+from RoboticArmControl.Elements import Phase
 
 class Layer:
     def __init__(self):

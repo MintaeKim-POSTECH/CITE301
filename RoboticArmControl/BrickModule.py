@@ -1,5 +1,5 @@
-from Elements import Phase
-from Elements import Position
+from RoboticArmControl.Elements import Phase
+from RoboticArmControl.Elements import Position
 
 minDist = 10.0
 
