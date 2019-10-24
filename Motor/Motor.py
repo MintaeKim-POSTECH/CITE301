@@ -32,7 +32,8 @@ import time
             t = 1.000 / vel
             return t / totalStep
 
-
+        def getSmoothVel(self,maxVel,target,cur):
+            return 1/(1+9*(cur/target)(cur/target))
 
         def move(self, angle, vel,smooth):
             if (angle + self.curAng < self.minAng or angle + self.curAng < self.maxAng) and self.maxAng != 0:
@@ -61,7 +62,8 @@ import time
                     counter += 1
             else:
                 while counter < stp:
-                    delay=
+                    v=self.getSmoothVel(vel,stp/2,stp/2-counter)
+                    delay=self.getDelay(v)
                     gpio.output(24, True)
                     time.sleep(delay)
                     gpio.output(24, False)
