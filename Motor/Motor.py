@@ -9,7 +9,7 @@ class Motor:
 
     def __init__(self, angPerSt, gear,maxAng=0.0, minAng=0.0):
         self.dir = 'right'  # direction of rotate, right=clockwise
-        self.curAng = 0.00  # current angle, For robot arm positioning & coorection error of movility
+        #self.curAng = 0.00  # current angle, For robot arm positioning & coorection error of movility
         self.angPerSt = angPerSt  # stepper motor configuration
         self.gear = gear  # geared stpper motor configuration, when it 2 times slow down, then value is 2.00
         self.maxAng = maxAng  # maximun Angle that stepper can rotate, it's for robotArm
