@@ -57,8 +57,7 @@ class Motor:
         else:
             gpio.output(self.dirPin, False)
             self.curAng -= (stp * self.angPerSt)
-        print(stp)
-        print(delay)
+
         stp_origin = stp
         stp = abs(stp)
         if(not smooth):
