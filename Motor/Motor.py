@@ -2,7 +2,7 @@
 # Cotrolling with A4988 and Rasberry Pi 3 B
 
 import sys
-import RPi.GPIO as gpio  # https://pypi.python.org/pypi/RPi.GPIO more info
+#import RPi.GPIO as gpio  # https://pypi.python.org/pypi/RPi.GPIO more info
 import time
 
 class Motor:
@@ -18,11 +18,11 @@ class Motor:
         self.stpPin = 0
 
     def set(self,dirPin, stpPin):
-        gpio.setmode(gpio.BCM)
-        gpio.setup(dirPin, gpio.OUT)  # setting gpio, dirPin controls direction of motor
-        gpio.setup(stpPin, gpio.OUT)  # stpPin controls step number of motor, you must set connect pin on rasberry Pi 3B
-        gpio.output(dirPin, True)
-        gpio.output(stpPin, False)
+        #gpio.setmode(gpio.BCM)
+        #gpio.setup(dirPin, gpio.OUT)  # setting gpio, dirPin controls direction of motor
+        #gpio.setup(stpPin, gpio.OUT)  # stpPin controls step number of motor, you must set connect pin on rasberry Pi 3B
+        #gpio.output(dirPin, True)
+        #gpio.output(stpPin, False)
 
         # Updating dir/stp Pins
         self.dirPin = dirPin
@@ -42,6 +42,10 @@ class Motor:
         return 1/(1+9*(cur/target)(cur/target))
 
     def move(self, angle, vel,smooth):
+        print("motor thread")
+        return True
+
+        '''
         if (angle + self.curAng < self.minAng or angle + self.curAng < self.maxAng) and self.maxAng != 0:
             return False
 
@@ -78,7 +82,8 @@ class Motor:
                 time.sleep(delay)
                 counter += 1
         return True
+        '''
 
     def __del__(self):
         print()
-        gpio.cleanup()
+        #gpio.cleanup()

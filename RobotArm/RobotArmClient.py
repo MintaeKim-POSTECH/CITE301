@@ -1,22 +1,23 @@
 import numpy as np
 
 from Motor.Motor import Motor
-#import RPi.GPIO as gpio
+import RPi.GPIO as gpio
 import math
 import operator
 import threading
 
 class armClient:
     def __init__(self ,dirPins, stpPins, maxAngles, minAngles,servoPin):
-        self.curAngles = [0.0, 0.0, 0.0]
+        a=calAngle(49.0,-9.0)
+        self.curAngles=[a[0],a[1],0.0]
         self.motorList = []
         self.slice=50
         self.ratio=5.0 #ratio of rotation,  second motor rotates robot arm indirect wat
-        #gpio.setmode(gpio.BCM)
-        #gpio.setup(servoPin, gpio.OUT)
+        gpio.setmode(gpio.BCM)
+        gpio.setup(servoPin, gpio.OUT)
 
-        #self.servoPwm = gpio.PWM(servoPin, 50)
-        #self.servoPwm.start(0)
+        self.servoPwm = gpio.PWM(servoPin, 50)
+        self.servoPwm.start(0)
 
         for i in range(0, 3):
             motor = Motor(1.8, 50.0, 0.0, 0.0)
@@ -53,13 +54,11 @@ class armClient:
     def work(self,target,lift):
         self.rotate(target[2])
         self.moveInDirectLine(self.curAngles[0],self.curAngles[1],target[0],target[1],self.slice)
-        '''
         if lift:
             self.servoPwm.ChangeDutyCycle(3)
         else:
             self.servoPwm.ChangeDutyCycle(12)
         self.moveInDirectLine(target[0], target[1],self.curAngles[0], self.curAngles[1],self.slice)
-        '''
     def initPos(self):
         pass
 
