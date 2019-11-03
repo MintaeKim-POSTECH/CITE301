@@ -9,7 +9,7 @@ class Motor:
 
     def __init__(self, angPerSt, gear,maxAng=0.0, minAng=0.0):
         self.dir = 'right'  # direction of rotate, right=clockwise
-        #self.curAng = 0.00  # current angle, For robot arm positioning & coorection error of movility
+        self.curAng = 0.00  # current angle, For robot arm positioning & coorection error of movility
         self.angPerSt = angPerSt  # stepper motor configuration
         self.gear = gear  # geared stpper motor configuration, when it 2 times slow down, then value is 2.00
         self.maxAng = maxAng  # maximun Angle that stepper can rotate, it's for robotArm
@@ -18,11 +18,11 @@ class Motor:
         self.stpPin = 0
 
     def set(self,dirPin, stpPin):
-        #gpio.setmode(gpio.BCM)
-        #gpio.setup(dirPin, gpio.OUT)  # setting gpio, dirPin controls direction of motor
-        #gpio.setup(stpPin, gpio.OUT)  # stpPin controls step number of motor, you must set connect pin on rasberry Pi 3B
-        #gpio.output(dirPin, True)
-        #gpio.output(stpPin, False)
+        gpio.setmode(gpio.BCM)
+        gpio.setup(dirPin, gpio.OUT)  # setting gpio, dirPin controls direction of motor
+        gpio.setup(stpPin, gpio.OUT)  # stpPin controls step number of motor, you must set connect pin on rasberry Pi 3B
+        gpio.output(dirPin, True)
+        gpio.output(stpPin, False)
 
         # Updating dir/stp Pins
         self.dirPin = dirPin
@@ -30,7 +30,7 @@ class Motor:
 
     def getStep(self, angle):
         stp = int(angle / self.angPerSt)
-        return stp
+        return abs(stp)
 
     def getDelay(self, vel):
         # rotation per sec => step/s
@@ -39,13 +39,13 @@ class Motor:
         return t / totalStep
 
     def getSmoothVel(self,maxVel,target,cur):
-        return 1/(1+9*(cur/target)(cur/target))
+        return 1/(1+(cur/target)(cur/target))
 
     def move(self, angle, vel,smooth):
         print("motor thread")
         return True
 
-        '''
+
         if (angle + self.curAng < self.minAng or angle + self.curAng < self.maxAng) and self.maxAng != 0:
             return False
 
@@ -54,6 +54,8 @@ class Motor:
         delay = self.getDelay(vel*self.gear)
         stp = self.getStep(angle*self.gear)
         counter = 0
+        if(stp==0):
+            return False
 
         if angle >= 0.0:
             gpio.output(self.dirPin, True)
@@ -62,8 +64,7 @@ class Motor:
             gpio.output(self.dirPin, False)
             self.curAng -= (stp * self.angPerSt)
 
-        stp_origin = stp
-        stp = abs(stp)
+
         if(not smooth):
             delay=self.getDelay(vel*self.gear)
             while counter < stp:
@@ -82,7 +83,7 @@ class Motor:
                 time.sleep(delay)
                 counter += 1
         return True
-        '''
+
 
     def __del__(self):
         print()
