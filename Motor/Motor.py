@@ -82,10 +82,6 @@ class Motor:
                 counter += 1
         gpio.output(self.stpPin, False)
         return True
-    
-    def motor_end(self):
-        gpio.output(self.dirPin, False)
-        gpio.output(self.stpPin, False)
         
     def __del__(self):
         print()

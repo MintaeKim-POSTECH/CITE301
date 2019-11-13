@@ -1,0 +1,33 @@
+# Server IP Address
+SERVER_IP_ADDR: 141.223.196.122
+SERVER_PORT: 8080
+
+# Maximum buffer size
+MAX_BUF_SIZE: 1024
+
+# ---- Robot Arm Configuration ----
+# Maximum # of robots connected
+ROBOT_ARM_COLOR: (0, 0, 0)
+
+# GPIO Pins
+## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
+## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
+GPIO_DIRPINS: [19, 27, 5, 23] # GPIO DIR PINS
+GPIO_STPPINS: [26, 22, 6, 24] # GPIO STEPPER PINS
+
+# Motor Configurations
+MOTOR_ANG_PER_SEC: 1.8
+MOTOR_GEAR: 1.0
+
+# Default Max Velocity for each operation
+VEL_DEFAULT_MAX_FORWARD: 1.5
+VEL_DEFAULT_MAX_RIGHT: 1.5
+VEL_DEFAULT_MAX_ROTATION: 1.5
+# ---- Robot Arm Configuration ----
+
+# ---- Server Configuration ----
+# Maximum # of robots connected
+MAX_ROBOT_CONNECTED: 2
+
+ROBOT_ARM_COLORS: []
+# ---- Server Configuration ----

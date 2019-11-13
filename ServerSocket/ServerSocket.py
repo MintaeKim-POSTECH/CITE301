@@ -9,24 +9,13 @@
 # For Multi-Threading & Usage of Synchronization (Semaphore, Lock)
 import threading
 import socket
-
-# ------ Configuration ------
-# Server IP Address
-SERVER_IP_ADDR = '141.223.196.122'
-SERVER_PORT = 8080
-
-# Maximum # of robots connected
-MAX_ROBOT_CONNECTED = 2
-
-# Maximum buffer size
-MAX_BUF_SIZE = 1024
-
-# Sticker Color Initiation (Generalized in CITD IV)
-ROBO_ARM_COLOR = {}
-# ------ Configuration ------
+import yaml
 
 # Saving Socket List
 SOCKET_LIST = []
+
+# Configurations
+config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 ## -- Shared Objects (Connection Infos) --
 # Shared Objects are often implemented by inner class, as an encapsulated models.
@@ -121,4 +110,5 @@ def run_server():
     sock.close()
 
 if __name__ == '__main__':
+    config = yaml.load(codecs.open("../Config.yaml", "r", "euc-kr"))
     run_server()

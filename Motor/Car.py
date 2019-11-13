@@ -89,4 +89,3 @@ class Car:
 # Multi-threading
 def wheel_move(wheel, angle, vel):
     wheel.move(angle, vel, smooth=False)
-    wheel.motor_end()
