@@ -58,8 +58,10 @@ class Motor:
 
         if angle > 0.0:
             gpio.output(self.dirPin, True)
+            print("True")
         else:
             gpio.output(self.dirPin, False)
+            print("False")
 
         if (not smooth):
             delay = self.getDelay(vel * self.gear)
@@ -78,8 +80,13 @@ class Motor:
                 gpio.output(self.stpPin, False)
                 time.sleep(delay)
                 counter += 1
+        gpio.output(self.stpPin, False)
         return True
-
+    
+    def motor_end(self):
+        gpio.output(self.dirPin, False)
+        gpio.output(self.stpPin, False)
+        
     def __del__(self):
         print()
         # gpio.cleanup()

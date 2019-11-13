@@ -6,17 +6,17 @@ import threading
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
-GPIO_DIRPINS = [23, 27, 5, 13] # GPIO DIR PINS
-GPIO_STPPINS = [24, 22, 6, 26] # GPIO STEPPER PINS
+GPIO_DIRPINS = [19, 27, 5, 23] # GPIO DIR PINS
+GPIO_STPPINS = [26, 22, 6, 24] # GPIO STEPPER PINS
 
 # Motor Configurations
 MOTOR_ANG_PER_SEC = 1.8
 MOTOR_GEAR = 1.0
 
-# Rotation per one move_* or rotation operation
-ANGLE_PER_ONE_OPS_FRONT = 10
-ANGLE_PER_ONE_OPS_RIGHT = 5
-ANGLE_PER_ONE_OPS_ROTATION = 5
+# Default Max Velocity for each operation
+VEL_DEFAULT_MAX_FORWARD = 1.0
+VEL_DEFAULT_MAX_RIGHT = 1.0
+VEL_DEFAULT_MAX_ROTATION = 1.0
 
 class Car:
     # Class Constructor
@@ -28,8 +28,8 @@ class Car:
 
             self.wheels.append(wheel)
 
-    # Move forward (backwards for - linear_velocity)
-    def move_forward (self, linear_velocity, angle = ANGLE_PER_ONE_OPS_FRONT) :
+    # Move forward (backwards for -angle)
+    def move_forward (self, angle, linear_velocity = VEL_DEFAULT_MAX_FORWARD) :
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
@@ -47,8 +47,8 @@ class Car:
         # TODO : Return Current Position
         return None
 
-    # Move Right (left for - linear_velocity)
-    def move_right(self, linear_velocity, angle = ANGLE_PER_ONE_OPS_RIGHT):
+    # Move Right (left for -angle)
+    def move_right(self, angle, linear_velocity = VEL_DEFAULT_MAX_RIGHT):
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
@@ -69,8 +69,8 @@ class Car:
         # TODO : Return Current Position
         return None
 
-    # Rotation Clockwise (Counter-clockwise for - angular_velocity)
-    def rotate (self, angular_velocity, angle = ANGLE_PER_ONE_OPS_ROTATION):
+    # Rotation Clockwise (Counter-clockwise for -angle)
+    def rotate (self, angle, angular_velocity = VEL_DEFAULT_MAX_ROTATION):
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
@@ -93,4 +93,5 @@ class Car:
 
 # Multi-threading
 def wheel_move(wheel, angle, vel):
-    wheel.move(angle, vel, smooth=True)
+    wheel.move(angle, vel, smooth=False)
+    wheel.motor_end()
