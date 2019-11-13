@@ -55,27 +55,6 @@ class Layer:
 
 
 # test
+'''
 
-layer = Layer()
-
-for i in range(10):
-    tmp = Brick()
-    tmp.pos.setPos(np.array([float(i), 0.0, 0.0]))
-    layer.addBrick(tmp)
-
-print(len(layer.brickList))
-
-for i in range(10):
-    print(layer.brickList[i].pos.getPos())
-
-print(layer.calCenter())
-
-b = Brick()
-b.pos.setPos(np.array([1.0, 0.0, 0.0]))
-layer.stackBrick(b)
-b.pos.setPos(np.array([2.0, 0.0, 0.0]))
-layer.stackBrick(b)
-
-print(len(layer.brickList))
-print(layer.calCenter())
-print(len(layer.stackedList))
+'''
