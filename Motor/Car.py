@@ -2,34 +2,29 @@
 
 from Motor import Motor
 import threading
+import yaml
+
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
-GPIO_DIRPINS = [19, 27, 5, 23] # GPIO DIR PINS
-GPIO_STPPINS = [26, 22, 6, 24] # GPIO STEPPER PINS
 
-# Motor Configurations
-MOTOR_ANG_PER_SEC = 1.8
-MOTOR_GEAR = 1.0
-
-# Default Max Velocity for each operation
-VEL_DEFAULT_MAX_FORWARD = 1.0
-VEL_DEFAULT_MAX_RIGHT = 1.0
-VEL_DEFAULT_MAX_ROTATION = 1.0
+# Configurations
+config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class Car:
     # Class Constructor
     def __init__(self):
+        print (config)
         self.wheels = []
         for i in range(4):
-            wheel = Motor(MOTOR_ANG_PER_SEC, MOTOR_GEAR)
-            wheel.set(GPIO_DIRPINS[i], GPIO_STPPINS[i])
+            wheel = Motor(config["MOTOR_ANG_PER_SEC"], config["MOTOR_GEAR"])
+            wheel.set(config["GPIO_DIRPINS"][i], config["GPIO_STPPINS"][i])
 
             self.wheels.append(wheel)
 
     # Move forward (backwards for -angle)
-    def move_forward (self, angle, linear_velocity = VEL_DEFAULT_MAX_FORWARD) :
+    def move_forward (self, angle, linear_velocity = config["VEL_DEFAULT_MAX_FORWARD"]) :
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
@@ -48,7 +43,7 @@ class Car:
         return None
 
     # Move Right (left for -angle)
-    def move_right(self, angle, linear_velocity = VEL_DEFAULT_MAX_RIGHT):
+    def move_right(self, angle, linear_velocity = config["VEL_DEFAULT_MAX_RIGHT"]):
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
@@ -70,7 +65,7 @@ class Car:
         return None
 
     # Rotation Clockwise (Counter-clockwise for -angle)
-    def rotate (self, angle, angular_velocity = VEL_DEFAULT_MAX_ROTATION):
+    def rotate (self, angle, angular_velocity = config["VEL_DEFAULT_MAX_ROTATION"]):
         wheels_process_list = []
         # Initiation of concurrent programming
         for i in range(4):
