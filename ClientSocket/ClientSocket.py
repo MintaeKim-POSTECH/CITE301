@@ -13,14 +13,14 @@ path_for_car = os.path.join(path_for_car, 'Motor')
 sys.path.append(path_for_car)
 
 # Modify if this invokes error
-# from Car import Car
+from Car import Car
 # --- Import Motor/Car.py ---
 
 clientSock = socket(AF_INET, SOCK_STREAM)
 clientSock.connect((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
 # New Car Module
-# car = Car()
+car = Car()
 
 # TOOD : Action for robot arms
 while (True) :
