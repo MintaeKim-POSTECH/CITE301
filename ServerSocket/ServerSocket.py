@@ -110,5 +110,4 @@ def run_server():
     sock.close()
 
 if __name__ == '__main__':
-    config = yaml.load(codecs.open("../Config.yaml", "r", "euc-kr"))
     run_server()
