@@ -17,6 +17,3 @@ import cv2
 # Step 4 : Calculation of Trajectories
 # Assumptions that two robot arm trajectories don't have ant conflicts!
 # Elaboration in CITD IV
-
-
-# Step 5 : Update Instructions of ConnectionInfos

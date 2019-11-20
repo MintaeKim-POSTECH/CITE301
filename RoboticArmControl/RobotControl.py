@@ -2,7 +2,7 @@ from RoboticArmControl.Elements import RobotPhase
 from RoboticArmControl.Elements import Position as pos
 import numpy as np
 from RoboticArmControl.BrickModule import Brick
-import RoboticArmControl.CalArmPath as cal
+import RoboticArmControl.CalArmPath_Test as cal
 import Motor.Motor
 
 

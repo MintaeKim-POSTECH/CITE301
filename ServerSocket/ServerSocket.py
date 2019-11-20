@@ -17,93 +17,51 @@ SOCKET_LIST = []
 # Configurations
 config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-## -- Shared Objects (Connection Infos) --
-# Shared Objects are often implemented by inner class, as an encapsulated models.
-# Shared Objects are private to others.
-# These shared objects must be modified by public methods in class.
-# Refer to Operation System Class (CSED312)
 class ConnectionInfos :
     def __init__ (self) :
         self.armList_conn = []
-        self.armList_inst = []
 
-        # (sema_isHeld, sema_isChanged)
-        self.armList_condvar = []
+        for i in range(config["MAX_ROBOT_CONNECTED"]) :
+            self.armList_conn.append(None)
 
-        # Locks for Critical Sections
-        self.lock = threading.Lock()
-    def action_conn(self, conn):
-        self.lock.acquire()
-
+    def action_conn(self, conn, robot_arm_num, robot_arm_color):
         # Adding current connection to the list.
-        self.armList_conn.append(conn)
-        self.armList_inst.append(None)
-
-        # condVar_isChanged
-        condvar_isChanged = threading.Condition(self.lock)
-        self.armList_condvar.append(condvar_isChanged)
+        self.armList_conn[robot_arm_num] = conn
 
         # For Iterating while loop, get the instructions from image
         while True :
-            # <ASSUMPTIONS>
-            # TODO : Connect ROBOT ARM IN IMAGES and ROBOT ARM CONNECTED BY SOCKET
-            ### TODO : Assumptions must be implemented correctly! (By Color)
+            # Calculate the next instructions by Task Manager
+            next_instruction = fetchNextTask(robot_arm_num)
 
-            # ------------------------------
-            # Fetch position of current robot by CVs
-            # Calculate the next instructions
-            nextInstruction = self.armList_inst[robot_idx]
-            # ------------------------------
+            conn.sendall(next_instruction.decode())
+            end_msg = conn.recv(config["MAX_BUF_SIZE"]).decode()
 
-            # TODO : Exit Condition (Exit Instruction) or All Tasks Done
-            ### TODO : What should be done in exit condition?
-            # TODO : Send instructions if valid
-            conn.send(nextInstruction)
+            # TODO: Saving Position Information with CVs
+            updatePosition(robot_arm_num, robot_arm_color)
 
-            # After one task is finished, the client will send a message "INST_DONE"
-            # If it is not "INST_DONE", then it should be terminated
-            end_msg = conn.recv(MAX_BUF_SIZE)
-            end_msg = end_msg.decode('utf-8')
-
-            if (end_msg == "INST_DONE") :
-                condvar_isChanged.wait()
-            else :
-                # Wrong End Message :: Break the loop and exit
-                # TODO : Post-Process Needed?
-                self.lock.release()
+            if (end_msg == "CLIENT_ELIMINATED") :
                 break
-        self.lock.release()
-    def update_instruction(self):
-        self.lock.acquire()
 
-        # By Assumption... We know the robot index (robot_idx)
-        # Update New Instructions allocated by Task Management
-        nextInstruction = fetchInstruction (robot_idx)
-
-        self.armList_inst[robot_idx] = nextInstruction
-        self.armList_condvar[robot_idx].notify()
-
-        self.lock.release()
+        # TODO: Reset infos
+        self.armList_conn[robot_arm_num] = None
 
 conn_status = ConnectionInfos()
-## -- Shared Objects --
 
 # Connection Handler
 def connection_handler(conn, addr, ):
-    # First line is the module info
-    conn_info = conn.recv (MAX_BUF_SIZE)
-    # Data Decoding
-    conn_info = conn_info.decode()
+    # Server Flow 1: First line is the Robot Arm Information info
+    recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
+    robot_arm_num = int(recv_info[0])
+    robot_arm_color = (float(recv_info[1]), float(recv_info[2]), float(recv_info[3]))
 
-    # Actions for Robo_arms
-    conn_status.action_conn(conn)
+    # Server Flow 2: Actions for Robo_arms
+    conn_status.action_conn(conn, robot_arm_num, robot_arm_color)
 
 def run_server():
     serverSock = socket.socket()
-    serverSock.bind(('', SERVER_PORT))
+    serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
     while True:
-        # Consideration of Camera (+ 1)
-        serverSock.listen(MAX_ROBOT_CONNECTED + 1)
+        serverSock.listen(config["MAX_ROBOT_CONNECTED"])
         conn, addr = serverSock.accept()
         t = threading.Thread(target=connection_handler, args=(conn, addr))
         t.start()
@@ -111,3 +69,10 @@ def run_server():
 
 if __name__ == '__main__':
     run_server()
+
+
+## -- Shared Objects (Connection Infos) --
+# Shared Objects are often implemented by inner class, as an encapsulated models.
+# Shared Objects are private to others.
+# These shared objects must be modified by public methods in class.
+# Refer to Operation System Class (CSED312)
