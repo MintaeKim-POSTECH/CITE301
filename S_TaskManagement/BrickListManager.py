@@ -38,18 +38,49 @@ class BrickListManager :
         self.dstCurrentLayer = self.dstLayerList[0]
 
     # -- Critical Section Ensured --
-    def get_next_block_src(self, robot_pos):
-        # TODO: Get Next Source Block based on Position Intormation from srcBricks
+    ## For CITD III, We need an initial position info to seperate two trajectories.
+    ## In CITD IV, We will try to generalize for more than three trajectories.
+    def get_next_block_src(self, robot_obj):
+        # Get Next Source Block based on Position Intormation from srcBricks
+        # Termination Condition
+        if (self.srcLayer.isLayerTasksDone() == True):
+            # Tasks Completed, Returning None
+            return -1
 
-        pass
+        # Searching by O(N)
+        # Find the Nearest Block with Position Information
+        minDist = 10000000.0
+        minBlock = None
 
-    def get_next_block_dest(self, robot_pos):
+        # Getting Nearest Destination Brick
+        for b in self.srcLayer.getEnableBrickList():
+            ## Seperation of Target Blocks (Fixed For CITD III)
+            ## TODO: getPos()[0] ?
+
+            # Right Block Filtering
+            if (robot_obj.getInitPos()[0] < self.srcLayer.getCenter()[0] and b.getPos()[0] > self.srcLayer.getCenter()[0]):
+                continue
+            # Left Block Filtering
+            elif (robot_obj.getInitPos()[0] > self.srcLayer.getCenter()[0] and b.getPos()[0] < self.srcLayer.getCenter()[0]):
+                continue
+
+            if (minDist > b.getPos().calDist(robot_obj.getPos())):
+                minDist = b.getPos().calDist(robot_obj.getPos())
+                minBlock = b
+
+        # Tasks Completed, Returning next destination block
+        # If the robot needs to wait then returns None
+        return minBlock
+
+    ## For CITD III, We need an initial position info to seperate two trajectories.
+    ## In CITD IV, We will try to generalize for more than three trajectories.
+    def get_next_block_dest(self, robot_obj):
         # Get Next Destination Block based on Position Information
         # Termination Condition
         if (self.dstCurrentLayer.isLayerTasksDone() == True) :
             if (self.dstLayerIndex == len(self.dstLayerList) - 1) :
-                # Tasks Completed, Returning Exit Code -2
-                return -2
+                # Tasks Completed, Returning None
+                return -1
             else :
                 # Fetch the next layer
                 self.dstCurrentLayer = self.dstLayerList[self.dstLayerIndex + 1]
@@ -62,8 +93,18 @@ class BrickListManager :
 
         # Getting Nearest Destination Brick
         for b in self.dstCurrentLayer.getEnableBrickList() :
-            if (minDist > b.getPos().calDist(robot_pos)) :
-                minDist = b.getPos().calDist(robot_pos)
+            ## Seperation of Target Blocks (Fixed For CITD III)
+            ## TODO: getPos()[0] ?
+
+            # Right Block Filtering
+            if (robot_obj.getInitPos()[0] < self.dstCurrentLayer.getCenter()[0] and b.getPos()[0] > self.dstCurrentLayer.getCenter()[0]):
+                continue
+            # Left Block Filtering
+            elif (robot_obj.getInitPos()[0] > self.dstCurrentLayer.getCenter()[0] and b.getPos()[0] < self.dstCurrentLayer.getCenter()[0]):
+                continue
+
+            if (minDist > b.getPos().calDist(robot_obj.getPos())) :
+                minDist = b.getPos().calDist(robot_obj.getPos())
                 minBlock = b
 
         # Tasks Completed, Returning next destination block
@@ -71,43 +112,53 @@ class BrickListManager :
         return minBlock
     # -- Critical Section Ensured --
 
-    def select_block(self, robot_obj):
+    def brick_move(self, robot_obj):
         self.cv.acquire()
-        srcBrickSelected = self.get_next_block_src(robot_obj.getPos())
-
-        if (not (srcBrickSelected == None)) :
-            # TODO: Unable Surrounding Block if exists
-
-            robot_obj.stop_src_decided(srcBrickSelected)
+        srcBrickSelected = self.get_next_block_src(robot_obj)
+        if (srcBrickSelected == -1) :
+            pass
+        elif (not (srcBrickSelected == None)) :
+            self.srcLayer.selectBrick(srcBrickSelected)
+            robot_obj.brick_info_move(srcBrickSelected)
             self.cv.notify()
         else :
             # Wait until get_next_block_src is not None
-            while (self.get_next_block_src(robot_obj.getPos()) == None):
+            while (self.get_next_block_src(robot_obj) == None):
                 self.cv.wait()
 
         self.cv.release()
 
-    def block_grabbed(self, robot_obj):
+    def brick_lift(self, robot_obj):
         self.cv.acquire()
-        dstBrickSelected = self.get_next_block_dest(robot_obj.getPos())
+        dstBrickSelected = self.get_next_block_dest(robot_obj)
 
-        if (not (dstBrickSelected == None)) :
+        if (dstBrickSelected == -1) :
+            pass
+        elif (not (dstBrickSelected == None)) :
             self.dstCurrentLayer.selectBrick(dstBrickSelected)
-            robot_obj.lifting_grabbed(dstBrickSelected)
+            robot_obj.brick_info_lift(dstBrickSelected)
             self.cv.notify()
         else :
             # Wait until get_next_block_dst is not None
-            while (self.get_next_block_src(robot_obj.getPos()) == None):
+            while (self.get_next_block_src(robot_obj) == None):
                 self.cv.wait()
 
         self.cv.release()
 
-    def after_released(self, robot_obj):
+    def brick_comeback(self, robot_obj):
         self.cv.acquire()
         robot_obj.getOngoingBlock().done()
-        # TODO: Enable Surrounding Blocks
+        # Enable Surrounding Blocks for SrcBlock
+        self.srcLayer.setBrickAsDone(robot_obj.getOngoingBlock())
 
+        robot_obj.brick_info_comeback()
+        self.cv.release()
+
+    def brick_fin(self, robot_obj):
+        self.cv.acquire()
+        # Enable Surrounding Blocks for DstBlock
         self.dstCurrentLayer.setBrickAsDone(robot_obj.getDstBlock())
-        robot_obj.stacking_released()
+
+        robot_obj.brick_info_fin()
         self.cv.release()
 ## -- Shared Objects (BrickListManager) --

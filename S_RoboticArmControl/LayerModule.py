@@ -3,8 +3,9 @@ from S_RoboticArmControl.BrickModule import Brick
 from S_RoboticArmControl.Elements import Position as Pos
 from S_RoboticArmControl.Elements import Phase
 
-# Estimated Bobot Size (Setting blocks Unabled)
-ROBOT_BODY_SIZE = 30
+import yaml
+# Configurations
+config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class Layer:
     def __init__(self):
@@ -61,7 +62,7 @@ class Layer:
         for b in self.brickList:
             if (not b.pos.isEqual(brick.pos)) :
                 if (b.getPhase() == Phase.ENABLE) :
-                    if (b.getPos().calDist(brick.getPos()) < ROBOT_BODY_SIZE) :
+                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE"]) :
                         b.unable()
 
     # Mark brick as done
@@ -72,7 +73,7 @@ class Layer:
         for b in self.brickList:
             if (not b.pos.isEqual(brick.pos)) :
                 if (b.getPhase() == Phase.ENABLE) :
-                    if (b.getPos().calDist(brick.getPos()) < ROBOT_BODY_SIZE) :
+                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE"]) :
                         b.enable()
 
     # Returns True if all tasks in this layer are done

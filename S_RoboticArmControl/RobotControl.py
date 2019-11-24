@@ -25,18 +25,76 @@ class Robot:
         self.cur_arm_angle = [0.0, 0.0, 0.0]
         self.next_arm_angle = [0.0, 0.0, 0.0]
 
-    def stop_src_decided(self, srcBrick):
+        # Initial Position
+        ## For CITD III, We need an initial position info to seperate two trajectories.
+        ## In CITD IV, We will try to generalize for more than three trajectories.
+        self.initial_pos = pos()
+
+        # Color
+        self.color = None
+
+    def brick_info_move(self, srcBrick):
+        self.phase = RobotPhase.MOVING
+
         self.brick_src = srcBrick
 
-    def lifting_grabbed(self, dstBrick):
+    def brick_info_lift(self, dstBrick):
+        self.phase = RobotPhase.LIFTING
+
+        self.brick_dst = dstBrick
         self.brick_ongoing = self.brick_src
         self.brick_src = None
-        self.brick_dst = dstBrick
 
-    def stacking_released(self):
+    def brick_info_stack(self):
+        self.phase = RobotPhase.STACKING
+
+    def brick_info_comeback(self):
+        self.phase = RobotPhase.COMEBACK
+
         self.brick_ongoing = None
         self.brick_dst = None
 
+    def brick_info_fin(self):
+        self.phase = RobotPhase.STOP
+
+    def isQueueEmpty(self):
+        return (len(self.next_inst_queue) == 0)
+    def push_inst(self, new_inst):
+        self.next_inst_queue.append(new_inst)
+    def pop_inst(self):
+        if (self.isQueueEmpty()):
+            return None
+        self.cur_inst = self.next_inst_queue[0]
+        self.next_inst_queue.remove(self.cur_inst)
+
+    # Initial Position
+    ## For CITD III, We need an initial position info to seperate two trajectories.
+    ## In CITD IV, We will try to generalize for more than three trajectories.
+    def setInitPos(self, init_pos):
+        # TODO: init_pos is 3-tuple (X, Y, Z)
+        # TODO: Implement
+        pass
+    def getInitPos(self):
+        return self.initial_pos
+
+    def setPos(self, pos):
+        self.cur_pos = pos
+    def getPos(self):
+        return self.cur_pos
+
+    def setColor(self, color):
+        self.color = color
+    def getColor(self):
+        return self.color
+
+    def getOngoingBlock(self):
+        return self.brick_ongoing
+    def getDstBlock(self):
+        return self.brick_dst
+    def getCurrentInst(self):
+        return self.cur_inst
+
+'''
     def setMotorPin(self):
         pass
     def lift(self, pos):
@@ -46,10 +104,4 @@ class Robot:
             # communicate with robot arm
             # send robot arm the next Angle
         pass
-
-    def getPos(self):
-        return self.cur_pos
-    def getOngoingBlock(self):
-        return self.brick_ongoing
-    def getDstBlock(self):
-        return self.brick_dst
+'''

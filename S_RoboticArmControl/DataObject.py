@@ -35,6 +35,10 @@ class DB:
                 h = dst.pos.pos[2]
             l.addBrick(dst)
 
+        # Calculation of Dst Layer Center
+        for layer in self.layerList :
+            layer.calCenter()
+
         def compare(b1, b2):
             if b1.src:
                 return b1.pos.upper(b2.pos)
@@ -42,5 +46,7 @@ class DB:
                 return not b1.pos.upper(b2.pos)
         self.srcBricks.sort()
         self.dstBricks.sort()
+
+        # TODO: Return (self.scrLayer, self.dstlayerList)
 
         return (self.srcBricks, self.dstBricks, self.layerList)
