@@ -1,6 +1,6 @@
-import RoboticArmControl as rc
-from RoboticArmControl.Elements import Phase
-from RoboticArmControl.Elements import Position
+import S_RoboticArmControl as rc
+from S_RoboticArmControl.Elements import Phase
+from S_RoboticArmControl.Elements import Position
 
 minDist = 10.0
 
@@ -10,18 +10,25 @@ class Brick:
         self.src = True
         self.pos = Position()
         self.phase = Phase.NULL
+        self.unableStack = 0
 
     def enable(self):
-        self.phase = Phase.ENABLE
+        self.unableStack = self.unableStack - 1
+        if (self.unableStack == 0) :
+            self.phase = Phase.ENABLE
 
     def unable(self):
         self.phase = Phase.UNABLE
+        self.unableStack = self.unableStack + 1
 
     def working(self):
         self.phase = Phase.WORKING
 
     def done(self):
         self.phase = Phase.DONE
+
+    def getPos(self):
+        return self.pos
 
     def getPhase(self):
         return self.phase

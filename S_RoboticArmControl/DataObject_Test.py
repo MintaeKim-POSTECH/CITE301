@@ -1,8 +1,8 @@
-from RoboticArmControl.LayerModule import Layer
-from RoboticArmControl.Elements import Position
-from RoboticArmControl.BrickModule import Brick
+from S_RoboticArmControl.LayerModule import Layer
+from S_RoboticArmControl.Elements import Position
+from S_RoboticArmControl.BrickModule import Brick
 import numpy as np
-from RoboticArmControl.dataOb import DB
+from S_RoboticArmControl.DataObject import DB
 
 
 #Layer Test

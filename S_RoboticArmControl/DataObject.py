@@ -1,6 +1,6 @@
-from RoboticArmControl.LayerModule import Layer
-from RoboticArmControl.Elements import Position
-from RoboticArmControl.BrickModule import Brick
+from S_RoboticArmControl.LayerModule import Layer
+from S_RoboticArmControl.Elements import Position
+from S_RoboticArmControl.BrickModule import Brick
 import json
 
 class DB:
@@ -42,3 +42,5 @@ class DB:
                 return not b1.pos.upper(b2.pos)
         self.srcBricks.sort()
         self.dstBricks.sort()
+
+        return (self.srcBricks, self.dstBricks, self.layerList)

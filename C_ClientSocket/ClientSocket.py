@@ -4,17 +4,17 @@ import yaml
 # Configurations
 config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-# --- Import Motor/Car.py ---
+# --- Import C_Motor/Car.py ---
 import os
 import sys
 
 path_for_car = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_car = os.path.join(path_for_car, 'Motor')
+path_for_car = os.path.join(path_for_car, 'C_Motor')
 sys.path.append(path_for_car)
 
 # Modify if this invokes error
 from Car import Car
-# --- Import Motor/Car.py ---
+# --- Import C_Motor/Car.py ---
 
 def run_client() :
     clientSock = socket(AF_INET, SOCK_STREAM)

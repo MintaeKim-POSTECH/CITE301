@@ -1,4 +1,4 @@
-from Motor import Motor
+from C_Motor import Motor
 import time
 
 motor = Motor(1.8, 1.0)

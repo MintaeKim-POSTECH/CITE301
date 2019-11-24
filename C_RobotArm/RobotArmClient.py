@@ -1,6 +1,6 @@
 import numpy as np
 
-from Motor import Motor
+from C_Motor import Motor
 
 import RPi.GPIO as gpio
 

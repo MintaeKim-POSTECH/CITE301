@@ -1,6 +1,6 @@
 # Reference : https://www.youtube.com/watch?v=o-j9TReI1aQ&app=desktop
 
-from Motor import Motor
+from C_Motor import Motor
 import threading
 import yaml
 

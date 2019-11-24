@@ -18,7 +18,7 @@ ROBOT_ARM_COLOR: (240, 0, 0)
 GPIO_DIRPINS: [19, 27, 5, 23] # GPIO DIR PINS
 GPIO_STPPINS: [26, 22, 6, 24] # GPIO STEPPER PINS
 
-# Motor Configurations
+# C_Motor Configurations
 MOTOR_ANG_PER_SEC: 1.8
 MOTOR_GEAR: 1.0
 
@@ -31,6 +31,4 @@ VEL_DEFAULT_MAX_ROTATION: 1.5
 # ---- Server Configuration ----
 # Maximum # of robots connected
 MAX_ROBOT_CONNECTED: 2
-
-ROBOT_ARM_COLORS: []
 # ---- Server Configuration ----

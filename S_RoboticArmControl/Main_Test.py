@@ -1,8 +1,8 @@
-from RoboticArmControl.Elements import RobotPhase
-from RoboticArmControl.LayerModule import Layer
-from RoboticArmControl.Elements import Position
+from S_RoboticArmControl.Elements import RobotPhase
+from S_RoboticArmControl.LayerModule import Layer
+from S_RoboticArmControl.Elements import Position
 import numpy as np
-from RoboticArmControl.BrickModule import Brick
+from S_RoboticArmControl.BrickModule import Brick
 import json
 
 with open('data.txt') as j:

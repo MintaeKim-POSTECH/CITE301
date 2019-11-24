@@ -15,6 +15,7 @@ class RobotPhase(Enum):
     MOVING = 1
     LIFTING = 2
     STACKING = 3
+    COMEBACK = 4
 
 
 class Position:
