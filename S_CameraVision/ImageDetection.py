@@ -13,7 +13,7 @@ def saveImages(imageManager):
         imageManager.update()
         time.sleep(1)
 
-def updatePosition(imageManager):
+def updatePosition(robot_obj, imageManager):
     ### TODO : FAILURE ?
     # Step 0 : Get the most recent image from directory Images
     frame_cal = cv2.imread(imageManager.getRecentImageDir())
@@ -21,8 +21,6 @@ def updatePosition(imageManager):
     # Step 1 : Detect Points with Particular Color
 
     # Step 2 : Indicate the Center Point of Robot Arms with infos from Step 1
-
-    ### TODO : Correspondance between images and conn
 
     # Step 3 : Drawing Squares or Rectangles
 

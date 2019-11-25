@@ -27,6 +27,7 @@ im = None
 ## Python signal handlers are always executed in the main Python thread,
 ## even if the signal was received in another thread.
 def sigint_handler(sig, frame) :
+    global t_child_saveImages, t_child_runServer, t_grandchild_list
     signal.pthread_kill(t_child_saveImages, signal.SIGKILL)
     for t_grandchild in t_grandchild_list :
         signal.pthread_kill(t_grandchild, signal.SIGKILL)
@@ -34,6 +35,7 @@ def sigint_handler(sig, frame) :
     sys.exit(0)
 
 def sigchld_handler(sig, frame):
+    global t_child_saveImages, t_child_runServer, t_grandchild_list
     dead_thread_pid = os.waitpid(-1, 0)
     for t_grandchild in t_grandchild_list :
         if (t_grandchild == dead_thread_pid) :
@@ -51,6 +53,7 @@ if __name__ == "__main__" :
     signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager
+    global im
     im = ImageManager()
 
     # Initiation of t_grandchild

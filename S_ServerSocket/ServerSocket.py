@@ -65,7 +65,8 @@ class RobotInfos :
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
         # Reset Current Position & Direction Information
-        updatePosition(self.roboInfoList[robot_arm_num])
+        global im
+        updatePosition(self.roboInfoList[robot_arm_num], im)
 
         # TODO: Push Initial Instructions based on Infos (Move to Initial Position)
 
@@ -87,7 +88,8 @@ class RobotInfos :
             self.armList_conn[robot_arm_num].sendall(next_instruction.decode())
             end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
 
-            updatePosition(self.roboInfoList[robot_arm_num])
+            global im
+            updatePosition(self.roboInfoList[robot_arm_num], im)
 
             if (end_msg == "CLIENT_ELIMINATED") :
                 break
@@ -123,6 +125,7 @@ def run_server(_im, t_grandchild_list):
     serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
     # Initializing Status Informations & Task Manager
+    global tm, im, robot_status, t_list
     tm = TaskManager()
     im = _im
     robot_status = RobotInfos()
