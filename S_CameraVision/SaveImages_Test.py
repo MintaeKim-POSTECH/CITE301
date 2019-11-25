@@ -33,14 +33,12 @@ while (True):
     if (ret != True):
         break
     
-    if (frame_num % PROCESS_FRAME_INTERVAL == 0) :
-        # Callibration
-        frame_cal = Callibration(frame)
+    if (frame_num % PROCESS_FRAME_INTERVAL == 0 and frame_num > 0) :
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
 
-        cv2.imwrite('./Images/' + str(int (frame_num / 25)) + '.jpg', frame)
+        cv2.imwrite('./Images/' + str(int (frame_num / PROCESS_FRAME_INTERVAL)) + '.jpg', frame)
 
     frame_num = frame_num + 1
     
