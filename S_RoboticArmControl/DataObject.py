@@ -47,6 +47,6 @@ class DB:
         self.srcBricks.sort()
         self.dstBricks.sort()
 
-        # TODO: Return (self.scrLayer, self.dstlayerList)
+        # TODO: Return (self.srcLayer, self.dstlayerList)
 
         return (self.srcBricks, self.dstBricks, self.layerList)

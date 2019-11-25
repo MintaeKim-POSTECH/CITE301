@@ -24,6 +24,7 @@ def run_client() :
     car = Car()
 
     # Client Flow 1 : Send Robot_Arm Number & Color Data
+    # TODO: ADD
     infoDat = str(config["ROBOT_ARM_NUM"]) + " " + str(config["ROBOT_ARM_COLOR"][0]) + " "
     infoDat += str(config["ROBOT_ARM_COLOR"][1]) + " " + str(config["ROBOT_ARM_COLOR"][2])
 
@@ -44,20 +45,14 @@ def run_client() :
             print("right " + recv_inst_tok[1])
             car.move_right(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'ARM') :
-            # TODO: ARM arg[1] arg[2] arg[3]
+            # TODO: ARM arg[1] arg[2] arg[3] state
             pass
-        elif (recv_inst_tok[0] == 'GRAB') :
-            # TODO : GRAB
-            pass
-        elif (recv_inst_tok[0] == 'RELEASE') :
-            # TODO : RELEASE
-            pass
-        elif (recv_inst_tok[0] == 'EXIT') : # Jobs Done
-            break
+        # elif (recv_inst_tok[0] == 'EXIT') : # Jobs Done
+            # break
 
         # Noticing Current Task is totally done.
         clientSock.sendall("DONE".encode())
-    clientSock.sendall("CLIENT_ELIMINATED".encode())
+    # clientSock.sendall("CLIENT_ELIMINATED".encode())
 
 if __name__ == "__main__" :
     run_client()

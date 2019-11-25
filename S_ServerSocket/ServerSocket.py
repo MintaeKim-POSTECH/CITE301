@@ -90,9 +90,7 @@ class RobotInfos :
 
             global im
             updatePosition(self.roboInfoList[robot_arm_num], im)
-
-            if (end_msg == "CLIENT_ELIMINATED") :
-                break
+            # TODO: Callibration
 
         # Exit Condition - Reset infos
         self.armList_conn[robot_arm_num] = None
@@ -105,19 +103,19 @@ im = None
 # Robot Status Information
 robot_status = None
 
-# Thread Lists
-t_list = None
-
 # Connection Handler
 def connection_handler(conn, addr, ):
     # Server Flow 1: First line is the Robot Arm Information info
     recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
     robot_arm_num = int(recv_info[0])
+    # TODO: Already exists? then exit
+
     robot_arm_color = (float(recv_info[1]), float(recv_info[2]), float(recv_info[3]))
     robot_arm_init_pos = (float(recv_info[4]), float(recv_info[5]))
 
     # Server Flow 2: Actions for Robo_arms
     robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos)
+    # TODO : WAIT until user starts
     robot_status.action_conn(robot_arm_num)
 
 def run_server(_im, t_grandchild_list):
@@ -125,11 +123,10 @@ def run_server(_im, t_grandchild_list):
     serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
     # Initializing Status Informations & Task Manager
-    global tm, im, robot_status, t_list
+    global tm, im, robot_status
     tm = TaskManager()
     im = _im
     robot_status = RobotInfos()
-    t_list = []
 
     # Setting Timeout as 5 seconds
     serverSock.settimeout(5)

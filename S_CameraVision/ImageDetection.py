@@ -5,6 +5,8 @@ import yaml
 import time
 from ImageManager import ImageManager
 
+# TODO: import Robot_Obj Library
+
 # Configurations
 config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
 

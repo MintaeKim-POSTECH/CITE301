@@ -14,7 +14,6 @@ class Robot:
         self.brick_dst = None
 
         # Robot Wheel Information
-        self.center = None
         self.cur_pos = pos()
 
         # Instruction Queue
