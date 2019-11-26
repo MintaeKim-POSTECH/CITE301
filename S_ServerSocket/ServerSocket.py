@@ -60,7 +60,7 @@ class RobotInfos :
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
-        self.roboInfoList[robot_arm_num].setColor(robot_arm_color)
+        self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
 
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
@@ -110,7 +110,7 @@ def connection_handler(conn, addr, ):
     robot_arm_num = int(recv_info[0])
     # TODO: Already exists? then exit
 
-    robot_arm_color = (float(recv_info[1]), float(recv_info[2]), float(recv_info[3]))
+    robot_arm_color = [float(recv_info[1]), float(recv_info[2]), float(recv_info[3])]
     robot_arm_init_pos = (float(recv_info[4]), float(recv_info[5]))
 
     # Server Flow 2: Actions for Robo_arms

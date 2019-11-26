@@ -30,7 +30,7 @@ class Robot:
         self.initial_pos = pos()
 
         # Color
-        self.color = None
+        self.color_rgb = None
 
     def brick_info_move(self, srcBrick):
         self.phase = RobotPhase.MOVING
@@ -76,15 +76,17 @@ class Robot:
     def getInitPos(self):
         return self.initial_pos
 
-    def setPos(self, pos):
-        self.cur_pos = pos
+    def setPos_position(self, pos):
+        self.cur_pos.setPos(pos)
+    def setPos_angle(self, angle):
+        self.cur_pos.setDir(angle)
     def getPos(self):
         return self.cur_pos
 
-    def setColor(self, color):
-        self.color = color
-    def getColor(self):
-        return self.color
+    def setColorRGB(self, color_rgb):
+        self.color_rgb = color_rgb
+    def getColorRGB(self):
+        return self.color_rgb
 
     def getOngoingBlock(self):
         return self.brick_ongoing

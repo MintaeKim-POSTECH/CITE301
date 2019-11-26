@@ -9,8 +9,8 @@ MAX_BUF_SIZE: 1024
 # Robot Number (Starts from 0)
 ROBOT_ARM_NUM: 0
 
-# Color of Sticker for CV Detection
-ROBOT_ARM_COLOR: (240, 0, 0)
+# Color of Sticker for CV Detection (RGB)
+ROBOT_ARM_COLOR: [240, 0, 0]
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
@@ -49,10 +49,17 @@ RESOLUTION_HEIGHT: 480
 # Frame to process (time)
 PROCESS_FRAME_INTERVAL: 25
 
-# Estimated Bobot Size (Pixel) (Setting blocks Unabled)
-ROBOT_BODY_SIZE: 30
-
 # Distance per pixel / Calculation for Camera Callibration & Instruction
 # Requires some experiments
-DISTANCE_PER_PIXEL: 0.02541
+# 1 Pixel : X mm
+MM_PER_PIXEL: 73
+
+# Distance between Center Position and Head Sticker (cm)
+CENTER_DIST_FROM_STICKER_MM: 3
+
+# Estimated Bobot Size (mm) (Blocks Unabled)
+ROBOT_BODY_SIZE_MM: 30
+
+# Color Sensitivity (HSV - Hue)
+COLOR_SENSITIVITY: 25
 # ---- Server Configuration ----

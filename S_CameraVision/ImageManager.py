@@ -1,4 +1,4 @@
-# Reference by...
+# Referenced by...
 # https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_gui/py_video_display/py_video_display.html
 import cv2
 import yaml
@@ -42,17 +42,17 @@ class ImageManager:
         if (self.frame_num % config["PROCESS_FRAME_INTERVAL"] == 0):
             cv2.imwrite('./Images/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '.jpg', self.frame)
 
-            # TODO: Callibration
-            self.frame_cal = None
-
-            cv2.imwrite('./Images_C/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '_C.jpg', self.frame_cal)
+            ## Callibration ----- GIVE UP
+            ## As height and width changes, it is hard to re-calculate DISTANCE_PER_PIXEL every time.
+            # self.frame_cal = None
+            # cv2.imwrite('./Images_C/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '_C.jpg', self.frame_cal)
 
         self.frame_num = self.frame_num + 1
         self.lock.release()
 
-    def getRecentImageDir(self):
+    def getRecentImageName(self):
         self.lock.acquire()
-        img_dir = './Images_C/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '_C.jpg'
+        img_dir = str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '.jpg'
         self.lock.release()
         return img_dir
 

@@ -1,5 +1,8 @@
 # Referenced by ...
 # https://docs.python.org/3/library/signal.html
+# https://python.bakyeono.net/chapter-3-4.html
+# https://docs.python.org/3/library/socket.html#socket.timeout
+# https://docs.python.org/ko/3.8/library/os.html#os.WNOHANG
 import threading
 import signal
 from S_ServerSocket import ServerSocket

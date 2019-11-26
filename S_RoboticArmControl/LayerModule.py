@@ -62,7 +62,7 @@ class Layer:
         for b in self.brickList:
             if (not b.pos.isEqual(brick.pos)) :
                 if (b.getPhase() == Phase.ENABLE) :
-                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE"]) :
+                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE_MM"]) :
                         b.unable()
 
     # Mark brick as done
@@ -73,7 +73,7 @@ class Layer:
         for b in self.brickList:
             if (not b.pos.isEqual(brick.pos)) :
                 if (b.getPhase() == Phase.ENABLE) :
-                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE"]) :
+                    if (b.getPos().calDist(brick.getPos()) < config["ROBOT_BODY_SIZE_MM"]) :
                         b.enable()
 
     # Returns True if all tasks in this layer are done
