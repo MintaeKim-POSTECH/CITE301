@@ -150,11 +150,11 @@ def updatePosition(robot_obj, imageManager):
 
     # Saving Information in Robot Object
     robot_cent_XY_mm_obj = []
-    robot_cent_XY_mm_obj[:] = robot_cent_XY_mm[:]
+    robot_cent_XY_mm_obj.extend(robot_cent_XY_mm)
     robot_cent_XY_mm_obj.append(0)
     robot_obj.setPos_position(robot_cent_XY_mm_obj)
     dir_vector_unit_obj = []
-    dir_vector_unit_obj[:] = dir_vector_unit[:]
+    dir_vector_unit_obj.extend(dir_vector_unit)
     dir_vector_unit_obj.append(0)
     robot_obj.setPos_angle(dir_vector_unit_obj)
 

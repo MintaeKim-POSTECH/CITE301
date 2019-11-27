@@ -28,12 +28,16 @@ class BrickListManager :
     def __init__(self):
         # Fetch Brick Lists by Database
         db = DB('./S_RoboticArmControl/data.txt')
-        (self.srcLayer, self.dstLayerList) = db.getData()
+        (self.srcLayerList, self.dstLayerList) = db.getData()
 
         # Block Reference Condition Variable
         self.cv = threading.Condition()
 
-        # Initiation of Layer Information
+        # Initiation of Src Layer Information
+        self.srcLayerIndex = 0
+        self.srcCurrentLayer = self.srcLayerList[0]
+
+        # Initiation of Dst Layer Information
         self.dstLayerIndex = 0
         self.dstCurrentLayer = self.dstLayerList[0]
 
@@ -41,11 +45,16 @@ class BrickListManager :
     ## For CITD III, We need an initial position info to seperate two trajectories.
     ## In CITD IV, We will try to generalize for more than three trajectories.
     def get_next_block_src(self, robot_obj):
-        # Get Next Source Block based on Position Intormation from srcBricks
+        # Get Next Source Block based on Position Information
         # Termination Condition
-        if (self.srcLayer.isLayerTasksDone() == True):
-            # Tasks Completed, Returning None
-            return -1
+        if (self.srcCurrentLayer.isLayerTasksDone() == True):
+            if (self.srcLayerIndex == len(self.srcLayerList) - 1):
+                # Tasks Completed, Returning None
+                return -1
+            else:
+                # Fetch the next layer
+                self.srcCurrentLayer = self.srcLayerList[self.srcLayerIndex + 1]
+                self.srcLayerIndex = self.srcLayerIndex + 1
 
         # Searching by O(N)
         # Find the Nearest Block with Position Information
@@ -53,15 +62,15 @@ class BrickListManager :
         minBlock = None
 
         # Getting Nearest Destination Brick
-        for b in self.srcLayer.getEnableBrickList():
+        for b in self.srcCurrentLayer.getEnableBrickList():
             ## Seperation of Target Blocks (Fixed For CITD III)
             ## TODO: getPos()[0] ?
 
             # Right Block Filtering
-            if (robot_obj.getInitPos()[0] < self.srcLayer.getCenter()[0] and b.getPos()[0] > self.srcLayer.getCenter()[0]):
+            if (robot_obj.getInitPos()[0] < self.srcCurrentLayer.getCenter()[0] and b.getPos()[0] > self.srcCurrentLayer.getCenter()[0]):
                 continue
             # Left Block Filtering
-            elif (robot_obj.getInitPos()[0] > self.srcLayer.getCenter()[0] and b.getPos()[0] < self.srcLayer.getCenter()[0]):
+            elif (robot_obj.getInitPos()[0] > self.srcCurrentLayer.getCenter()[0] and b.getPos()[0] < self.srcCurrentLayer.getCenter()[0]):
                 continue
 
             if (minDist > b.getPos().calDist(robot_obj.getPos())):
@@ -118,7 +127,7 @@ class BrickListManager :
         if (srcBrickSelected == -1) :
             pass
         elif (not (srcBrickSelected == None)) :
-            self.srcLayer.selectBrick(srcBrickSelected)
+            self.srcCurrentLayer.selectBrick(srcBrickSelected)
             robot_obj.brick_info_move(srcBrickSelected)
             self.cv.notify()
         else :
@@ -149,7 +158,7 @@ class BrickListManager :
         self.cv.acquire()
         robot_obj.getOngoingBlock().done()
         # Enable Surrounding Blocks for SrcBlock
-        self.srcLayer.setBrickAsDone(robot_obj.getOngoingBlock())
+        self.srcCurrentLayer.setBrickAsDone(robot_obj.getOngoingBlock())
 
         robot_obj.brick_info_comeback()
         self.cv.release()
