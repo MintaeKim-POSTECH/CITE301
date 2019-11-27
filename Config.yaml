@@ -54,7 +54,7 @@ PROCESS_FRAME_INTERVAL: 25
 
 # TODO: Experimental Decision
 # 1 Pixel : X mm
-MM_PER_PIXEL: 73
+MM_PER_PIXEL: 0.3
 # 1 MM : Y Degree (Wheel)
 DEGREE_PER_MM_FORWARD: 0.3
 DEGREE_PER_MM_RIGHT : 0.5
