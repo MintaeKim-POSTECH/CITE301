@@ -31,23 +31,23 @@ im = None
 ## even if the signal was received in another thread.
 def sigint_handler(sig, frame) :
     global t_child_saveImages, t_child_runServer, t_grandchild_list
-    signal.pthread_kill(t_child_saveImages.get_ident(), signal.SIGKILL)
+    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
     for t_grandchild in t_grandchild_list :
-        signal.pthread_kill(t_grandchild.get_ident(), signal.SIGKILL)
-    signal.pthread_kill(t_child_runServer.get_ident(), signal.SIGKILL)
+        signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
+    signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
     sys.exit(0)
 
 def sigchld_handler(sig, frame):
     global t_child_saveImages, t_child_runServer, t_grandchild_list
     dead_thread_pid = os.waitpid(-1, 0)
     for t_grandchild in t_grandchild_list :
-        if (t_grandchild.get_ident() == dead_thread_pid) :
+        if (t_grandchild.ident == dead_thread_pid) :
             t_grandchild_list.remove(t_grandchild)
             return
 
-    if (t_child_saveImages.get_ident() == dead_thread_pid) :
+    if (t_child_saveImages.ident == dead_thread_pid) :
         t_child_saveImages = None
-    elif (t_child_runServer.get_ident() == dead_thread_pid) :
+    elif (t_child_runServer.ident == dead_thread_pid) :
         t_child_runServer = None
 
 
