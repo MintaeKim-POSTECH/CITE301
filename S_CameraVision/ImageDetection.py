@@ -81,14 +81,15 @@ def updatePosition(robot_obj, imageManager):
 
     # Masking - Morphology (Clustering)
     kernel = np.ones((11, 11), np.uint8)
-    mask_morph = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-    mask_morph = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask_morph_open = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    mask_morph = cv2.morphologyEx(mask_morph_open, cv2.MORPH_CLOSE, kernel)
 
     # Filtered Image Frame
-    frame_filtered = cv2.bitwise_and(frame_bgr, frame_bgr, mask=mask)
+    frame_filtered = cv2.bitwise_and(frame_bgr, frame_bgr, mask=mask_morph)
+    cv2.imwrite("./S_CameraVision/Images_Box/Filtered/" + image_name, frame_filtered)
 
     # Labeling - Clustering
-    numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(frame_filtered)
+    numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(mask_morph)
 
     # Fetch Indices of Stickers
     sticker_indices = []
