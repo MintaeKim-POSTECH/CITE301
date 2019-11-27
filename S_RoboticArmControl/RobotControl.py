@@ -1,9 +1,5 @@
 from S_RoboticArmControl.Elements import RobotPhase
 from S_RoboticArmControl.Elements import Position as pos
-import numpy as np
-from S_RoboticArmControl.BrickModule import Brick
-import S_RoboticArmControl.CalArmPath_Test as cal
-import C_Motor.Motor
 
 class Robot:
     def __init__(self):
@@ -73,9 +69,8 @@ class Robot:
     ## For CITD III, We need an initial position info to seperate two trajectories.
     ## In CITD IV, We will try to generalize for more than three trajectories.
     def setInitPos(self, init_pos):
-        # TODO: init_pos is 3-tuple (X, Y, Z)
-        # TODO: Implement
-        pass
+        init_pos.append(0)
+        self.initial_pos.setPos(init_pos)
     def getInitPos(self):
         return self.initial_pos
 
