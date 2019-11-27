@@ -118,13 +118,10 @@ def updatePosition(robot_obj, imageManager):
     # TODO: While Loop until passes assert condition
 
     ## Step 2 : Indicate the Center Point of Robot Arms with infos from Step 1
-    # Calculate distances between two indices, and pick the nearest one.
-    def calc_dist_square(p1, p2):
-        return ((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
-    d0_1 = calc_dist_square(sticker_indices[0], sticker_indices[1])
-    d1_2 = calc_dist_square(sticker_indices[2], sticker_indices[1])
-    d0_2 = calc_dist_square(sticker_indices[0], sticker_indices[2])
+    d0_1 = np.sum((np.array(sticker_indices[0:1])) ** 2)
+    d1_2 = np.sum((np.array(sticker_indices[1:2])) ** 2)
+    d0_2 = np.sum((np.array([sticker_indices[0], sticker_indices[2]])) ** 2)
     dist = [d0_1, d0_2, d1_2]
 
     point_head = None
@@ -141,15 +138,19 @@ def updatePosition(robot_obj, imageManager):
 
     # Calculation of Direction Vector & Center
     # Direction Vector
-    mid_point = (point_shoulder[0] + point_shoulder[1]) / 2
-    dir_vector = point_head - mid_point
-    dir_vector_size = dir_vector[0] ** 2 + dir_vector[1] ** 2
+    mid_point = np.array(point_shoulder[0]) + np.array(point_shoulder[1])
+    mid_point = mid_point / 2
+    dir_vector = np.array(point_head) - mid_point
+    dir_vector_size = np.sum(dir_vector ** 2)
     dir_vector_unit = dir_vector / dir_vector_size
 
     # Center Position Data
-    robot_cent_XY_pixel = point_head + dir_vector_unit * config["CENTER_DIST_FROM_STICKER_MM"] / config["MM_PER_PIXEL"]
+    robot_cent_XY_pixel_np = np.array(point_head) + dir_vector_unit * config["CENTER_DIST_FROM_STICKER_MM"] / config["MM_PER_PIXEL"]
+    robot_cent_XY_pixel = np.ndarray.tolist(robot_cent_XY_pixel_np)
+
     # TODO: Convert pixel into mm
-    robot_cent_XY_mm = None
+    # TODO: Delete (Testing Purpose Only)
+    robot_cent_XY_mm = [50, 50]
 
     # Saving Information in Robot Object
     robot_cent_XY_mm_obj = []
