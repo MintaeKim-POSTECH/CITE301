@@ -56,7 +56,6 @@ if __name__ == "__main__" :
     signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager
-    global im
     im = ImageManager()
 
     # Initiation of t_grandchild
