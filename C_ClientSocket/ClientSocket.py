@@ -56,7 +56,7 @@ def run_client() :
             # break
 
         # Noticing Current Task is totally done.
-        time.sleep(5)
+        time.sleep(2)
         clientSock.sendall("DONE".encode())
     # clientSock.sendall("CLIENT_ELIMINATED".encode())
 

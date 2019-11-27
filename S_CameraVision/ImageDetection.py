@@ -42,6 +42,7 @@ def updatePosition(robot_obj, imageManager):
         if (frame_bgr.tolist() == None):
             continue
         else :
+            print ("Re-try")
             break
     print(image_name)
 
