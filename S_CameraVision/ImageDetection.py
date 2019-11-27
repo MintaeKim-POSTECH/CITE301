@@ -31,8 +31,19 @@ def saveImages(imageManager):
 
 def updatePosition(robot_obj, imageManager):
     image_name = imageManager.getRecentImageName()
+
     ## Step 0 : Get the most recent image from directory Images
-    frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
+    frame_bgr = None
+    # Reason for while loop is to ensure that we've successfully fetched image file.
+    # Without the while loop, there was a chance for a case where fetching image failed
+    # because cv2.imwrite was in progress.
+    while True:
+        frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
+        if (not (frame_bgr == None)) :
+            break
+        else :
+            print ("Re-try")
+            continue
     print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
