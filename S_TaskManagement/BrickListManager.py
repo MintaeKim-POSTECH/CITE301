@@ -27,7 +27,7 @@ from RobotControl import Robot
 class BrickListManager :
     def __init__(self):
         # Fetch Brick Lists by Database
-        db = DB()
+        db = DB('./S_RoboticArmControl/data.txt')
         (self.srcLayer, self.dstLayerList) = db.getData()
 
         # Block Reference Condition Variable

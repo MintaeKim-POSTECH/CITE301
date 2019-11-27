@@ -4,7 +4,7 @@ from S_RoboticArmControl.BrickModule import Brick
 import json
 
 class DB:
-    def __init__(self,fileName):
+    def __init__(self, fileName):
         self.fName=fileName
         self.srcBricks = []
         self.dstBricks = []
