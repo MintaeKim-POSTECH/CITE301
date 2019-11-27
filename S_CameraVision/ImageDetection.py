@@ -22,7 +22,7 @@ from RobotControl import Robot
 # --- Import S_RoboticArmControl/RobotControl.py ---
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 def saveImages(imageManager):
     while (True):
@@ -32,7 +32,7 @@ def saveImages(imageManager):
 def updatePosition(robot_obj, imageManager):
     image_name = imageManager.getRecentImageName()
     ## Step 0 : Get the most recent image from directory Images
-    frame_bgr = cv2.imread('./Images/' + image_name)
+    frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
 
     ## Step 1 : Detect Points with Particular Color
     # Converting RGB to HSV - Robot
@@ -107,7 +107,7 @@ def updatePosition(robot_obj, imageManager):
 
         cv2.rectangle(frame_bgr, (x, y), (x + width, y + height), (0, 0, 255))
 
-    cv2.imwrite('./Images_Box/Sticker/' + image_name, frame_bgr)
+    cv2.imwrite('./S_CameraVision/Images_Box/Sticker/' + image_name, frame_bgr)
     # Calculation of Direction Vector & Position
     assert (len(sticker_indices) == 3) # 3 Stickers!
 
@@ -165,4 +165,4 @@ def updatePosition(robot_obj, imageManager):
     thickness = 2
     cv2.circle(frame_bgr, center, radian, color, thickness)
 
-    cv2.imwrite('./Images_Box/Robot/' + image_name, frame_bgr)
+    cv2.imwrite('./S_CameraVision/Images_Box/Robot/' + image_name, frame_bgr)

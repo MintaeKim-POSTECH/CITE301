@@ -5,7 +5,7 @@ from S_RoboticArmControl.Elements import Phase
 
 import yaml
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class Layer:
     def __init__(self):

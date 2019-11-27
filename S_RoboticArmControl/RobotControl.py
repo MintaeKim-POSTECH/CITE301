@@ -60,9 +60,12 @@ class Robot:
         return (len(self.next_inst_queue) == 0)
     def push_inst(self, new_inst):
         self.next_inst_queue.append(new_inst)
+    def push_inst_list(self, new_inst_list):
+        self.next_inst_queue.extend(new_inst_list)
     def pop_inst(self):
         if (self.isQueueEmpty()):
-            return None
+            self.cur_inst = None
+            return
         self.cur_inst = self.next_inst_queue[0]
         self.next_inst_queue.remove(self.cur_inst)
 

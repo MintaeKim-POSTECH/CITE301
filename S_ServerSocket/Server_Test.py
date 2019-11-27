@@ -16,7 +16,7 @@ def connection_handler(conn, addr, n, next_line_tok):
 	if next_line_tok[1] == "EXIT" :
 		data = next_line_tok[1]
 	else :
-		data = next_line_tok[1] + "_" + next_line_tok[2]
+		data = next_line_tok[1] + " " + next_line_tok[2]
 	conn.sendall(data.encode())
 	recv_info = conn.recv(config["MAX_BUF_SIZE"])
 	recv_info = recv_info.decode()

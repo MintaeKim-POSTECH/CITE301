@@ -2,7 +2,7 @@ import yaml
 import threading
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 # --- Import S_RoboticArmControl/LayerModule.py, ... ---
 import os

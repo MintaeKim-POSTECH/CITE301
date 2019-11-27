@@ -5,7 +5,7 @@ import yaml
 import threading
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 ## -- Shared Objects (ImageManager) --
 # Shared Objects are often implemented by inner class, as an encapsulated models.

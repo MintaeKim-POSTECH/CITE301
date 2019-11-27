@@ -15,7 +15,7 @@ import yaml
 SOCKET_LIST = []
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 # --- Import S_RoboticArmControl/RobotControl.py ---
 import os
@@ -56,7 +56,11 @@ class RobotInfos :
             self.armList_conn.append(None)
             self.roboInfoList.append(None)
 
+        # Lock
+        self.lock = threading.Lock()
+
     def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos):
+        self.lock.acquire()
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
@@ -70,6 +74,8 @@ class RobotInfos :
 
         # TODO: Push Initial Instructions based on Infos (Move to Initial Position)
 
+        self.lock.release()
+
     def action_conn(self, robot_arm_num):
         # For Iterating while loop, get the instructions from image
         while True :
@@ -82,7 +88,7 @@ class RobotInfos :
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
-            if (next_instruction == None) :
+            if (next_instruction == "") :
                 break
 
             self.armList_conn[robot_arm_num].sendall(next_instruction.decode())
@@ -90,11 +96,20 @@ class RobotInfos :
 
             global im
             updatePosition(self.roboInfoList[robot_arm_num], im)
-            # TODO: Callibration
+
+        self.lock.acquire()
 
         # Exit Condition - Reset infos
         self.armList_conn[robot_arm_num] = None
         self.roboInfoList[robot_arm_num] = None
+
+        self.lock.release()
+
+    def isRunning(self, robot_num_new):
+        self.lock.acquire()
+        isRun = (not (self.armList_conn[robot_num_new] == None))
+        self.lock.release()
+        return isRun
 
 # Task Manager
 tm = None
@@ -108,10 +123,12 @@ def connection_handler(conn, addr, ):
     # Server Flow 1: First line is the Robot Arm Information info
     recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
     robot_arm_num = int(recv_info[0])
-    # TODO: Already exists? then exit
+    # Robot_arm_number already running? then exit.
+    if (robot_status.isRunning(robot_arm_num)) :
+        return
 
     robot_arm_color = [float(recv_info[1]), float(recv_info[2]), float(recv_info[3])]
-    robot_arm_init_pos = (float(recv_info[4]), float(recv_info[5]))
+    robot_arm_init_pos = [float(recv_info[4]), float(recv_info[5])]
 
     # Server Flow 2: Actions for Robo_arms
     robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos)

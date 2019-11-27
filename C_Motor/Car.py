@@ -10,7 +10,7 @@ import yaml
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class Car:
     # Class Constructor
@@ -19,7 +19,7 @@ class Car:
         self.wheels = []
         for i in range(4):
             wheel = Motor(config["MOTOR_ANG_PER_SEC"], config["MOTOR_GEAR"])
-            wheel.set(config["GPIO_DIRPINS"][i], config["GPIO_STPPINS"][i])
+            wheel.set(config["GPIO_WHEEL_DIRPINS"][i], config["GPIO_WHEEL_STPPINS"][i])
 
             self.wheels.append(wheel)
 
@@ -36,11 +36,6 @@ class Car:
         for i in range(4):
             # Wait the child process to finish
             wheels_process_list[i].join()
-
-        # TODO : Position & Rotation Callibration (using CVs)
-
-        # TODO : Return Current Position
-        return None
 
     # Move Right (left for -angle)
     def move_right(self, angle, linear_velocity = config["VEL_DEFAULT_MAX_RIGHT"]):
@@ -59,11 +54,6 @@ class Car:
             # Wait the child process to finish
             wheels_process_list[i].join()
 
-        # TODO : Position & Rotation Callibration (using CVs)
-
-        # TODO : Return Current Position
-        return None
-
     # Rotation Clockwise (Counter-clockwise for -angle)
     def rotate (self, angle, angular_velocity = config["VEL_DEFAULT_MAX_ROTATION"]):
         wheels_process_list = []
@@ -80,11 +70,6 @@ class Car:
         for i in range(4):
             # Wait the child process to finish
             wheels_process_list[i].join()
-
-        # TODO : Position & Rotation Callibration (using CVs)
-
-        # TODO : Return Current Position
-        return None
 
 # Multi-threading
 def wheel_move(wheel, angle, vel):

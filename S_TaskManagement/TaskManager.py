@@ -1,8 +1,9 @@
 from BrickListManager import BrickListManager
+from Instruction import Instruction
 import yaml
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 # --- Import S_RoboticArmControl/RobotControl.py ---
 import os
@@ -33,8 +34,20 @@ class TaskManager :
     def fetchNextTask(self, robot_obj) :
         if (robot_obj.isQueueEmpty() == True) :
             # TODO: Push new Instructions for each robot_obj phase
+
+            ## Usage :
+            # new_inst_forward = Instruction('FORWARD', [(CALCULATED_MM / config["DEGREE_PER_MM_FORWARD")])
+            # new_inst_right = Instruction('RIGHT', [(CALCULATED_MM / config["DEGREE_PER_MM_RIGHT")])
+            # new_inst_rotate = Instruction('ROTATE', [(CALCULATED_DEGREE / config["DEGREE_PER_MM_ROTATE")])
+            # new_inst_arm = Instruction('ARM', [angle_1, angle_2, angle_3, state(0 or 1)]) (state 0 : grab, 1 : release)
+
+            # robot_obj.push_inst(new_inst)
+            # robot_obj.push_inst_list(new_inst_list)
+
             pass
 
         # Pop_front instruction
         robot_obj.pop_inst()
-        return robot_obj.getCurrentInst()
+        if (robot_obj.getCurrentInst() == None) :
+            return ""
+        return str(robot_obj.getCurrentInst())
