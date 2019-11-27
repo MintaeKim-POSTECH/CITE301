@@ -147,7 +147,7 @@ def updatePosition(robot_obj, imageManager):
     mid_point = np.array(point_shoulder[0]) + np.array(point_shoulder[1])
     mid_point = mid_point / 2
     dir_vector = np.array(point_head) - mid_point
-    dir_vector_size = np.sum(dir_vector ** 2)
+    dir_vector_size = np.sum(dir_vector ** 2) ** 0.5
     dir_vector_unit = dir_vector / dir_vector_size
 
     print ("mid_point : " + str(mid_point))
