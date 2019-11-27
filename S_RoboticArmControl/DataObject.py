@@ -57,7 +57,7 @@ class DB:
         for lay in self.dstLayerList:
             lay.calCenter()
 
-        return (self.srcLayerList, self.dstlayerList)
+        return (self.srcLayerList, self.dstLayerList)
 
 
     def compare(b1, b2):
