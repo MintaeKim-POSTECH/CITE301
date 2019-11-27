@@ -27,7 +27,7 @@ config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 def saveImages(imageManager):
     while (True):
         imageManager.update()
-        time.sleep(0.3)
+        time.sleep(0.1)
 
 def updatePosition(robot_obj, imageManager):
     image_name = imageManager.getRecentImageName()
