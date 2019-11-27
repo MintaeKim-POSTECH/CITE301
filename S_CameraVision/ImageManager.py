@@ -40,12 +40,12 @@ class ImageManager:
             return -1
 
         if (self.frame_num % config["PROCESS_FRAME_INTERVAL"] == 0):
-            cv2.imwrite('./Images/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '.jpg', self.frame)
+            cv2.imwrite('./S_CameraVision/Images/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '.jpg', self.frame)
 
             ## Callibration ----- GIVE UP
             ## As height and width changes, it is hard to re-calculate DISTANCE_PER_PIXEL every time.
             # self.frame_cal = None
-            # cv2.imwrite('./Images_C/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '_C.jpg', self.frame_cal)
+            # cv2.imwrite('./S_CameraVision/Images_C/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '_C.jpg', self.frame_cal)
 
         self.frame_num = self.frame_num + 1
         self.lock.release()

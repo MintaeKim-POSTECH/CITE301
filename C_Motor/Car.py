@@ -18,7 +18,7 @@ class Car:
         print (config)
         self.wheels = []
         for i in range(4):
-            wheel = Motor(config["MOTOR_ANG_PER_SEC"], config["MOTOR_GEAR"])
+            wheel = Motor(config["MOTOR_WHEEL_ANG_PER_SEC"], config["MOTOR_WHEEL_GEAR"])
             wheel.set(config["GPIO_WHEEL_DIRPINS"][i], config["GPIO_WHEEL_STPPINS"][i])
 
             self.wheels.append(wheel)
