@@ -37,7 +37,12 @@ def updatePosition(robot_obj, imageManager):
     # Reason for while loop is to ensure that we've successfully fetched image file.
     # Without the while loop, there was a chance for a case where fetching image failed
     # because cv2.imwrite was in progress.
-    frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
+    while True:
+        frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
+        if (frame_bgr == None):
+            continue
+        else :
+            break
     print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
@@ -48,10 +53,7 @@ def updatePosition(robot_obj, imageManager):
     robot_color_hsv = robot_color_hsv[0][0]
 
     # Converting BGR to HSV - Image
-    try :
-        frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
-    except :
-        print (frame_hsv)
+    frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
 
     # Masking - Color
     mask = None
