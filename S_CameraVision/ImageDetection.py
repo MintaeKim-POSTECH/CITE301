@@ -108,11 +108,13 @@ def updatePosition(robot_obj, imageManager):
 
         cv2.rectangle(frame_bgr, (x, y), (x + width, y + height), (0, 0, 255))
 
-    cv2.imwrite('./S_CameraVision/Images_Box/Sticker/' + image_name, frame_bgr)
-    # Calculation of Direction Vector & Position
-    # assert (len(sticker_indices) == 3) # 3 Stickers!
     # TODO: Delete (Testing Purpose Only)
     sticker_indices = [[250, 250], [400, 400], [400, 150]]
+
+    cv2.imwrite('./S_CameraVision/Images_Box/Sticker/' + image_name, frame_bgr)
+
+    # Calculation of Direction Vector & Position
+    # assert (len(sticker_indices) == 3) # 3 Stickers!
 
     ### TODO : FAILURE ?
     # TODO: While Loop until passes assert condition
