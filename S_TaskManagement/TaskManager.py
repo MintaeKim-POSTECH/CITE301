@@ -36,13 +36,17 @@ class TaskManager :
             # TODO: Push new Instructions for each robot_obj phase
 
             ## Usage :
-            # new_inst_forward = Instruction('FORWARD', [(CALCULATED_MM / config["DEGREE_PER_MM_FORWARD")])
-            # new_inst_right = Instruction('RIGHT', [(CALCULATED_MM / config["DEGREE_PER_MM_RIGHT")])
-            # new_inst_rotate = Instruction('ROTATE', [(CALCULATED_DEGREE / config["DEGREE_PER_MM_ROTATE")])
+            # new_inst_forward = Instruction('FORWARD', [(CALCULATED_MM / config["DEGREE_PER_MM_FORWARD"])])
+            # new_inst_right = Instruction('RIGHT', [(CALCULATED_MM / config["DEGREE_PER_MM_RIGHT"])])
+            # new_inst_rotate = Instruction('ROTATE', [(CALCULATED_DEGREE / config["DEGREE_PER_MM_ROTATE"])])
             # new_inst_arm = Instruction('ARM', [angle_1, angle_2, angle_3, state(0 or 1)]) (state 0 : grab, 1 : release)
 
             # robot_obj.push_inst(new_inst)
             # robot_obj.push_inst_list(new_inst_list)
+
+            # TODO: Delete (Test Purpose Only)
+            new_inst_forward = Instruction('FORWARD', [(50 / config["DEGREE_PER_MM_FORWARD"])])
+            robot_obj.push_inst(new_inst_forward)
 
             pass
 
