@@ -21,3 +21,7 @@ if __name__ == "__main__" :
             time.sleep(2)
             print ("Server Process Aborted")
             continue
+        except TimeoutError:
+            time.sleep(2)
+            print ("Time-Out (No Response)")
+            continue

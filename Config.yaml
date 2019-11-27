@@ -50,7 +50,7 @@ RESOLUTION_WIDTH: 640
 RESOLUTION_HEIGHT: 480
 
 # Frame to process (time)
-PROCESS_FRAME_INTERVAL: 25
+PROCESS_FRAME_INTERVAL: 10
 
 # TODO: Experimental Decision
 # 1 Pixel : X mm
