@@ -30,8 +30,8 @@ class BrickListManager :
         db = DB('./S_RoboticArmControl/data.txt')
         (self.srcLayerList, self.dstLayerList) = db.getData()
 
-        # Block Reference Condition Variable
-        self.cv = threading.Condition()
+        # Block Reference Monitor
+        self.monitor = threading.Condition()
 
         # Initiation of Src Layer Information
         self.srcLayerIndex = 0
@@ -122,23 +122,23 @@ class BrickListManager :
     # -- Critical Section Ensured --
 
     def brick_move(self, robot_obj):
-        self.cv.acquire()
+        self.monitor.acquire()
         srcBrickSelected = self.get_next_block_src(robot_obj)
         if (srcBrickSelected == -1) :
             pass
         elif (not (srcBrickSelected == None)) :
             self.srcCurrentLayer.selectBrick(srcBrickSelected)
             robot_obj.brick_info_move(srcBrickSelected)
-            self.cv.notify()
+            self.monitor.notify()
         else :
             # Wait until get_next_block_src is not None
             while (self.get_next_block_src(robot_obj) == None):
-                self.cv.wait()
+                self.monitor.wait()
 
-        self.cv.release()
+        self.monitor.release()
 
     def brick_lift(self, robot_obj):
-        self.cv.acquire()
+        self.monitor.acquire()
         dstBrickSelected = self.get_next_block_dest(robot_obj)
 
         if (dstBrickSelected == -1) :
@@ -146,28 +146,29 @@ class BrickListManager :
         elif (not (dstBrickSelected == None)) :
             self.dstCurrentLayer.selectBrick(dstBrickSelected)
             robot_obj.brick_info_lift(dstBrickSelected)
-            self.cv.notify()
+            self.monitor.notify()
         else :
             # Wait until get_next_block_dst is not None
             while (self.get_next_block_src(robot_obj) == None):
-                self.cv.wait()
+                self.monitor.wait()
 
-        self.cv.release()
+        self.monitor.release()
 
     def brick_comeback(self, robot_obj):
-        self.cv.acquire()
+        self.monitor.acquire()
         robot_obj.getOngoingBlock().done()
         # Enable Surrounding Blocks for SrcBlock
         self.srcCurrentLayer.setBrickAsDone(robot_obj.getOngoingBlock())
 
         robot_obj.brick_info_comeback()
-        self.cv.release()
+        self.monitor.release()
 
     def brick_fin(self, robot_obj):
-        self.cv.acquire()
+        self.monitor.acquire()
         # Enable Surrounding Blocks for DstBlock
         self.dstCurrentLayer.setBrickAsDone(robot_obj.getDstBlock())
 
         robot_obj.brick_info_fin()
-        self.cv.release()
+        self.monitor.release()
+
 ## -- Shared Objects (BrickListManager) --

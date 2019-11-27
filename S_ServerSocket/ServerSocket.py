@@ -1,6 +1,4 @@
 # Referenced from https://soooprmx.com/archives/8737
-# Referenced from https://wayhome25.github.io/python/2017/02/26/py-14-list/
-# Referenced from https://codechacha.com/ko/how-to-import-python-files/
 
 # Assume that Server IPs are fixed
 # Assume that Camera is connected to Server
@@ -10,117 +8,25 @@
 import threading
 import socket
 import yaml
+import time
 
-# Saving Socket List
-SOCKET_LIST = []
+from SharedRoboList import SharedRoboList
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-# --- Import S_RoboticArmControl/RobotControl.py ---
-import os
-import sys
-path_for_roboAC = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_roboAC = os.path.join(path_for_roboAC, 'S_RoboticArmControl')
-sys.path.append(path_for_roboAC)
+# Checking Termination Condition
+def check_termination(robot_status):
+    while True:
+        if (robot_status.isTasksDone() == True):
+            return
+        # Checking for Every 3 Seconds
+        time.sleep(5)
 
-from RobotControl import Robot
-# --- Import S_RoboticArmControl/RobotControl.py ---
-
-
-# --- Import S_TaskManagement/TaskManager  ---
-path_for_tm = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_tm = os.path.join(path_for_tm, 'S_TaskManagement')
-sys.path.append(path_for_tm)
-
-from TaskManager import TaskManager
-# --- Import S_TaskManagement/TaskManager  ---
-
-
-# --- Import S_CameraVision/ImageManager.py & ImageDetection.py ---
-path_for_CV = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_CV = os.path.join(path_for_CV, 'S_CameraVision')
-sys.path.append(path_for_CV)
-
-from ImageManager import ImageManager
-from ImageDetection import updatePosition
-# --- Import S_CameraVision/ImageManager.py & ImageDetection.py ---
-
-class RobotInfos :
-    def __init__ (self) :
-        self.armList_conn = []
-        # Construction of roboInfoList
-        self.roboInfoList = []
-
-        for i in range(config["MAX_ROBOT_CONNECTED"]) :
-            self.armList_conn.append(None)
-            self.roboInfoList.append(None)
-
-        # Lock
-        self.lock = threading.Lock()
-
-    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos):
-        self.lock.acquire()
-        # Adding current connection to the list.
-        self.armList_conn[robot_arm_num] = conn
-        self.roboInfoList[robot_arm_num] = Robot()
-        self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
-
-        self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
-
-        # Reset Current Position & Direction Information
-        global im
-        updatePosition(self.roboInfoList[robot_arm_num], im)
-
-        # TODO: Push Initial Instructions based on Infos (Move to Initial Position)
-        # tm.pushInitialInstruction(self.roboInfoList[robo_arm_num])
-
-        self.lock.release()
-
-    def action_conn(self, robot_arm_num):
-        # For Iterating while loop, get the instructions from image
-        while True :
-            # Calculate the next instructions by Task Manager
-            ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
-            ## In CITD IV, We will try to generalize for more than three trajectories.
-            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num])
-
-            # If the robot is waiting for the other robot to finish their task,
-            # then this robot would be waiting for a new block by a condition variable in BrickListManager.
-            # That means if next_instruction is None, which means no instruction left in queue
-            # infers that all tasks are done.
-            if (next_instruction == "") :
-                break
-
-            self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
-            end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
-
-            global im
-            updatePosition(self.roboInfoList[robot_arm_num], im)
-
-        self.lock.acquire()
-
-        # Exit Condition - Reset infos
-        self.armList_conn[robot_arm_num] = None
-        self.roboInfoList[robot_arm_num] = None
-
-        self.lock.release()
-
-    def isRunning(self, robot_num_new):
-        self.lock.acquire()
-        isRun = (not (self.armList_conn[robot_num_new] == None))
-        self.lock.release()
-        return isRun
-
-# Task Manager
-tm = None
-# Image Manager
-im = None
-# Robot Status Information
-robot_status = None
+    # Further Handling will be processed in the sigchld handler
 
 # Connection Handler
-def connection_handler(conn, addr, ):
+def connection_handler(conn, addr, tm, im, robot_status):
     # Server Flow 1: First line is the Robot Arm Information info
     recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
     robot_arm_num = int(recv_info[0])
@@ -132,32 +38,28 @@ def connection_handler(conn, addr, ):
     robot_arm_init_pos = [float(recv_info[4]), float(recv_info[5])]
 
     # Server Flow 2: Actions for Robo_arms
-    robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos)
-    # TODO : WAIT until user starts
-    robot_status.action_conn(robot_arm_num)
+    robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im)
+    robot_status.action_conn(robot_arm_num, tm, im)
 
-def run_server(_im, t_grandchild_list):
+def run_server(tm, im, robot_status, t_grandchild_list):
     serverSock = socket.socket()
     serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
-
-    # Initializing Status Informations & Task Manager
-    global tm, im, robot_status
-    tm = TaskManager()
-    im = _im
-    robot_status = RobotInfos()
 
     # Setting Timeout as 5 seconds
     # serverSock.settimeout(5)
     serverSock.settimeout(None)
 
+    t = threading.Thread(target=check_termination, args=(robot_status, ))
+    t.start()
+
+    t_grandchild_list.append((t, "CHECK_TERMINATION"))
+
     # Server Routine
     while True:
         serverSock.listen(config["MAX_ROBOT_CONNECTED"])
         conn, addr = serverSock.accept()
-        t = threading.Thread(target=connection_handler, args=(conn, addr))
+        t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, robot_status))
         t.start()
 
         # Adding Current Thread to grandchild thread list.
-        t_grandchild_list.append(t)
-
-        # Assuming that if all tasks are done, then there would be time-out!
+        t_grandchild_list.append((t, "CONN"))

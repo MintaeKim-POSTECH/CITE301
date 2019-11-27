@@ -8,10 +8,12 @@
 import cv2
 import yaml
 import time
-from ImageManager import ImageManager
 from skimage import io
-
 import numpy as np
+
+from ImageManager import ImageManager
+import ConvertPixel2Real
+
 
 # --- Import S_RoboticArmControl/RobotControl.py ---
 import os
@@ -35,19 +37,20 @@ def updatePosition(robot_obj, imageManager):
     image_name = None
 
     ## Step 0 : Get the most recent image from directory Images
-    frame_bgr = None
+    frame_rgb = None
     # Reason for while loop is to ensure that we've successfully fetched image file.
     # Without the while loop, there was a chance for a case where fetching image failed
     # Instead of using cv2.imread, we use skimage.imread to detect corrupted jpeg files.
     while True:
         image_name = imageManager.getRecentImageName()
         try :
-            frame_bgr = io.imread('./S_CameraVision/Images/' + image_name)
+            frame_rgb = io.imread('./S_CameraVision/Images/' + image_name)
         except :
             print("Pre-mature end of JPEG File, Re-try")
             continue
         break
-    print(image_name)
+
+    # print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
     # Converting RGB to HSV - Robot
@@ -57,6 +60,7 @@ def updatePosition(robot_obj, imageManager):
     robot_color_hsv = robot_color_hsv[0][0]
 
     # Converting BGR to HSV - Image
+    frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
     frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
 
     # Masking - Color
@@ -141,8 +145,8 @@ def updatePosition(robot_obj, imageManager):
     d0_2 = np.sum((np.array([sticker_indices[0], sticker_indices[2]])) ** 2)
     dist = [d0_1, d0_2, d1_2]
 
-    print ("sticker_indices : " + str(sticker_indices))
-    print ("dist : " + str(dist))
+    # print ("sticker_indices : " + str(sticker_indices))
+    # print ("dist : " + str(dist))
 
     point_head = None
     point_shoulder = None
@@ -156,8 +160,8 @@ def updatePosition(robot_obj, imageManager):
         point_head = sticker_indices[1]
         point_shoulder = [sticker_indices[0], sticker_indices[2]]
 
-    print ("point_head : " + str(point_head))
-    print ("point_shoulder : " + str(point_shoulder))
+    # print ("point_head : " + str(point_head))
+    # print ("point_shoulder : " + str(point_shoulder))
 
     # Calculation of Direction Vector & Center
     # Direction Vector
@@ -167,22 +171,21 @@ def updatePosition(robot_obj, imageManager):
     dir_vector_size = np.sum(dir_vector ** 2) ** 0.5
     dir_vector_unit = dir_vector / dir_vector_size
 
-    print ("mid_point : " + str(mid_point))
-    print ("dir_vector : " + str(dir_vector))
-    print ("dir_vector_size : " + str(dir_vector_size))
-    print ("dir_vector_unit : " + str(dir_vector_unit))
+    # print ("mid_point : " + str(mid_point))
+    # print ("dir_vector : " + str(dir_vector))
+    # print ("dir_vector_size : " + str(dir_vector_size))
+    # print ("dir_vector_unit : " + str(dir_vector_unit))
 
     # Center Position Data
     robot_cent_XY_pixel_np = np.array(point_head) + dir_vector_unit * config["CENTER_DIST_FROM_STICKER_MM"] / config["MM_PER_PIXEL"]
     robot_cent_XY_pixel = np.ndarray.tolist(robot_cent_XY_pixel_np)
 
-    print ("Center : " + str(robot_cent_XY_pixel))
+    # print ("Center : " + str(robot_cent_XY_pixel))
 
-    # TODO: Convert pixel into mm
-    # TODO: Delete (Testing Purpose Only)
-    robot_cent_XY_mm = [50, 50]
+    # Convert pixel into mm
+    robot_cent_XY_mm = ConvertPixel2Real.Pixel2Real(robot_cent_XY_pixel)
 
-    print ("Center (mm) : " + str(robot_cent_XY_mm))
+    # print ("Center (mm) : " + str(robot_cent_XY_mm))
 
     # Saving Information in Robot Object
     robot_cent_XY_mm_obj = []

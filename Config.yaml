@@ -61,10 +61,10 @@ DEGREE_PER_MM_RIGHT : 0.5
 # 1 Degree (Body) : Z Degree (Wheel)
 DEGREE_PER_ANGLE_ROTATION : 0.7
 
-# Distance between Center Position and Head Sticker (cm)
-CENTER_DIST_FROM_STICKER_MM: 3
+# Distance between Center Position and Head Sticker (mm)
+CENTER_DIST_FROM_STICKER_MM: 7
 
-# Estimated Bobot Size (mm) (Blocks Unabled)
+# Estimated Robot Size (mm) (Blocks Unabled)
 ROBOT_BODY_SIZE_MM: 30
 
 # Color Sensitivity (HSV - Hue)
