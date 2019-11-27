@@ -146,7 +146,8 @@ def run_server(_im, t_grandchild_list):
     robot_status = RobotInfos()
 
     # Setting Timeout as 5 seconds
-    serverSock.settimeout(5)
+    # serverSock.settimeout(5)
+    serverSock.settimeout(None)
 
     # Server Routine
     while True:

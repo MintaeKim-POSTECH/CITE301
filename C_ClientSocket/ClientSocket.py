@@ -1,6 +1,6 @@
 from socket import *
 import yaml
-
+import time
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
@@ -56,6 +56,7 @@ def run_client() :
             # break
 
         # Noticing Current Task is totally done.
+        time.sleep(1)
         clientSock.sendall("DONE".encode())
     # clientSock.sendall("CLIENT_ELIMINATED".encode())
 
