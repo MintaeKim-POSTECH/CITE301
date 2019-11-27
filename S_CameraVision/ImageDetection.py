@@ -3,7 +3,8 @@
 # https://www.youtube.com/watch?time_continue=422&v=zVuPIBW4Ri8&feature=emb_logo
 # https://webnautes.tistory.com/1257
 # https://stackoverflow.com/questions/30331944/finding-red-color-in-image-using-python-opencv
-#
+# https://stackoverflow.com/questions/33548956/detect-avoid-premature-end-of-jpeg-in-cv2-python
+
 import cv2
 import yaml
 import time
@@ -38,11 +39,13 @@ def updatePosition(robot_obj, imageManager):
     # Without the while loop, there was a chance for a case where fetching image failed
     # because cv2.imwrite was in progress.
     while True:
-        frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
-        if (frame_bgr.tolist() == None):
-            print("Re-try")
+        with open('./S_CameraVision/Images/' + image_name, 'rb') as f:
+            check_chars = f.read()[-2:]
+        if (check_chars != b'\xff\xd9'):
+            print("Pre-mature end of JPEG File, Re-try")
             continue
         else :
+            frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
             break
     print(image_name)
 
