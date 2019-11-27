@@ -40,9 +40,9 @@ def updatePosition(robot_obj, imageManager):
     while True:
         frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
         if (frame_bgr.tolist() == None):
+            print("Re-try")
             continue
         else :
-            print ("Re-try")
             break
     print(image_name)
 
