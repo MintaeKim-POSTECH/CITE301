@@ -164,7 +164,7 @@ def updatePosition(robot_obj, imageManager):
 
     ## Step 3 : Drawing Circle
     center = (int(robot_cent_XY_pixel[0]), int(robot_cent_XY_pixel[1]))
-    radian = config["ROBOT_BODY_SIZE_MM"] / config["MM_PER_PIXEL"]
+    radian = int (config["ROBOT_BODY_SIZE_MM"] / config["MM_PER_PIXEL"])
     color = (255, 0, 0)
     thickness = 2
     cv2.circle(frame_bgr, center, radian, color, thickness)
