@@ -4,11 +4,12 @@
 # https://webnautes.tistory.com/1257
 # https://stackoverflow.com/questions/30331944/finding-red-color-in-image-using-python-opencv
 # https://stackoverflow.com/questions/33548956/detect-avoid-premature-end-of-jpeg-in-cv2-python
-
+# https://medium.com/joelthchao/programmatically-detect-corrupted-image-8c1b2006c3d3
 import cv2
 import yaml
 import time
 from ImageManager import ImageManager
+from skimage import io
 
 import numpy as np
 
@@ -31,22 +32,21 @@ def saveImages(imageManager):
         time.sleep(0.1)
 
 def updatePosition(robot_obj, imageManager):
-    image_name = imageManager.getRecentImageName()
+    image_name = None
 
     ## Step 0 : Get the most recent image from directory Images
     frame_bgr = None
     # Reason for while loop is to ensure that we've successfully fetched image file.
     # Without the while loop, there was a chance for a case where fetching image failed
-    # because cv2.imwrite was in progress.
+    # Instead of using cv2.imread, we use skimage.imread to detect corrupted jpeg files.
     while True:
-        with open('./S_CameraVision/Images/' + image_name, 'rb') as f:
-            check_chars = f.read()[-2:]
-        if (check_chars != b'\xff\xd9'):
+        image_name = imageManager.getRecentImageName()
+        try :
+            frame_bgr = io.imread('./S_CameraVision/Images/' + image_name)
+        except :
             print("Pre-mature end of JPEG File, Re-try")
             continue
-        else :
-            frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
-            break
+        break
     print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
