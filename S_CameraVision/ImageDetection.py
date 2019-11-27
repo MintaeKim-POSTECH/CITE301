@@ -163,7 +163,7 @@ def updatePosition(robot_obj, imageManager):
     robot_obj.setPos_angle(dir_vector_unit_obj)
 
     ## Step 3 : Drawing Circle
-    center = (robot_cent_XY_pixel[0], robot_cent_XY_pixel[1])
+    center = (int(robot_cent_XY_pixel[0]), int(robot_cent_XY_pixel[1]))
     radian = config["ROBOT_BODY_SIZE_MM"] / config["MM_PER_PIXEL"]
     color = (255, 0, 0)
     thickness = 2
