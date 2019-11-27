@@ -33,6 +33,7 @@ def updatePosition(robot_obj, imageManager):
     image_name = imageManager.getRecentImageName()
     ## Step 0 : Get the most recent image from directory Images
     frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
+    print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
     # Converting RGB to HSV - Robot
