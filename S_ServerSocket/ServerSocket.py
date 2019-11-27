@@ -73,6 +73,7 @@ class RobotInfos :
         updatePosition(self.roboInfoList[robot_arm_num], im)
 
         # TODO: Push Initial Instructions based on Infos (Move to Initial Position)
+        # tm.pushInitialInstruction(self.roboInfoList[robo_arm_num])
 
         self.lock.release()
 
