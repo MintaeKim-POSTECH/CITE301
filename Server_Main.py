@@ -73,6 +73,6 @@ if __name__ == "__main__" :
 
     # Wait until all the tasks are finished normally.
     t_child_runServer.join()
-    signal.pthread_kill(t_child_saveImages, signal.SIGKILL)
+    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
     sys.exit(0)
 
