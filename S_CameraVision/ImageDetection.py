@@ -39,7 +39,7 @@ def updatePosition(robot_obj, imageManager):
     # because cv2.imwrite was in progress.
     while True:
         frame_bgr = cv2.imread('./S_CameraVision/Images/' + image_name)
-        if (not (frame_bgr == None)) :
+        if (frame_bgr.empty() == False) :
             break
         else :
             print ("Re-try")
