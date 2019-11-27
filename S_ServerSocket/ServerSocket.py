@@ -91,7 +91,7 @@ class RobotInfos :
             if (next_instruction == "") :
                 break
 
-            self.armList_conn[robot_arm_num].sendall(next_instruction.decode())
+            self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
             end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
 
             global im
