@@ -4,16 +4,18 @@ from S_RoboticArmControl.BrickModule import Brick
 import json
 
 class DB:
-    def __init__(self, fileName):
+    def __init__(self,fileName):
         self.fName=fileName
         self.srcBricks = []
         self.dstBricks = []
-        self.layerList=[]
+        self.srcLayerList = []
+        self.dstLayerList = []
 
     def getData(self):
         with open(self.fName) as j:
             data = json.load(j)
         dataList = data["bricks"]
+
         for ob in dataList:
             p = Position()
             p.setPos(ob["point"])
@@ -26,27 +28,40 @@ class DB:
             else:
                 b.src = False
                 self.dstBricks.append(b)
+
+        self.srcBricks.sort()
+        self.dstBricks.sort()
+
+        h = 0.0
+        l = Layer()
+        for src in self.srcBricks:
+            if abs(h - src.pos.pos[2]) > 1.0:
+                self.srcLayerList.append(l)
+                l = Layer()
+                h = src.pos.pos[2]
+            l.addBrick(src)
+
         h = 0.0
         l = Layer()
         for dst in self.dstBricks:
             if abs(h - dst.pos.pos[2]) > 1.0:
-                self.layerList.append(l)
+                self.dstLayerList.append(l)
                 l = Layer()
                 h = dst.pos.pos[2]
             l.addBrick(dst)
 
         # Calculation of Dst Layer Center
-        for layer in self.layerList :
+        for layer in self.srcLayerList :
             layer.calCenter()
 
-        def compare(b1, b2):
-            if b1.src:
-                return b1.pos.upper(b2.pos)
-            else:
-                return not b1.pos.upper(b2.pos)
-        self.srcBricks.sort()
-        self.dstBricks.sort()
+        for lay in self.dstLayerList:
+            lay.calCenter()
 
-        # TODO: Return (self.srcLayer, self.dstlayerList)
+        return (self.scrLayer, self.dstlayerList)
 
-        return (self.srcBricks, self.dstBricks, self.layerList)
+
+    def compare(b1, b2):
+        if b1.src:
+             return b1.pos.upper(b2.pos)
+        else:
+             return not b1.pos.upper(b2.pos)
