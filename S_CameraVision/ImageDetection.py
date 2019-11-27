@@ -124,6 +124,9 @@ def updatePosition(robot_obj, imageManager):
     d0_2 = np.sum((np.array([sticker_indices[0], sticker_indices[2]])) ** 2)
     dist = [d0_1, d0_2, d1_2]
 
+    print ("sticker_indices : " + str(sticker_indices))
+    print ("dist : " + str(dist))
+
     point_head = None
     point_shoulder = None
     if (min(dist) == d0_1) :
@@ -136,6 +139,9 @@ def updatePosition(robot_obj, imageManager):
         point_head = sticker_indices[1]
         point_shoulder = [sticker_indices[0], sticker_indices[2]]
 
+    print ("point_head : " + str(point_head))
+    print ("point_shoulder : " + str(point_shoulder))
+
     # Calculation of Direction Vector & Center
     # Direction Vector
     mid_point = np.array(point_shoulder[0]) + np.array(point_shoulder[1])
@@ -144,13 +150,22 @@ def updatePosition(robot_obj, imageManager):
     dir_vector_size = np.sum(dir_vector ** 2)
     dir_vector_unit = dir_vector / dir_vector_size
 
+    print ("mid_point : " + str(mid_point))
+    print ("dir_vector : " + str(dir_vector))
+    print ("dir_vector_size : " + str(dir_vector_size))
+    print ("dir_vector_unit : " + str(dir_vector_unit))
+
     # Center Position Data
     robot_cent_XY_pixel_np = np.array(point_head) + dir_vector_unit * config["CENTER_DIST_FROM_STICKER_MM"] / config["MM_PER_PIXEL"]
     robot_cent_XY_pixel = np.ndarray.tolist(robot_cent_XY_pixel_np)
 
+    print ("Center : " + str(robot_cent_XY_pixel))
+
     # TODO: Convert pixel into mm
     # TODO: Delete (Testing Purpose Only)
     robot_cent_XY_mm = [50, 50]
+
+    print ("Center (mm) : " + str(robot_cent_XY_mm))
 
     # Saving Information in Robot Object
     robot_cent_XY_mm_obj = []
@@ -164,7 +179,7 @@ def updatePosition(robot_obj, imageManager):
 
     ## Step 3 : Drawing Circle
     center = (int(robot_cent_XY_pixel[0]), int(robot_cent_XY_pixel[1]))
-    radian = int (config["ROBOT_BODY_SIZE_MM"] / config["MM_PER_PIXEL"])
+    radian = int(config["ROBOT_BODY_SIZE_MM"] / config["MM_PER_PIXEL"])
     color = (255, 0, 0)
     thickness = 2
     cv2.circle(frame_bgr, center, radian, color, thickness)
