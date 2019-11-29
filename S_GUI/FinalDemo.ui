@@ -636,6 +636,36 @@ CITE301 Creative iT Design - Advanced Design</string>
      <string>Background_Image</string>
     </property>
    </widget>
+   <zorder>bg_img</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_7</zorder>
+   <zorder>robo0_dat_pos</zorder>
+   <zorder>robo0_dat_inst_on</zorder>
+   <zorder>label_14</zorder>
+   <zorder>robo0_dat_state</zorder>
+   <zorder>label_16</zorder>
+   <zorder>label_17</zorder>
+   <zorder>label_18</zorder>
+   <zorder>robo0_dat_inst_next</zorder>
+   <zorder>label_20</zorder>
+   <zorder>label_21</zorder>
+   <zorder>label_22</zorder>
+   <zorder>label_23</zorder>
+   <zorder>robo1_dat_state</zorder>
+   <zorder>robo1_dat_pos</zorder>
+   <zorder>robo1_dat_inst_on</zorder>
+   <zorder>robo1_dat_inst_next</zorder>
+   <zorder>progress_cur</zorder>
+   <zorder>progress_tot</zorder>
+   <zorder>label_28</zorder>
+   <zorder>label_29</zorder>
+   <zorder>robo0_img</zorder>
+   <zorder>robo1_img</zorder>
+   <zorder>button_start</zorder>
+   <zorder>button_stop</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
