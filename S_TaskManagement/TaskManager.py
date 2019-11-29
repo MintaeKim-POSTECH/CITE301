@@ -1,7 +1,7 @@
 from BrickListManager import BrickListManager
 from Instruction import Instruction
 import yaml
-import numpy as pn
+import numpy as np
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
