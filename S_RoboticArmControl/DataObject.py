@@ -33,6 +33,8 @@ class DB:
         self.dstBricks.sort()
 
         # Assert # of srcBricks == dstBricks
+        print (len(self.srcBricks))
+        print (len(self.dstBricks))
         assert (len(self.srcBricks) == len(self.dstBricks))
 
         h = 0.0
