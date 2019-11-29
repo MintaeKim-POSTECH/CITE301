@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
         # 2. Position
         robot_position = pos_raw.getPos()
         robot_direction = pos_raw.getDir()
-        pos = "X: " + str(robot_position[0]) + " Y: " + str(robot_position[1]) + " Degree: "
+        pos = "X: " + str(round(robot_position[0], 2)) + " Y: " + str(round(robot_position[1], 2)) + " Degree: "
 
         if (robot_direction[1] == 0) :
             if (robot_direction[0] == 1) :
@@ -144,7 +144,7 @@ class MainWindow(QMainWindow):
             elif (robot_direction[0] == -1) :
                 pos += '270˚'
         else :
-            pos += str(math.degrees(math.atan2(robot_direction[1], robot_direction[0]))) + "˚"
+            pos += str(round(math.degrees(math.atan2(robot_direction[1], robot_direction[0])), 2)) + "˚"
 
         return state, pos, self.tostring_inst(ongoing_inst_raw), self.tostring_inst(next_inst_raw)
 
@@ -157,23 +157,23 @@ class MainWindow(QMainWindow):
         inst_args = inst_raw.getArgs()
         if (inst_type == InstType.INST_FORWARD) :
             if (inst_args[0] > 0) :
-                inst = 'Moving ' + str(inst_args[0]) + 'mm FORWARD'
+                inst = 'Moving ' + str(round(inst_args[0], 2)) + 'mm FORWARD'
             else :
-                inst = 'Moving ' + str(abs(inst_args[0])) + 'mm BACKWARD'
+                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + 'mm BACKWARD'
         elif (inst_type == InstType.INST_RIGHT) :
             if (inst_args[0] > 0):
-                inst = 'Moving ' + str(inst_args[0]) + 'mm RIGHT'
+                inst = 'Moving ' + str(round(inst_args[0], 2)) + 'mm RIGHT'
             else:
-                inst = 'Moving ' + str(abs(inst_args[0])) + 'mm LEFT'
+                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + 'mm LEFT'
         elif (inst_type == InstType.INST_RIGHT) :
             if (inst_args[0] > 0):
-                inst = 'Moving ' + str(inst_args[0]) + '˚ CLOCKWISE'
+                inst = 'Moving ' + str(round(inst_args[0], 2)) + '˚ CLOCKWISE'
             else:
-                inst = 'Moving ' + str(abs(inst_args[0])) + '˚ COUNTER-CLOCKWISE'
+                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + '˚ COUNTER-CLOCKWISE'
         else :
             if (inst_args[3] == 0):
-                inst = 'Using Robot Arm with Angle ' + str(inst_args[0]) + "˚, " + str(inst_args[1]) + "˚, " + str(inst_args[2]) + "˚ and GRAB"
+                inst = 'Using Robot Arm with Angle ' + str(round(inst_args[0], 2)) + "˚, " + str(round(inst_args[1], 2)) + "˚, " + str(round(inst_args[2], 2)) + "˚ and GRAB"
             else :
-                inst = 'Using Robot Arm with Angle ' + str(inst_args[0]) + "˚, " + str(inst_args[1]) + "˚, " + str(inst_args[2]) + "˚ and RELEASE"
+                inst = 'Using Robot Arm with Angle ' + str(round(inst_args[0], 2)) + "˚, " + str(round(inst_args[1], 2)) + "˚, " + str(round(inst_args[2], 2)) + "˚ and RELEASE"
 
         return inst

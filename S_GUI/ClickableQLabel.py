@@ -13,7 +13,7 @@ class PicButton(QAbstractButton) :
         self.img_c = QPixmap(imgdir_c)
 
         self.pressed.connect(self.update)
-        self.released.connect(self.update)
+        self.released.connect(self.slot_released)
 
     def registerButtonHandler(self, func, aux):
         self.handler = func
@@ -33,8 +33,9 @@ class PicButton(QAbstractButton) :
     def leaveEvent(self, event):
         self.update()
 
-    def releasedEvent(self, event):
+    def slot_released(self):
         print ("releasedEvent")
+        self.update()
         (self.handler)(self.aux)
 
     def sizeHint(self):

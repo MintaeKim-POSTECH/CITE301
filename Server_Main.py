@@ -88,4 +88,17 @@ if __name__ == "__main__" :
     for (t_grandchild, thread_type) in t_grandchild_list:
         signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
     signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
+
+    filelist = [f for f in os.listdir("./S_CameraVision/Images") if f.endswith(".jpg")]
+    for f in filelist:
+        os.remove(f)
+    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Filtered") if f.endswith(".jpg")]
+    for f in filelist:
+        os.remove(f)
+    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Robot") if f.endswith(".jpg")]
+    for f in filelist:
+        os.remove(f)
+    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Sticker") if f.endswith(".jpg")]
+    for f in filelist:
+        os.remove(f)
     sys.exit(0)
