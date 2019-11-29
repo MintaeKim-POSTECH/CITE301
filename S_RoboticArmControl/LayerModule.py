@@ -1,9 +1,9 @@
 import numpy as np
-from S_RoboticArmControl.BrickModule import Brick
+import yaml
+
 from S_RoboticArmControl.Elements import Position as Pos
 from S_RoboticArmControl.Elements import Phase
 
-import yaml
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 

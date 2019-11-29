@@ -73,3 +73,10 @@ ROBOT_ROTATING_DIAMETER: 250
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 25
 # ---- Server Configuration ----
+
+# ---- GUI Configuration ----
+ROBOT_IMG_POS_0: [30, 200]
+ROBOT_IMG_POS_1: [930, 200]
+
+RESOLUTION_WIDTH_GUI: 640
+# ---- GUI Configuration ----

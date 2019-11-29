@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from S_GUI.ClickableQLabel import PicButton
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -70,10 +70,10 @@ class Ui_MainWindow(object):
         self.label_7.setFont(font)
         self.label_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_7.setObjectName("label_7")
-        self.button_start = QtWidgets.QLabel(self.centralwidget)
+        self.button_start = PicButton("./S_GUI/Images/start_n.png", "./S_GUI/Images/start_r.png", "./S_GUI/Images/start_c.png", (self.centralwidget))
         self.button_start.setGeometry(QtCore.QRect(690, 660, 80, 80))
         self.button_start.setObjectName("button_start")
-        self.button_stop = QtWidgets.QLabel(self.centralwidget)
+        self.button_stop = PicButton("./S_GUI/Images/stop_n.png", "./S_GUI/Images/stop_r.png", "./S_GUI/Images/stop_c.png", (self.centralwidget))
         self.button_stop.setGeometry(QtCore.QRect(830, 660, 80, 80))
         self.button_stop.setObjectName("button_stop")
         self.robo0_dat_pos = QtWidgets.QLabel(self.centralwidget)
@@ -293,8 +293,6 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "건축용 로봇 팔 제어 시스템 개발"))
         self.label_6.setText(_translate("MainWindow", "Development of Builder Robot Arms Management System"))
         self.label_7.setText(_translate("MainWindow", "Robot 2"))
-        self.button_start.setText(_translate("MainWindow", "Start Button"))
-        self.button_stop.setText(_translate("MainWindow", "Stop Button"))
         self.robo0_dat_pos.setText(_translate("MainWindow", "Position Data"))
         self.robo0_dat_inst_on.setText(_translate("MainWindow", "On-going Instruction Data"))
         self.label_14.setText(_translate("MainWindow", "Current State  : "))

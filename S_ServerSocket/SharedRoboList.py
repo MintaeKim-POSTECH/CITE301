@@ -5,37 +5,11 @@
 import threading
 import yaml
 
+from S_RoboticArmControl.RobotControl import Robot
+from S_CameraVision.ImageDetection import updatePosition
+
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
-
-# --- Import S_RoboticArmControl/RobotControl.py ---
-import os
-import sys
-path_for_roboAC = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_roboAC = os.path.join(path_for_roboAC, 'S_RoboticArmControl')
-sys.path.append(path_for_roboAC)
-
-from RobotControl import Robot
-# --- Import S_RoboticArmControl/RobotControl.py ---
-
-
-# --- Import S_TaskManagement/TaskManager  ---
-path_for_tm = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_tm = os.path.join(path_for_tm, 'S_TaskManagement')
-sys.path.append(path_for_tm)
-
-from TaskManager import TaskManager
-# --- Import S_TaskManagement/TaskManager  ---
-
-
-# --- Import S_CameraVision/ImageDetection.py ---
-path_for_CV = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_CV = os.path.join(path_for_CV, 'S_CameraVision')
-sys.path.append(path_for_CV)
-
-from ImageDetection import updatePosition
-# --- Import S_CameraVision/ImageDetection.py ---
-
 
 class SharedRoboList :
     def __init__ (self) :
@@ -58,23 +32,26 @@ class SharedRoboList :
         # Monitor for Running State
         self.monitor = threading.Condition()
 
-    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im):
+    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm):
         self.lock.acquire()
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
+        self.roboInfoList[robot_arm_num].set_robo_num(robot_arm_num)
         self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
-        # Reset Current Position & Direction Information
-        updatePosition(self.roboInfoList[robot_arm_num], im)
-
-        # Push Initial Instructions based on Infos (Move to Initial Position)
-        tm.pushInitialInstruction(self.roboInfoList[robot_arm_num])
-
+        # Lock that protects roboTerminated
         self.lock.release()
 
-    def action_conn(self, robot_arm_num, tm, im):
+        # Reset Current Position & Direction Information
+        updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+
+        # Push Initial Instructions based on Infos (Move to Initial Position)
+        tm.pushInitialInstruction(self.roboInfoList[robot_arm_num], gm)
+
+
+    def action_conn(self, robot_arm_num, tm, im, gm):
         # For Iterating while loop, get the instructions from image
         while True:
             # WAIT until user starts
@@ -84,35 +61,48 @@ class SharedRoboList :
                 self.monitor.wait()
             self.monitor.release()
 
+            print ("before fnt")
             # Calculate the next instructions by Task Manager
             ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
             ## In CITD IV, We will try to generalize for more than three trajectories.
-            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num])
+            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num], gm)
 
+            print ("after fnt")
             # If the robot is waiting for the other robot to finish their task,
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
             if (next_instruction == "") :
-                self.lock.acquire()
+                print ("no instruction left")
+                # Exit Condition - Setting Robot Terminated
                 self.roboTerminated[robot_arm_num] = True
 
-                # Exit Condition - Reset infos
                 self.armList_conn[robot_arm_num] = None
                 self.roboInfoList[robot_arm_num] = None
-
                 self.lock.release()
 
+                gm.gui_update_image_connclose()
+                gm.gui_update_robot_info_conn(robot_arm_num)
+                break
+
+            print ("sendall")
             self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
             end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
 
-            updatePosition(self.roboInfoList[robot_arm_num], im)
+            print ("updateposition")
+            updatePosition(self.roboInfoList[robot_arm_num], im, gm)
 
     def isRunning(self, robot_num_new):
         self.lock.acquire()
         isRun = (not (self.armList_conn[robot_num_new] == None))
         self.lock.release()
         return isRun
+
+    def getRobotEntry(self, robot_num):
+        self.lock.acquire()
+        robot = self.roboInfoList[robot_num]
+        self.lock.release()
+        return robot
 
     def isTasksDone(self):
         self.lock.acquire()
