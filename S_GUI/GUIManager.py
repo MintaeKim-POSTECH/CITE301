@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
 
         # Initial Image Fetched
         qPixmapVar_bg = QPixmap("./S_GUI/Images/bg_img.jpg")
-        qPixmapVar_bg = qPixmapVar_bg.scaledToHeight(930)
+        qPixmapVar_bg = qPixmapVar_bg.scaledToWidth(1600)
         self.ui.bg_img.setPixmap(qPixmapVar_bg)
         self.ui.bg_img.repaint()
         qPixmapVar_l1 = QPixmap("./S_GUI/Images/Loading.png")

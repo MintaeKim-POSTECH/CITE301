@@ -95,7 +95,7 @@ if __name__ == "__main__" :
     t_child_saveImages = t
 
     # Execution of Server Loop by Multi-threading
-    t = threading.Thread(target=ServerSocket.run_server, args=(tm, im, robot_status, t_grandchild_list))
+    t = threading.Thread(target=ServerSocket.run_server, args=(tm, im, gm, robot_status, t_grandchild_list))
     t.start()
     t_child_runServer = t
 
