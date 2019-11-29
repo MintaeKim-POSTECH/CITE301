@@ -8,17 +8,14 @@ class PicButton(QLabel) :
     def __init__(self, imgdir_n, imgdir_r, imgdir_c, parent):
         QLabel.__init__(self, parent)
 
-        self.img_n = QPixmap()
-        self.img_n.load(imgdir_n)
-        self.img_n.scaledToHeight(80)
+        self.img_n = QPixmap(imgdir_n)
+        self.img_n = self.img_n.scaledToHeight(80)
 
-        self.img_r = QPixmap()
-        self.img_r.load(imgdir_r)
-        self.img_r.scaledToHeight(80)
+        self.img_r = QPixmap(imgdir_r)
+        self.img_r = self.img_r.scaledToHeight(80)
 
-        self.img_c = QPixmap()
-        self.img_c.load(imgdir_c)
-        self.img_c.scaledToHeight(80)
+        self.img_c = QPixmap(imgdir_c)
+        self.img_c = self.img_c.scaledToHeight(80)
 
         self.setMouseTracking(True)
 

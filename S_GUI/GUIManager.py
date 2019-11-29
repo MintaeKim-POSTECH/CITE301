@@ -23,17 +23,14 @@ class MainWindow(QMainWindow):
         self.ui.progress_tot.valueChanged.connected(self.progress_tot_val)
 
         # Initial Image Fetched
-        qPixmapVar_bg = QPixmap()
-        qPixmapVar_bg.load("./S_GUI/Images/bg_img.jpg")\
-        qPixmapVar_bg.scaledToHeight(930)
+        qPixmapVar_bg = QPixmap("./S_GUI/Images/bg_img.jpg")
+        qPixmapVar_bg = qPixmapVar_bg.scaledToHeight(930)
         self.ui.bg_img.setPixmap(qPixmapVar_bg)
         self.ui.bg_img.repaint()
-        qPixmapVar_l1 = QPixmap()
-        qPixmapVar_l1.load("./S_GUI/Images/Loading.png")
+        qPixmapVar_l1 = QPixmap("./S_GUI/Images/Loading.png")
         self.ui.robo0_img.setPixmap(qPixmapVar_l1)
         self.ui.robo0_img.repaint()
-        qPixmapVar_l2 = QPixmap()
-        qPixmapVar_l2.load("./S_GUI/Images/Loading.png")
+        qPixmapVar_l2 = QPixmap("./S_GUI/Images/Loading.png")
         self.ui.robo1_img.setPixmap(qPixmapVar_l2)
         self.ui.robo1_img.repaint()
 
@@ -47,9 +44,8 @@ class MainWindow(QMainWindow):
 
     def gui_update_image(self, robot_obj, new_image_dir):
         robot_num = robot_obj.get_robo_num()
-        qPixmapVar_newImage = QPixmap()
-        qPixmapVar_newImage.load(new_image_dir)
-        qPixmapVar_newImage.scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
+        qPixmapVar_newImage = QPixmap(new_image_dir)
+        qPixmapVar_newImage = qPixmapVar_newImage.scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
 
         if (robot_num == 0) :
             self.ui.robo0_img.setPixmap(qPixmapVar_newImage)
@@ -63,7 +59,8 @@ class MainWindow(QMainWindow):
         if (robot_num == 0) :
             if (isConnected == True) :
                 robot0 = robot_status.getRobotEntry(robot_num)
-                state, pos, ongoing_inst, next_inst = self.tostring(robot0.getInformation())
+                state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot0.getInformation()
+                state, pos, ongoing_inst, next_inst = self.tostring(state_raw, pos_raw, ongoing_inst_raw, next_inst_raw)
                 self.ui.robo0_dat_state.setText(state)
                 self.ui.robo0_dat_pos.setText(pos)
                 self.ui.robo0_dat_inst_on.setText(ongoing_inst)
@@ -76,7 +73,8 @@ class MainWindow(QMainWindow):
         elif (robot_num == 1) :
             if (isConnected == True):
                 robot1 = robot_status.getRobotEntry(robot_num)
-                state, pos, ongoing_inst, next_inst = self.tostring(robot1.getInformation())
+                state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot1.getInformation()
+                state, pos, ongoing_inst, next_inst = self.tostring(state_raw, pos_raw, ongoing_inst_raw, next_inst_raw)
                 self.ui.robo1_dat_state.setText(state)
                 self.ui.robo1_dat_pos.setText(pos)
                 self.ui.robo1_dat_inst_on.setText(ongoing_inst)
@@ -88,7 +86,8 @@ class MainWindow(QMainWindow):
                 self.ui.robo1_dat_inst_next.setText("Disconnected")
 
     def gui_update_robot_info_conn(self, robot_obj):
-        state, pos, ongoing_inst, next_inst = self.tostring(robot_obj.getInformation())
+        state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot_obj.getInformation()
+        state, pos, ongoing_inst, next_inst = self.tostring(state_raw, pos_raw, ongoing_inst_raw, next_inst_raw)
         robot_num = robot_obj.get_robo_num()
         if (robot_num == 0) :
             self.ui.robo0_dat_state.setText(state)
