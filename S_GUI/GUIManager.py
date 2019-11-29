@@ -7,12 +7,6 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import *
 from S_GUI.GUI import Ui_MainWindow
 
-# Changed
-# self.button_start = PicButton("./S_GUI/Images/start_n.png", "./S_GUI/Images/start_r.png", "./S_GUI/Images/start_c.png", (self.centralwidget))
-# Changed
-# self.button_stop = PicButton("./S_GUI/Images/stop_n.png", "./S_GUI/Images/stop_r.png", "./S_GUI/Images/stop_c.png",
-#                             (self.centralwidget))
-
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
