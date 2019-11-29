@@ -8,7 +8,7 @@ import signal
 import os
 import sys
 import time
-from S_ServerSocket import ServerSocket
+import S_ServerSocket.ServerSocket as ServerSocket
 from S_CameraVision.ImageManager import ImageManager
 from S_CameraVision.ImageDetection import saveImages
 from S_ServerSocket.SharedRoboList import SharedRoboList
