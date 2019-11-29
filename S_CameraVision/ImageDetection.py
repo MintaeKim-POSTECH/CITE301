@@ -11,8 +11,8 @@ import time
 from skimage import io
 import numpy as np
 
-from ImageManager import ImageManager
-import ConvertPixel2Real
+# from S_CameraVision.ImageManager import ImageManager
+import S_CameraVision.ConvertPixel2Real as ConvertPixel2Real
 
 
 # --- Import S_RoboticArmControl/RobotControl.py ---
