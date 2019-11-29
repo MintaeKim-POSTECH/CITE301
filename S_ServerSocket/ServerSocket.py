@@ -26,11 +26,8 @@ def connection_handler(conn, addr, tm, im, gm, robot_status):
     robot_arm_init_pos = [float(recv_info[4]), float(recv_info[5])]
 
     # Server Flow 2: Actions for Robo_arms
-    print ("before conn_init")
     robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm)
-    print ("conn_init")
     robot_status.action_conn(robot_arm_num, tm, im, gm)
-    print ("action_conn")
 
 def run_server(tm, im, gm, robot_status, t_grandchild_list):
     serverSock = socket.socket()

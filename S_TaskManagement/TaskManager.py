@@ -21,6 +21,7 @@ class TaskManager :
     ## In CITD IV, We will try to generalize for more than three trajectories.
     def fetchNextTask(self, robot_obj, gm) :
         if (robot_obj.isQueueEmpty() == True) :
+            print ("yes")
             # TODO: Push new Instructions for each robot_obj phase
 
             ## Usage :
@@ -42,8 +43,7 @@ class TaskManager :
             # TODO: Delete (Test Purpose Only)
             new_inst_forward = Instruction('FORWARD', [(50 * config["DEGREE_PER_MM_FORWARD"])])
             robot_obj.push_inst(new_inst_forward)
-
-            pass
+            print ("new instruction")
 
         # Pop_front instruction
         robot_obj.pop_inst()

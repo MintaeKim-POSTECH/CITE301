@@ -33,9 +33,7 @@ class SharedRoboList :
         self.monitor = threading.Condition()
 
     def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm):
-        print ("before lock")
         self.lock.acquire()
-        print ("no one holds lock")
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
@@ -43,26 +41,19 @@ class SharedRoboList :
         self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
-        print ("set1")
-
         # Lock that protects roboTerminated
         self.lock.release()
 
-        print ("set2")
         # Reset Current Position & Direction Information
         updatePosition(self.roboInfoList[robot_arm_num], im, gm)
-
-        print ("set3")
 
         # Push Initial Instructions based on Infos (Move to Initial Position)
         tm.pushInitialInstruction(self.roboInfoList[robot_arm_num], gm)
 
-        print ("set4")
 
     def action_conn(self, robot_arm_num, tm, im, gm):
         # For Iterating while loop, get the instructions from image
         while True:
-            print("action_conn jinip")
             # WAIT until user starts
             # Checking Whole Process State (Run / Stop)
             self.monitor.acquire()
@@ -70,16 +61,19 @@ class SharedRoboList :
                 self.monitor.wait()
             self.monitor.release()
 
+            print ("before fnt")
             # Calculate the next instructions by Task Manager
             ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
             ## In CITD IV, We will try to generalize for more than three trajectories.
             next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num], gm)
 
+            print ("after fnt")
             # If the robot is waiting for the other robot to finish their task,
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
             if (next_instruction == "") :
+                print ("no instruction left")
                 # Exit Condition - Setting Robot Terminated
                 self.roboTerminated[robot_arm_num] = True
 
@@ -91,9 +85,11 @@ class SharedRoboList :
                 gm.gui_update_robot_info_conn(robot_arm_num)
                 break
 
+            print ("sendall")
             self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
             end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
 
+            print ("updateposition")
             updatePosition(self.roboInfoList[robot_arm_num], im, gm)
 
     def isRunning(self, robot_num_new):
