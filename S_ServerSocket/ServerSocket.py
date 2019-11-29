@@ -13,16 +13,6 @@ import time
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-# Checking Termination Condition
-def check_termination(robot_status):
-    while True:
-        if (robot_status.isTasksDone() == True):
-            return
-        # Checking for Every 3 Seconds
-        time.sleep(5)
-
-    # Further Handling will be processed in the sigchld handler
-
 # Connection Handler
 def connection_handler(conn, addr, tm, im, gm, robot_status):
     # Server Flow 1: First line is the Robot Arm Information info
@@ -47,17 +37,13 @@ def run_server(tm, im, gm, robot_status, t_grandchild_list):
     # serverSock.settimeout(5)
     serverSock.settimeout(None)
 
-    t = threading.Thread(target=check_termination, args=(robot_status, ))
-    t.start()
-
-    t_grandchild_list.append((t, "CHECK_TERMINATION"))
-
     # Server Routine
     while True:
         serverSock.listen(config["MAX_ROBOT_CONNECTED"])
         conn, addr = serverSock.accept()
-        t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, gm, robot_status))
-        t.start()
+        if (robot_status.isTaskDone() == False) :
+            t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, gm, robot_status))
+            t.start()
 
-        # Adding Current Thread to grandchild thread list.
-        t_grandchild_list.append((t, "CONN"))
+            # Adding Current Thread to grandchild thread list.
+            t_grandchild_list.append(t)

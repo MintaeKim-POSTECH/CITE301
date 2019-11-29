@@ -34,36 +34,15 @@ t_grandchild_list = None
 ## According to the python docs,
 ## Python signal handlers are always executed in the main Python thread,
 ## even if the signal was received in another thread.
-def sigint_handler(sig, frame) :
-    global t_child_saveImages, t_child_runServer, t_grandchild_list
-    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
-    for (t_grandchild, thread_type) in t_grandchild_list :
-        signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
-    signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-    sys.exit(0) # TODO: Need Check
-
 def sigchld_handler(sig, frame):
     global t_child_saveImages, t_child_runServer, t_grandchild_list
     dead_thread_pid = os.waitpid(-1, 0)
-    isTaskDone = False
 
     # Comparison of PIDs
-    for (t_grandchild, thread_type) in t_grandchild_list :
+    for t_grandchild in t_grandchild_list :
         if (t_grandchild.ident == dead_thread_pid) :
             t_grandchild_list.remove(t_grandchild)
-            if (thread_type == 'CHECK_TERMINATION') :
-                isTaskDone = True
-                break
             return
-
-    # If CHECK_TERMINATION Thread was exited, then all tasks are done.
-    # We just need to terminate all threads, and exit.
-    if (isTaskDone == True):
-        signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
-        for (t_grandchild, thread_type) in t_grandchild_list:
-            signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
-        signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-        sys.exit(0) # TODO: Check
 
     # Comparison of PIDs
     if (t_child_saveImages.ident == dead_thread_pid) :
@@ -72,7 +51,6 @@ def sigchld_handler(sig, frame):
         t_child_runServer = None
 
 if __name__ == "__main__" :
-    signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList
@@ -102,4 +80,11 @@ if __name__ == "__main__" :
     t_child_runServer = t
 
     # Execution of GUIs
-    sys.exit(app.exec_())
+    app.exec_()
+
+    # Afterwards Process
+    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
+    for (t_grandchild, thread_type) in t_grandchild_list:
+        signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
+    signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
+    sys.exit(0)
