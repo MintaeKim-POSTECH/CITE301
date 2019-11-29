@@ -23,13 +23,17 @@ class MainWindow(QMainWindow):
         self.ui.progress_tot.valueChanged.connected(self.progress_tot_val)
 
         # Initial Image Fetched
-        qPixmapVar_bg = QPixmap().load("./S_GUI/Images/bg_img.jpg").scaledToHeight(930)
+        qPixmapVar_bg = QPixmap()
+        qPixmapVar_bg.load("./S_GUI/Images/bg_img.jpg")\
+        qPixmapVar_bg.scaledToHeight(930)
         self.ui.bg_img.setPixmap(qPixmapVar_bg)
         self.ui.bg_img.repaint()
-        qPixmapVar_l1 = QPixmap().load("./S_GUI/Images/Loading.png")
+        qPixmapVar_l1 = QPixmap()
+        qPixmapVar_l1.load("./S_GUI/Images/Loading.png")
         self.ui.robo0_img.setPixmap(qPixmapVar_l1)
         self.ui.robo0_img.repaint()
-        qPixmapVar_l2 = QPixmap().load("./S_GUI/Images/Loading.png")
+        qPixmapVar_l2 = QPixmap()
+        qPixmapVar_l2.load("./S_GUI/Images/Loading.png")
         self.ui.robo1_img.setPixmap(qPixmapVar_l2)
         self.ui.robo1_img.repaint()
 
@@ -43,7 +47,10 @@ class MainWindow(QMainWindow):
 
     def gui_update_image(self, robot_obj, new_image_dir):
         robot_num = robot_obj.get_robo_num()
-        qPixmapVar_newImage = QPixmap().load(new_image_dir).scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
+        qPixmapVar_newImage = QPixmap()
+        qPixmapVar_newImage.load(new_image_dir)
+        qPixmapVar_newImage.scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
+
         if (robot_num == 0) :
             self.ui.robo0_img.setPixmap(qPixmapVar_newImage)
             self.ui.robo0_img.repaint()
