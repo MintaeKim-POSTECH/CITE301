@@ -41,14 +41,21 @@ class SharedRoboList :
         self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
+        print ("set1")
+
         # Lock that protects roboTerminated
         self.lock.release()
 
+        print ("set2")
         # Reset Current Position & Direction Information
         updatePosition(self.roboInfoList[robot_arm_num], im, gm)
 
+        print ("set3")
+
         # Push Initial Instructions based on Infos (Move to Initial Position)
         tm.pushInitialInstruction(self.roboInfoList[robot_arm_num], gm)
+
+        print ("set4")
 
     def action_conn(self, robot_arm_num, tm, im, gm):
         # For Iterating while loop, get the instructions from image
