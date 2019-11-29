@@ -114,6 +114,7 @@ class SharedRoboList :
         return isRunning
 
     def setProcessRunning (self, isRunning):
+        print ("Entered")
         self.monitor.acquire()
         if (isRunning == True and self.running == False): # False -> True
             self.running = isRunning

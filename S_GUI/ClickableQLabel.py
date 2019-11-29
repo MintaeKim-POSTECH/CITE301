@@ -33,11 +33,7 @@ class PicButton(QAbstractButton) :
     def leaveEvent(self, event):
         self.update()
 
-    def mousePressEvent(self, event):
-        self.update()
-
     def mouseReleaseEvent(self, event):
-        self.update()
         (self.handler)(self.aux)
 
     def sizeHint(self):
