@@ -33,7 +33,9 @@ class SharedRoboList :
         self.monitor = threading.Condition()
 
     def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm):
+        print ("before lock")
         self.lock.acquire()
+        print ("no one holds lock")
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
