@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
 
         # ProgressBar Signal
         self.progress_tot_val = 0
-        self.ui.progress_tot.valueChanged.connected(self.progress_tot_val)
+        self.ui.progress_tot.setValue(self.progress_tot_val)
 
         # Initial Image Fetched
         qPixmapVar_bg = QPixmap("./S_GUI/Images/bg_img.jpg")
