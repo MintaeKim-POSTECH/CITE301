@@ -32,8 +32,7 @@ class DB:
         self.srcBricks.sort()
         self.dstBricks.sort()
 
-        # Assert # of srcBricks == dstBricks
-        assert (len(self.srcBricks) == len(self.dstBricks))
+        # assert (len(self.srcBricks) == len(self.dstBricks))
 
         h = 0.0
         l = Layer()
