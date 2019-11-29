@@ -34,6 +34,7 @@ class PicButton(QAbstractButton) :
         self.update()
 
     def releasedEvent(self, event):
+        print ("releasedEvent")
         (self.handler)(self.aux)
 
     def sizeHint(self):
