@@ -41,7 +41,7 @@ def run_server(tm, im, gm, robot_status, t_grandchild_list):
     while True:
         serverSock.listen(config["MAX_ROBOT_CONNECTED"])
         conn, addr = serverSock.accept()
-        if (robot_status.isTaskDone() == False) :
+        if (robot_status.isTasksDone() == False) :
             t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, gm, robot_status))
             t.start()
 
