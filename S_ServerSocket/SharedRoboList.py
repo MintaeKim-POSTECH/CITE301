@@ -54,6 +54,7 @@ class SharedRoboList :
     def action_conn(self, robot_arm_num, tm, im, gm):
         # For Iterating while loop, get the instructions from image
         while True:
+            print ("stop")
             # WAIT until user starts
             # Checking Whole Process State (Run / Stop)
             self.monitor.acquire()
