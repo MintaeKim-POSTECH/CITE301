@@ -39,7 +39,7 @@ def updatePosition(robot_obj, imageManager, guiManager):
             continue
         break
 
-    # print(image_name)
+    print(image_name)
 
     ## Step 1 : Detect Points with Particular Color
     # Converting RGB to HSV - Robot
