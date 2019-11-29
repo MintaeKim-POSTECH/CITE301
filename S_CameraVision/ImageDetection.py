@@ -183,9 +183,10 @@ def updatePosition(robot_obj, imageManager):
     # print ("Center : " + str(robot_cent_XY_pixel))
 
     # Convert pixel into mm
-    robot_cent_XY_mm = ConvertPixel2Real.Pixel2Real(robot_cent_XY_pixel)
+    # robot_cent_XY_mm = ConvertPixel2Real.Pixel2Real(robot_cent_XY_pixel)
+    robot_cent_XY_mm = [50, 50]
 
-    # print ("Center (mm) : " + str(robot_cent_XY_mm))
+    print ("Center (mm) : " + str(robot_cent_XY_mm))
 
     # Saving Information in Robot Object
     robot_cent_XY_mm_obj = []
