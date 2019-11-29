@@ -1,38 +1,43 @@
 # Referenced by
 # https://stackoverflow.com/questions/2711033/how-code-a-image-button-in-pyqt
 
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-class PicButton(QLabel) :
-    def __init__(self, imgdir_n, imgdir_r, imgdir_c, parent):
-        QLabel.__init__(self, parent)
-        self.imgdir_n = imgdir_n
-        self.imgdir_r = imgdir_r
-        self.imgdir_c = imgdir_c
+class PicButton(QAbstractButton) :
+    def __init__(self, imgdir_n, imgdir_r, imgdir_c, parent=None):
+        super(PicButton, self).__init__(parent)
+        self.img_n = QPixmap(imgdir_n)
+        self.img_r = QPixmap(imgdir_r)
+        self.img_c = QPixmap(imgdir_c)
 
-        self.img = QPixmap(imgdir_n)
-        self.img = self.img.scaledToHeight(80)
-        self.setPixmap(self.img)
-
-        self.setMouseTracking(True)
+        self.pressed.connect(self.update)
+        self.released.connect(self.update)
 
     def registerButtonHandler(self, func, aux):
         self.handler = func
         self.aux = aux
 
-    def mouseMoveEvent(self, event):
-        self.img.load(self.imgdir_r)
-        self.img = self.img.scaledToHeight(80)
-        self.setPixmap(self.img)
+    def paintEvent(self, event):
+        pix = self.img_r if self.underMouse() else self.img_n
+        if self.isDown():
+            pix = self.img_c
 
-        self.repaint()
+        painter = QPainter(self)
+        painter.drawPixmap(event.rect(), pix)
+
+    def enterEvent(self, event):
+        self.update()
+
+    def leaveEvent(self, event):
+        self.update()
 
     def mousePressEvent(self, event):
-        self.img.load(self.imgdir_c)
-        self.img = self.img.scaledToHeight(80)
-        self.setPixmap(self.img)
+        self.update()
 
-        self.repaint()
+    def mouseReleaseEvent(self, event):
+        self.update()
+        (self.handler)(self.aux)
 
-        self.handler(self.aux)
+    def sizeHint(self):
+        return QSize(80, 80)

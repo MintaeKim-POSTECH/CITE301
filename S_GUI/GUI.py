@@ -293,8 +293,6 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "건축용 로봇 팔 제어 시스템 개발"))
         self.label_6.setText(_translate("MainWindow", "Development of Builder Robot Arms Management System"))
         self.label_7.setText(_translate("MainWindow", "Robot 2"))
-        self.button_start.setText(_translate("MainWindow", "Start Button"))
-        self.button_stop.setText(_translate("MainWindow", "Stop Button"))
         self.robo0_dat_pos.setText(_translate("MainWindow", "Position Data"))
         self.robo0_dat_inst_on.setText(_translate("MainWindow", "On-going Instruction Data"))
         self.label_14.setText(_translate("MainWindow", "Current State  : "))
