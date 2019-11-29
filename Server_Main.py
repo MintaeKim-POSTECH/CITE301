@@ -7,7 +7,6 @@ import threading
 import signal
 import os
 import sys
-import time
 from PyQt5.QtWidgets import QApplication
 
 import S_ServerSocket.ServerSocket as ServerSocket
@@ -29,13 +28,22 @@ robot_status = None
 # Thread t
 t_child_saveImages = None
 t_child_runServer = None
-t_child_qt = None
-
 # Child Thread Lists
 t_grandchild_list = None
 
+## According to the python docs,
+## Python signal handlers are always executed in the main Python thread,
+## even if the signal was received in another thread.
+def sigint_handler(sig, frame) :
+    global t_child_saveImages, t_child_runServer, t_grandchild_list
+    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
+    for (t_grandchild, thread_type) in t_grandchild_list :
+        signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
+    signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
+    sys.exit(0) # TODO: Need Check
+
 def sigchld_handler(sig, frame):
-    global t_child_qt, t_child_saveImages, t_child_runServer, t_grandchild_list
+    global t_child_saveImages, t_child_runServer, t_grandchild_list
     dead_thread_pid = os.waitpid(-1, 0)
     isTaskDone = False
 
@@ -55,24 +63,16 @@ def sigchld_handler(sig, frame):
         for (t_grandchild, thread_type) in t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
         signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-        os.waitid(os.P_PID, t_child_qt, os.WEXITED)
+        sys.exit(0) # TODO: Check
 
     # Comparison of PIDs
     if (t_child_saveImages.ident == dead_thread_pid) :
         t_child_saveImages = None
     elif (t_child_runServer.ident == dead_thread_pid) :
         t_child_runServer = None
-    elif (t_child_qt.ident == dead_thread_pid) :
-        signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
-        for (t_grandchild, thread_type) in t_grandchild_list:
-            signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
-        signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-        sys.exit(-1)
-
-def helper_thread_qt(app) :
-    sys.exit(app.exec_())
 
 if __name__ == "__main__" :
+    signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList
@@ -102,9 +102,4 @@ if __name__ == "__main__" :
     t_child_runServer = t
 
     # Execution of GUIs
-    t = threading.Thread(target=helper_thread_qt, args=(app, ))
-    t.start()
-    t_child_qt = t
-
-    while True:
-        time.sleep(1000) # Main Thread Sleeps Forever!
+    sys.exit(app.exec_())
