@@ -7,17 +7,23 @@ import threading
 import signal
 import os
 import sys
-import time
 import S_ServerSocket.ServerSocket as ServerSocket
 from S_CameraVision.ImageManager import ImageManager
 from S_CameraVision.ImageDetection import saveImages
 from S_ServerSocket.SharedRoboList import SharedRoboList
 from S_TaskManagement.TaskManager import TaskManager
 
+from S_GUI.GUIManager import MainWindow
+# GUIs
+from PyQt5.QtWidgets import QApplication
+from S_GUI.GUIManager import MainWindow
+
 # Task Manager
 tm = None
 # Image Manager
 im = None
+# GUI Manager
+gm = None
 # Shared Robot Information List
 robot_status = None
 
@@ -36,7 +42,7 @@ def sigint_handler(sig, frame) :
     for (t_grandchild, thread_type) in t_grandchild_list :
         signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
     signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-    sys.exit(0)
+    sys.exit(0) # Need Check
 
 def sigchld_handler(sig, frame):
     global t_child_saveImages, t_child_runServer, t_grandchild_list
@@ -59,7 +65,7 @@ def sigchld_handler(sig, frame):
         for (t_grandchild, thread_type) in t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
         signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-        sys.exit(0)
+        sys.exit(0) # Check
 
     # Comparison of PIDs
     if (t_child_saveImages.ident == dead_thread_pid) :
@@ -77,6 +83,12 @@ if __name__ == "__main__" :
     tm = TaskManager()
     robot_status = SharedRoboList()
 
+    # Initiation of GUI & GUI Manager
+    app = QApplication(sys.argv)
+
+    gm = MainWindow()
+    gm.show()
+
     # Initiation of t_grandchild
     t_grandchild_list = []
 
@@ -90,10 +102,5 @@ if __name__ == "__main__" :
     t.start()
     t_child_runServer = t
 
-    while True:
-        nextline = input()
-        if (nextline == '0'):
-            robot_status.setProcessRunning(0);
-        else :
-            robot_status.setProcessRunning(1);
-        # Main Thread Loop forever!
+    # Execution of GUIs
+    sys.exit(app.exec_())

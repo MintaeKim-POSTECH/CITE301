@@ -1,23 +1,11 @@
 import yaml
 import threading
 
+from S_RoboticArmControl.DataObject import DB
+from S_RoboticArmControl.Elements import Phase
+
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
-
-# --- Import S_RoboticArmControl/LayerModule.py, ... ---
-import os
-import sys
-
-path_for_roboAC = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_roboAC = os.path.join(path_for_roboAC, 'S_RoboticArmControl')
-sys.path.append(path_for_roboAC)
-
-from LayerModule import Layer
-from DataObject import DB
-from BrickModule import Brick
-import Elements
-from RobotControl import Robot
-# --- Import S_RoboticArmControl/LayerModule.py, ... ---
 
 ## -- Shared Objects (BrickListManager) --
 # Shared Objects are often implemented by inner class, as an encapsulated models.
@@ -125,7 +113,8 @@ class BrickListManager :
         self.monitor.acquire()
         srcBrickSelected = self.get_next_block_src(robot_obj)
         if (srcBrickSelected == -1) :
-            pass
+            self.monitor.release()
+            return False
         elif (not (srcBrickSelected == None)) :
             self.srcCurrentLayer.selectBrick(srcBrickSelected)
             robot_obj.brick_info_move(srcBrickSelected)
@@ -136,13 +125,15 @@ class BrickListManager :
                 self.monitor.wait()
 
         self.monitor.release()
+        return True
 
     def brick_lift(self, robot_obj):
         self.monitor.acquire()
         dstBrickSelected = self.get_next_block_dest(robot_obj)
 
         if (dstBrickSelected == -1) :
-            pass
+            self.monitor.release()
+            return False
         elif (not (dstBrickSelected == None)) :
             self.dstCurrentLayer.selectBrick(dstBrickSelected)
             robot_obj.brick_info_lift(dstBrickSelected)
@@ -153,6 +144,7 @@ class BrickListManager :
                 self.monitor.wait()
 
         self.monitor.release()
+        return True
 
     def brick_comeback(self, robot_obj):
         self.monitor.acquire()
@@ -170,5 +162,18 @@ class BrickListManager :
 
         robot_obj.brick_info_fin()
         self.monitor.release()
+
+
+    def get_progress_rate(self):
+        self.monitor.acquire()
+        bricks_done = 0
+        bricks_total = 0
+        for dstLayer in self.dstLayerList :
+            for dstBrick in dstLayer :
+                bricks_total = bricks_total + 1
+                if (dstBrick.getPhase() == Phase.DONE) :
+                    bricks_done = bricks_done + 1
+        self.monitor.release()
+        return (int)(bricks_done * 100.0 / bricks_total)
 
 ## -- Shared Objects (BrickListManager) --

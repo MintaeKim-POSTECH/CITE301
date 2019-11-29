@@ -1,4 +1,5 @@
 from enum import Enum
+
 class InstType (Enum):
     INST_FORWARD = 0
     INST_RIGHT = 1

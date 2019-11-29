@@ -14,17 +14,6 @@ import numpy as np
 # from S_CameraVision.ImageManager import ImageManager
 import S_CameraVision.ConvertPixel2Real as ConvertPixel2Real
 
-
-# --- Import S_RoboticArmControl/RobotControl.py ---
-import os
-import sys
-path_for_roboAC = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-path_for_roboAC = os.path.join(path_for_roboAC, 'S_RoboticArmControl')
-sys.path.append(path_for_roboAC)
-
-from RobotControl import Robot
-# --- Import S_RoboticArmControl/RobotControl.py ---
-
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
@@ -33,7 +22,7 @@ def saveImages(imageManager):
         imageManager.update()
         time.sleep(0.1)
 
-def updatePosition(robot_obj, imageManager):
+def updatePosition(robot_obj, imageManager, guiManager):
     image_name = None
 
     ## Step 0 : Get the most recent image from directory Images
@@ -73,7 +62,7 @@ def updatePosition(robot_obj, imageManager):
         mask_l = np.array([0, 0, 205])
         mask_u = np.array([180, 255, 255])
         mask = cv2.inRange(frame_hsv, mask_l, mask_u)
-    if (robot_color_hsv[0] < config["COLOR_SENSITIVITY"]) :
+    elif (robot_color_hsv[0] < config["COLOR_SENSITIVITY"]) :
         mask0_l = np.array([0, 30, 30])
         mask0_u = np.array([robot_color_hsv[0] + config["COLOR_SENSITIVITY"], 255, 255])
         mask0 = cv2.inRange(frame_hsv, mask0_l, mask0_u)
@@ -206,3 +195,5 @@ def updatePosition(robot_obj, imageManager):
     cv2.circle(frame_bgr, center, radian, color, thickness)
 
     cv2.imwrite('./S_CameraVision/Images_Box/Robot/' + image_name, frame_bgr)
+
+    guiManager.gui_update_image(robot_obj, './S_CameraVision/Images_Box/Robot/' + image_name)

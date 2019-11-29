@@ -10,8 +10,6 @@ import socket
 import yaml
 import time
 
-# from S_ServerSocket.SharedRoboList import SharedRoboList
-
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
@@ -26,7 +24,7 @@ def check_termination(robot_status):
     # Further Handling will be processed in the sigchld handler
 
 # Connection Handler
-def connection_handler(conn, addr, tm, im, robot_status):
+def connection_handler(conn, addr, tm, im, gm, robot_status):
     # Server Flow 1: First line is the Robot Arm Information info
     recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
     robot_arm_num = int(recv_info[0])
@@ -38,10 +36,10 @@ def connection_handler(conn, addr, tm, im, robot_status):
     robot_arm_init_pos = [float(recv_info[4]), float(recv_info[5])]
 
     # Server Flow 2: Actions for Robo_arms
-    robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im)
-    robot_status.action_conn(robot_arm_num, tm, im)
+    robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm)
+    robot_status.action_conn(robot_arm_num, tm, im, gm)
 
-def run_server(tm, im, robot_status, t_grandchild_list):
+def run_server(tm, im, gm, robot_status, t_grandchild_list):
     serverSock = socket.socket()
     serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
@@ -58,7 +56,7 @@ def run_server(tm, im, robot_status, t_grandchild_list):
     while True:
         serverSock.listen(config["MAX_ROBOT_CONNECTED"])
         conn, addr = serverSock.accept()
-        t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, robot_status))
+        t = threading.Thread(target=connection_handler, args=(conn, addr, tm, im, gm, robot_status))
         t.start()
 
         # Adding Current Thread to grandchild thread list.
