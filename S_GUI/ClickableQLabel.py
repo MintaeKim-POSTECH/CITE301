@@ -1,6 +1,7 @@
 # Referenced by
 # https://stackoverflow.com/questions/2711033/how-code-a-image-button-in-pyqt
 
+from PyQt5.QtWidget import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
