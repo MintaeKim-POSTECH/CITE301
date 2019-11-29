@@ -73,7 +73,6 @@ def helper_thread_qt(app) :
     sys.exit(app.exec_())
 
 if __name__ == "__main__" :
-    signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList
