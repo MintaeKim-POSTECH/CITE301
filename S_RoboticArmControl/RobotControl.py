@@ -88,7 +88,6 @@ class Robot:
         self.lock.release()
 
     def set_robo_num(self, num):
-        self.lock.acquire()
         self.robot_num = num
     def get_robo_num(self):
         return self.robot_num
