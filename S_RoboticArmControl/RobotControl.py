@@ -129,7 +129,6 @@ class Robot:
         self.lock.release()
         return rgb
 
-
     def getOngoingBlock(self):
         self.lock.acquire()
         brick_og = self.brick_ongoing
@@ -145,6 +144,16 @@ class Robot:
         cur_inst = self.cur_inst
         self.lock.release()
         return cur_inst
+
+    def getInformation(self):
+        self.lock.acquire()
+        state, pos, ongoing_inst= self.phase, self.cur_pos, self.cur_inst
+        if (len(self.next_inst_queue) == 0) :
+            next_inst = None
+        else :
+            next_inst = self.next_inst_queue[0]
+        self.lock.release()
+        return state, pos, ongoing_inst, next_inst
 
 '''
     def setMotorPin(self):

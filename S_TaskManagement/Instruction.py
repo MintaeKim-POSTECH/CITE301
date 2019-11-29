@@ -22,6 +22,11 @@ class Instruction :
             pass # Not Reached
         self.args = args
 
+    def getInstType(self):
+        return self.inst_type
+    def getArgs(self):
+        return self.args
+
     def __str__(self):
         if (self.inst_type == InstType.INST_FORWARD) :
             return ('FORWARD ' + str(self.args[0]))

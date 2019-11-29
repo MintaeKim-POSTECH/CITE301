@@ -7,15 +7,13 @@ import threading
 import signal
 import os
 import sys
+from PyQt5.QtWidgets import QApplication
+
 import S_ServerSocket.ServerSocket as ServerSocket
 from S_CameraVision.ImageManager import ImageManager
 from S_CameraVision.ImageDetection import saveImages
 from S_ServerSocket.SharedRoboList import SharedRoboList
 from S_TaskManagement.TaskManager import TaskManager
-
-from S_GUI.GUIManager import MainWindow
-# GUIs
-from PyQt5.QtWidgets import QApplication
 from S_GUI.GUIManager import MainWindow
 
 # Task Manager
@@ -42,7 +40,7 @@ def sigint_handler(sig, frame) :
     for (t_grandchild, thread_type) in t_grandchild_list :
         signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
     signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-    sys.exit(0) # Need Check
+    sys.exit(0) # TODO: Need Check
 
 def sigchld_handler(sig, frame):
     global t_child_saveImages, t_child_runServer, t_grandchild_list
@@ -65,7 +63,7 @@ def sigchld_handler(sig, frame):
         for (t_grandchild, thread_type) in t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
         signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-        sys.exit(0) # Check
+        sys.exit(0) # TODO: Check
 
     # Comparison of PIDs
     if (t_child_saveImages.ident == dead_thread_pid) :
@@ -73,7 +71,6 @@ def sigchld_handler(sig, frame):
     elif (t_child_runServer.ident == dead_thread_pid) :
         t_child_runServer = None
 
-# TODO: GUIs with
 if __name__ == "__main__" :
     signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGCHLD, sigchld_handler)
