@@ -55,6 +55,7 @@ if __name__ == "__main__" :
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList
     im = ImageManager()
+
     tm = TaskManager()
     robot_status = SharedRoboList()
 

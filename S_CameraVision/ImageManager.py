@@ -21,8 +21,13 @@ class ImageManager:
             exit()
 
         # Reset Resolution
+        print (config["RESOLUTION_WIDTH"])
+        print (config["RESOLUTION_HEIGHT"])
+
         ret = self.cap.set(3, config["RESOLUTION_WIDTH"])
+        print (ret)
         ret = self.cap.set(4, config["RESOLUTION_HEIGHT"])
+        print (ret)
 
         # Latest Image Number
         self.frame_num = 0
@@ -33,6 +38,8 @@ class ImageManager:
     def update(self):
         self.lock.acquire()
         # Capture frame-by-frame
+        print (self.cap[3])
+        print (self.cap[4])
         self.ret, self.frame = self.cap.read()
 
         # Fetching failed?
