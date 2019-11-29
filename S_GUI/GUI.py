@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from S_GUI.ClickableQLabel import PicButton
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -70,11 +70,11 @@ class Ui_MainWindow(object):
         self.label_7.setFont(font)
         self.label_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_7.setObjectName("label_7")
+        self.button_start = QtWidgets.QLabel(self.centralwidget)
+        self.button_start.setGeometry(QtCore.QRect(690, 660, 80, 80))
         self.button_start.setObjectName("button_start")
-
-        # Changed
-        self.button_stop = PicButton("./S_GUI/Images/stop_n.png", "./S_GUI/Images/stop_r.png", "./S_GUI/Images/stop_c.png", (self.centralwidget))
-        self.button_stop.setGeometry(QtCore.QRect(710, 460, 180, 180))
+        self.button_stop = QtWidgets.QLabel(self.centralwidget)
+        self.button_stop.setGeometry(QtCore.QRect(830, 660, 80, 80))
         self.button_stop.setObjectName("button_stop")
         self.robo0_dat_pos = QtWidgets.QLabel(self.centralwidget)
         self.robo0_dat_pos.setGeometry(QtCore.QRect(200, 740, 401, 31))
