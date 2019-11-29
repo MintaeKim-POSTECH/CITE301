@@ -10,7 +10,7 @@ import socket
 import yaml
 import time
 
-from SharedRoboList import SharedRoboList
+# from S_ServerSocket.SharedRoboList import SharedRoboList
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
