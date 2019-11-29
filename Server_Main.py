@@ -86,6 +86,8 @@ if __name__ == "__main__" :
     gm = MainWindow()
     gm.show()
 
+    gm.gui_extra_initiation(robot_status)
+
     # Initiation of t_grandchild
     t_grandchild_list = []
 
