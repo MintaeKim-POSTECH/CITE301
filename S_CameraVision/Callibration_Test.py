@@ -6,15 +6,15 @@ import glob
 import os
 
 # -- Configuration --
-CHESS_SQUARE_SIZE_MM = 30
-CHESS_GRID_HORIZONTAL = 7
-CHESS_GRID_VERTICAL = 8
-
-RESOLUTION_WIDTH = 640
-RESOLUTION_HEIGHT = 480
-# -- Configuration --
-
-# termination criteria
+# CHESS_SQUARE_SIZE_MM = 30
+# CHESS_GRID_HORIZONTAL = 7
+# CHESS_GRID_VERTICAL = 8
+#
+# RESOLUTION_WIDTH = 640
+# RESOLUTION_HEIGHT = 480
+# # -- Configuration --
+#
+# # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, CHESS_SQUARE_SIZE_MM, 0.001)
  
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)

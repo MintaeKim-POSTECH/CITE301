@@ -65,7 +65,10 @@ DEGREE_PER_ANGLE_ROTATION : 0.7
 CENTER_DIST_FROM_STICKER_MM: 7
 
 # Estimated Robot Size (mm) (Blocks Unabled)
-ROBOT_BODY_SIZE_MM: 30
+ROBOT_BODY_SIZE_MM: 150
+
+# Diameter of Minimun area for
+ROBOT_ROTATING_DIAMETER: 250
 
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 25
