@@ -3,6 +3,7 @@
 
 import yaml
 import math
+import threading
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import *
 
@@ -34,6 +35,9 @@ class MainWindow(QMainWindow):
         self.ui.robo1_img.setPixmap(qPixmapVar_l2)
         self.ui.robo1_img.repaint()
 
+        # Locks for Image
+        self.lock = threading.Lock()
+
     # Extra Initiation
     def gui_extra_initiation(self, robot_status):
         self.ui.button_start.registerButtonHandler(robot_status.setProcessRunning, 1)
@@ -42,7 +46,21 @@ class MainWindow(QMainWindow):
         self.gui_update_robot_info(robot_status, 0)
         self.gui_update_robot_info(robot_status, 1)
 
+    def gui_update_image_connclose(self, robot_obj):
+        self.lock.acquire()
+        robot_num = robot_obj.get_robo_num()
+        qPixmapVar_l = QPixmap("./S_GUI/Images/Loading.png")
+        if (robot_num == 0):
+            self.ui.robo0_img.setPixmap(qPixmapVar_l)
+            self.ui.robo0_img.repaint()
+        else :
+            self.ui.robo1_img.setPixmap(qPixmapVar_l)
+            self.ui.robo1_img.repaint()
+        self.lock.release()
+
+
     def gui_update_image(self, robot_obj, new_image_dir):
+        self.lock.acquire()
         robot_num = robot_obj.get_robo_num()
         qPixmapVar_newImage = QPixmap(new_image_dir)
         qPixmapVar_newImage = qPixmapVar_newImage.scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
@@ -53,6 +71,7 @@ class MainWindow(QMainWindow):
         elif (robot_num == 1):
             self.ui.robo1_img.setPixmap(qPixmapVar_newImage)
             self.ui.robo1_img.repaint()
+        self.lock.release()
 
     def gui_update_robot_info(self, robot_status, robot_num):
         isConnected = robot_status.isRunning(robot_num)

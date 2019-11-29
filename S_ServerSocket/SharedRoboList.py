@@ -77,6 +77,7 @@ class SharedRoboList :
                 self.roboInfoList[robot_arm_num] = None
                 self.lock.release()
 
+                gm.gui_update_image_connclose()
                 gm.gui_update_robot_info_conn(robot_arm_num)
                 break
 
