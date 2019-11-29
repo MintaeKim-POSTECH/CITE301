@@ -91,5 +91,9 @@ if __name__ == "__main__" :
     t_child_runServer = t
 
     while True:
-        # Main Thread Sleep Forever :>
-        time.sleep(10000)
+        nextline = input()
+        if (nextline == '0'):
+            robot_status.setProcessRunning(0);
+        else :
+            robot_status.setProcessRunning(1);
+        # Main Thread Loop forever!
