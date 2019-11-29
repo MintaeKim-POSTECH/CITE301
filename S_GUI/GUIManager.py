@@ -159,17 +159,17 @@ class MainWindow(QMainWindow):
             if (inst_args[0] > 0) :
                 inst = 'Moving ' + str(round(inst_args[0], 2)) + 'mm FORWARD'
             else :
-                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + 'mm BACKWARD'
+                inst = 'Moving ' + str(abs(round(inst_args[0], 2))) + 'mm BACKWARD'
         elif (inst_type == InstType.INST_RIGHT) :
             if (inst_args[0] > 0):
                 inst = 'Moving ' + str(round(inst_args[0], 2)) + 'mm RIGHT'
             else:
-                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + 'mm LEFT'
+                inst = 'Moving ' + str(abs(round(inst_args[0], 2))) + 'mm LEFT'
         elif (inst_type == InstType.INST_RIGHT) :
             if (inst_args[0] > 0):
                 inst = 'Moving ' + str(round(inst_args[0], 2)) + '˚ CLOCKWISE'
             else:
-                inst = 'Moving ' + str(abs(round(inst_args[0]), 2)) + '˚ COUNTER-CLOCKWISE'
+                inst = 'Moving ' + str(abs(round(inst_args[0], 2))) + '˚ COUNTER-CLOCKWISE'
         else :
             if (inst_args[3] == 0):
                 inst = 'Using Robot Arm with Angle ' + str(round(inst_args[0], 2)) + "˚, " + str(round(inst_args[1], 2)) + "˚, " + str(round(inst_args[2], 2)) + "˚ and GRAB"

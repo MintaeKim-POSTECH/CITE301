@@ -51,7 +51,7 @@ def sigchld_handler(sig, frame):
         t_child_runServer = None
 
 if __name__ == "__main__" :
-    signal.signal(signal.SIGCHLD, sigchld_handler)
+    # signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList
     im = ImageManager()
