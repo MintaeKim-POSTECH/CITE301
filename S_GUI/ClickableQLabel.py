@@ -34,7 +34,6 @@ class PicButton(QAbstractButton) :
         self.update()
 
     def slot_released(self):
-        print ("releasedEvent")
         self.update()
         (self.handler)(self.aux)
 
