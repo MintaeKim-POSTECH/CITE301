@@ -150,6 +150,9 @@ class MainWindow(QMainWindow):
 
     def tostring_inst(self, inst_raw):
         # 3. Instruction
+        if (inst_raw == None) :
+            return 'None'
+
         inst_type = inst_raw.getInstType()
         inst_args = inst_raw.getArgs()
         if (inst_type == InstType.INST_FORWARD) :
