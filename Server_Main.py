@@ -7,7 +7,6 @@ import threading
 import signal
 import os
 import sys
-import shutil
 from PyQt5.QtWidgets import QApplication
 
 import S_ServerSocket.ServerSocket as ServerSocket
@@ -92,26 +91,4 @@ if __name__ == "__main__" :
     t_child_runServer = t
 
     # Execution of GUIs
-    app.exec_()
-
-    # Afterwards Process
-    signal.pthread_kill(t_child_saveImages.ident, signal.SIGKILL)
-    for (t_grandchild, thread_type) in t_grandchild_list:
-        signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
-    signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
-
-    # Removal of Files
-    print ("Removal of Files")
-    shutil.rmtree('./S_CameraVision/Images')
-    os.mkdir('./S_CameraVision/Images')
-
-    shutil.rmtree('./S_CameraVision/Images_Box/Filtered')
-    os.mkdir('./S_CameraVision/Images_Box/Filtered')
-
-    shutil.rmtree('./S_CameraVision/Images_Box/Robot')
-    os.mkdir('./S_CameraVision/Images_Box/Robot')
-
-    shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
-    os.mkdir('./S_CameraVision/Images_Box/Sticker')
-
-    sys.exit(0)
+    sys.exit(app.exec_())

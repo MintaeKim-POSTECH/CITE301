@@ -3,7 +3,7 @@
 
 import yaml
 import math
-import threading
+import os, shutil
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import *
 
@@ -45,8 +45,8 @@ class MainWindow(QMainWindow):
         self.ui.robo1_dat_inst_on.setText("Disconnected")
         self.ui.robo1_dat_inst_next.setText("Disconnected")
 
-        # Threading (Required?)
-        self.lock = threading.Lock()
+        # Exit Slots
+        self.actionExit.triggered.connect(self.close)
 
     # Extra Initiation
     def gui_extra_initiation(self, robot_status):
@@ -159,3 +159,20 @@ class MainWindow(QMainWindow):
                 inst = 'Using Robot Arm with Angle ' + str(round(inst_args[0], 2)) + "˚, " + str(round(inst_args[1], 2)) + "˚, " + str(round(inst_args[2], 2)) + "˚ and RELEASE"
 
         return inst
+
+    def closeEvent(self, event):
+        # Afterwards Process - Removal of Files
+        print("Removal of Files")
+        shutil.rmtree('./S_CameraVision/Images')
+        os.mkdir('./S_CameraVision/Images')
+
+        shutil.rmtree('./S_CameraVision/Images_Box/Filtered')
+        os.mkdir('./S_CameraVision/Images_Box/Filtered')
+
+        shutil.rmtree('./S_CameraVision/Images_Box/Robot')
+        os.mkdir('./S_CameraVision/Images_Box/Robot')
+
+        shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
+        os.mkdir('./S_CameraVision/Images_Box/Sticker')
+
+        event.accept()
