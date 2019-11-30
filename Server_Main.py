@@ -52,7 +52,7 @@ if __name__ == "__main__" :
     # Initiation of GUI & GUI Manager
     app = QApplication(sys.argv)
 
-    gm = MainWindow(t_child_saveImages, t_child_runServer, t_grandchild_list)
+    gm = MainWindow()
     gm.show()
 
     # Initiation of ImageManager, TaskManager, and SharedRoboList

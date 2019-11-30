@@ -15,7 +15,7 @@ from S_TaskManagement.Instruction import InstType
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class MainWindow(QMainWindow):
-    def __init__(self, t_child_saveImages, t_child_runServer, t_grandchild_list):
+    def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
