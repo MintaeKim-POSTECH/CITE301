@@ -29,7 +29,7 @@ def connection_handler(conn, addr, tm, im, im_pos, robot_status):
     robot_status.action_conn_init(conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, im_pos)
     robot_status.action_conn(robot_arm_num, tm, im, im_pos)
 
-def run_server(tm, im, im_pos, gm, robot_status, t_grandchild_list):
+def run_server(tm, im, im_pos, gm, robot_status):
     serverSock = socket.socket()
     serverSock.bind((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
