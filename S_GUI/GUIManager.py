@@ -164,8 +164,12 @@ class MainWindow(QMainWindow):
         return inst
 
     def closeEvent(self, event):
+        print(self.t_child_saveImages.ident)
+        print(self.t_child_runServer.ident)
+        print(self.t_grandchild_list)
         # Afterwards Process - Killing normal threads
         signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
+        print (self.t_grandchild_list)
         for t_grandchild in self.t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
         signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
