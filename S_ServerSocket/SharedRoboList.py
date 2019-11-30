@@ -19,6 +19,7 @@ config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 class SharedRoboList(QtCore.QObject):
     updated_image_connclose = QtCore.pyqtSignal(int)
     updated_robot_info_connclose = QtCore.pyqtSignal(int)
+    connection_ended = QtCore.pyqtSignal(int)
 
     def __init__ (self, parent=None) :
         super(SharedRoboList, self).__init__(parent)
@@ -90,6 +91,9 @@ class SharedRoboList(QtCore.QObject):
 
                 self.updated_image_connclose.emit(robot_arm_num)
                 self.updated_robot_info_connclose.emit(robot_arm_num)
+
+                # Updating Grandchild Thread List
+                self.connection_ended.emit(threading.get_ident())
                 break
 
             try :
@@ -106,6 +110,9 @@ class SharedRoboList(QtCore.QObject):
 
                 self.updated_image_connclose.emit(robot_arm_num)
                 self.updated_robot_info_connclose.emit(robot_arm_num)
+
+                # Updating Grandchild Thread List
+                self.connection_ended.emit(threading.get_ident())
                 break
 
             try :
@@ -122,11 +129,15 @@ class SharedRoboList(QtCore.QObject):
 
                 self.updated_image_connclose.emit(robot_arm_num)
                 self.updated_robot_info_connclose.emit(robot_arm_num)
+
+                # Updating Grandchild Thread List
+                self.connection_ended.emit(threading.get_ident())
                 break
 
             im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
 
 
+            # For Testing Purpose
             time.sleep(5)
 
     def isRunning(self, robot_num_new):

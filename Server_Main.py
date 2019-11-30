@@ -27,12 +27,6 @@ gm = None
 # Shared Robot Information List
 robot_status = None
 
-# Thread t
-t_child_saveImages = None
-t_child_runServer = None
-# Child Thread Lists
-t_grandchild_list = []
-
 ## According to the python docs,
 ## Python signal handlers are always executed in the main Python thread,
 ## even if the signal was received in another thread.
@@ -73,6 +67,7 @@ if __name__ == "__main__" :
     robot_status = SharedRoboList()
     robot_status.updated_image_connclose.connect(gm.gui_update_image_connclose)
     robot_status.updated_robot_info_connclose.connect(gm.gui_update_robot_info_connclose)
+    robot_status.connection_ended.connect(gm.manage_grandchild)
 
     # Extra Initiation - Registering Function
     gm.gui_extra_initiation(robot_status)
@@ -80,12 +75,12 @@ if __name__ == "__main__" :
     # Execution of saveImages() by Multi-threading
     t = threading.Thread(target=saveImages, args=(im, ))
     t.start()
-    t_child_saveImages = t
+    gm.t_child_saveImages = t
 
     # Execution of Server Loop by Multi-threading
     t = threading.Thread(target=ServerSocket.run_server, args=(tm, im, im_pos, gm, robot_status, t_grandchild_list))
     t.start()
-    t_child_runServer = t
+    gm.t_child_runServer = t
 
     # Execution of GUIs
     sys.exit(app.exec_())

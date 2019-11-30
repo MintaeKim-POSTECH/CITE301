@@ -47,9 +47,9 @@ class MainWindow(QMainWindow):
         self.ui.robo1_dat_inst_next.setText("Disconnected")
 
         # Threading Issue
-        self.t_child_saveImages = t_child_saveImages
-        self.t_child_runServer = t_child_runServer
-        self.t_grandchild_list = t_grandchild_list
+        self.t_child_saveImages = None
+        self.t_child_runServer = None
+        self.t_grandchild_list = []
 
     # Extra Initiation
     def gui_extra_initiation(self, robot_status):
@@ -162,6 +162,12 @@ class MainWindow(QMainWindow):
                 inst = 'Using Robot Arm with Angle ' + str(round(inst_args[0], 2)) + "˚, " + str(round(inst_args[1], 2)) + "˚, " + str(round(inst_args[2], 2)) + "˚ and RELEASE"
 
         return inst
+
+    def manage_grandchild(self, dead_thread_tid):
+        for t_grandchild in self.t_grandchild_list:
+            if (dead_thread_tid == t_grandchild.ident) :
+                self.t_grandchild_list.remove(t_grandchild)
+                return
 
     def closeEvent(self, event):
         print(self.t_child_saveImages.ident)

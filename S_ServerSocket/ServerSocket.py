@@ -46,4 +46,4 @@ def run_server(tm, im, im_pos, gm, robot_status, t_grandchild_list):
             t.start()
 
             # Adding Current Thread to grandchild thread list.
-            t_grandchild_list.append(t)
+            gm.t_grandchild_list.append(t)
