@@ -86,7 +86,6 @@ class SharedRoboList :
 
             try :
                 self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
-                end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
             except ConnectionResetError:
                 # Partner dropped the connection
                 self.lock.acquire()
@@ -101,6 +100,22 @@ class SharedRoboList :
                 gm.gui_update_robot_info(self, robot_arm_num)
                 break
 
+            try :
+                end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
+            except ConnectionResetError:
+                # Partner dropped the connection
+                self.lock.acquire()
+                # Exit Condition - Setting Robot Terminated
+                self.roboTerminated[robot_arm_num] = True
+
+                self.armList_conn[robot_arm_num] = None
+                self.roboInfoList[robot_arm_num] = None
+                self.lock.release()
+
+                gm.gui_update_image_connclose(robot_arm_num)
+                gm.gui_update_robot_info(self, robot_arm_num)
+                break
+                
             updatePosition(self.roboInfoList[robot_arm_num], im, gm)
 
             time.sleep(5)

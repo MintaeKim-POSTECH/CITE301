@@ -46,9 +46,8 @@ class MainWindow(QMainWindow):
         self.gui_update_robot_info(robot_status, 0)
         self.gui_update_robot_info(robot_status, 1)
 
-    def gui_update_image_connclose(self, robot_obj):
+    def gui_update_image_connclose(self, robot_num):
         self.lock.acquire()
-        robot_num = robot_obj.get_robo_num()
         qPixmapVar_l = QPixmap("./S_GUI/Images/Loading.png")
         if (robot_num == 0):
             self.ui.robo0_img.setPixmap(qPixmapVar_l)
