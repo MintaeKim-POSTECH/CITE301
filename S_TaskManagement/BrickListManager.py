@@ -169,7 +169,7 @@ class BrickListManager :
         bricks_done = 0
         bricks_total = 0
         for dstLayer in self.dstLayerList :
-            for dstBrick in dstLayer :
+            for dstBrick in dstLayer.getBrickList() :
                 bricks_total = bricks_total + 1
                 if (dstBrick.getPhase() == Phase.DONE) :
                     bricks_done = bricks_done + 1
