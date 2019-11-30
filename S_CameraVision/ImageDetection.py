@@ -30,7 +30,7 @@ class UpdatePositionClass (QtCore.QObject) :
     def __init__(self, parent=None):
         super(UpdatePositionClass, self).__init__(parent)
 
-    def updatePosition(robot_obj, imageManager) :
+    def updatePosition(self, robot_obj, imageManager) :
         image_name = None
 
         ## Step 0 : Get the most recent image from directory Images
