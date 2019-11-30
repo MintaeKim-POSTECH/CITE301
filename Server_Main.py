@@ -31,7 +31,7 @@ robot_status = None
 t_child_saveImages = None
 t_child_runServer = None
 # Child Thread Lists
-t_grandchild_list = None
+t_grandchild_list = []
 
 ## According to the python docs,
 ## Python signal handlers are always executed in the main Python thread,
@@ -76,9 +76,6 @@ if __name__ == "__main__" :
 
     # Extra Initiation - Registering Function
     gm.gui_extra_initiation(robot_status)
-
-    # Initiation of t_grandchild
-    t_grandchild_list = []
 
     # Execution of saveImages() by Multi-threading
     t = threading.Thread(target=saveImages, args=(im, ))
