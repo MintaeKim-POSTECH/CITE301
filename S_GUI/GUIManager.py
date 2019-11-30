@@ -172,4 +172,5 @@ class MainWindow(QMainWindow):
         shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
         os.mkdir('./S_CameraVision/Images_Box/Sticker')
 
-        event.accept()
+        # Call Parent (QMainWindow).close()
+        super(MainWindow, self).closeEvent(event)
