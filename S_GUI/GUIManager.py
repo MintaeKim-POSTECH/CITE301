@@ -170,6 +170,8 @@ class MainWindow(QMainWindow):
                 return
 
     def closeEvent(self, event):
+        super(MainWindow, self).closeEvent(event)
+        
         print(self.t_child_saveImages.ident)
         print(self.t_child_runServer.ident)
         print(self.t_grandchild_list)
@@ -189,15 +191,10 @@ class MainWindow(QMainWindow):
         os.mkdir('./S_CameraVision/Images_Box/Sticker')
 
         # Afterwards Process - Killing normal threads
-        print ("killing grandchild")
         for t_grandchild in self.t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
 
-        print("killing saveimages")
         signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
-        print ("killing runserver")
         signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
 
-        print ("success")
         # Call Parent (QMainWindow).close()
-        super(MainWindow, self).closeEvent(event)
