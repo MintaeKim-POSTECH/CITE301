@@ -74,13 +74,13 @@ class SharedRoboList(QtCore.QObject):
             # Calculate the next instructions by Task Manager
             ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
             ## In CITD IV, We will try to generalize for more than three trajectories.
-            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num])
+            next_instruction_obj = tm.fetchNextTask(self.roboInfoList[robot_arm_num])
 
             # If the robot is waiting for the other robot to finish their task,
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
-            if (next_instruction == "") :
+            if (next_instruction_obj == None) :
                 self.lock.acquire()
                 # Exit Condition - Setting Robot Terminated
                 self.roboTerminated[robot_arm_num] = True
@@ -95,6 +95,8 @@ class SharedRoboList(QtCore.QObject):
                 # Updating Grandchild Thread List
                 self.connection_ended.emit(threading.get_ident())
                 break
+
+            next_instruction = str(next_instruction_obj)
 
             try :
                 self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
@@ -134,8 +136,10 @@ class SharedRoboList(QtCore.QObject):
                 self.connection_ended.emit(threading.get_ident())
                 break
 
+            # TODO: Implement Callibration
+            # ideal_pos = tm.getIdealPos(robot_obj, new_instruction)
             im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
-
+            # tm.callibrate(robot_obj, ideal_pos)
 
             # For Testing Purpose
             time.sleep(5)

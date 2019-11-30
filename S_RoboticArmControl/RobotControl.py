@@ -69,11 +69,27 @@ class Robot:
         l = len(self.next_inst_queue)
         self.lock.release()
         return (l == 0)
-    def push_inst(self, new_inst):
+
+    def push_front_inst(self, new_inst):
+        self.lock.acquire()
+        temp = []
+        temp.append(new_inst)
+        temp.extend(self.next_inst_queue)
+        self.next_inst_queue = temp
+        self.lock.release()
+    def push_front_inst_list(self, new_inst_list):
+        self.lock.acquire()
+        temp = []
+        temp.extend(new_inst_list)
+        temp.extend(self.next_inst_queue)
+        self.next_inst_queue = temp
+        self.lock.release()
+
+    def push_back_inst(self, new_inst):
         self.lock.acquire()
         self.next_inst_queue.append(new_inst)
         self.lock.release()
-    def push_inst_list(self, new_inst_list):
+    def push_back_inst_list(self, new_inst_list):
         self.lock.acquire()
         self.next_inst_queue.extend(new_inst_list)
         self.lock.release()

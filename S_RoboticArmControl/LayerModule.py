@@ -86,7 +86,7 @@ class Layer:
         return self.stackedList
 
     def calRadius(self):
-        self.diameter=self.brickList()[0].getPos().calDist(self.calCenter())
+        self.diameter=self.brickList[0].getPos().calDist(self.calCenter())
 
     def getRadius(self):
         return self.diameter

@@ -39,17 +39,18 @@ def run_client() :
             print("arm " + recv_inst_tok[1:4])
             # TODO: ARM arg[1] arg[2] arg[3] state
             state = int(recv_inst_tok[4])
+
+            # TODO : Implement
             if (state == 0) : # GRAB
                 pass
             else : # Release
                 pass
-        # elif (recv_inst_tok[0] == 'EXIT') : # Jobs Done
-            # break
+
+        # TODO: Remove (Test Purpose Only)
+        time.sleep(2)
 
         # Noticing Current Task is totally done.
-        time.sleep(2)
         clientSock.sendall("DONE".encode())
-    # clientSock.sendall("CLIENT_ELIMINATED".encode())
 
 if __name__ == "__main__" :
     run_client()
