@@ -204,4 +204,4 @@ class UpdatePositionClass (QtCore.QObject) :
 
         cv2.imwrite('./S_CameraVision/Images_Box/Robot/' + image_name, frame_bgr)
 
-        self.updated_image_conn(robot_obj, './S_CameraVision/Images_Box/Robot/' + image_name)
+        self.updated_image_conn.emit(robot_obj, './S_CameraVision/Images_Box/Robot/' + image_name)
