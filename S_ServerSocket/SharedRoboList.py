@@ -12,7 +12,6 @@ import time
 from PyQt5 import QtCore
 
 from S_RoboticArmControl.RobotControl import Robot
-from S_CameraVision.ImageDetection import updatePosition
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
