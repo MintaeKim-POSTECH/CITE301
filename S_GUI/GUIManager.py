@@ -173,12 +173,6 @@ class MainWindow(QMainWindow):
         print(self.t_child_saveImages.ident)
         print(self.t_child_runServer.ident)
         print(self.t_grandchild_list)
-        # Afterwards Process - Killing normal threads
-        signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
-        print (self.t_grandchild_list)
-        for t_grandchild in self.t_grandchild_list:
-            signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
-        signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
 
         # Afterwards Process - Removal of Files
         print("Removal of Files")
@@ -194,5 +188,16 @@ class MainWindow(QMainWindow):
         shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
         os.mkdir('./S_CameraVision/Images_Box/Sticker')
 
+        # Afterwards Process - Killing normal threads
+        print ("killing grandchild")
+        for t_grandchild in self.t_grandchild_list:
+            signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
+
+        print("killing saveimages")
+        signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
+        print ("killing runserver")
+        signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
+
+        print ("success")
         # Call Parent (QMainWindow).close()
         super(MainWindow, self).closeEvent(event)
