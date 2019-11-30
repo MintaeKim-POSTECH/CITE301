@@ -72,7 +72,7 @@ class SharedRoboList :
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
-            if (next_instruction == "") :
+            if (next_instruction == None) :
                 print ("no instruction left")
                 # Exit Condition - Setting Robot Terminated
                 self.roboTerminated[robot_arm_num] = True

@@ -35,14 +35,16 @@ VEL_DEFAULT_MAX_FORWARD: 1.5
 VEL_DEFAULT_MAX_RIGHT: 1.5
 VEL_DEFAULT_MAX_ROTATION: 1.5
 
-# Fixed Initial Position (cm)
+# Fixed Initial Position (mm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
-INIT_POS1: [15.0, 0.0]
-INIT_POS2: [15.0, 0.0]
+INIT_POS: [15.0, 0.0]
 
-# ---- Robot Arm Configuration ----
+# Robot Arm Configuration (mm)
 ROBOTARM_L1: 145
 ROBOTARM_L2: 180
+
+# ---- Robot Arm Configuration ----
+
 
 # ---- Server Configuration ----
 # Maximum # of robots connected

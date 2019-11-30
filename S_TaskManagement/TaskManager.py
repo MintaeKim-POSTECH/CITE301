@@ -189,7 +189,7 @@ class TaskManager :
         if (robot_obj.getCurrentInst() == None) :
             return ""
 
-        return str(robot_obj.getCurrentInst())
+        return robot_obj.getCurrentInst()
 
 #Returns the domian of brick
 #   1 2
