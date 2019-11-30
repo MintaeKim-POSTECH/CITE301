@@ -45,9 +45,6 @@ class MainWindow(QMainWindow):
         self.ui.robo1_dat_inst_on.setText("Disconnected")
         self.ui.robo1_dat_inst_next.setText("Disconnected")
 
-        # Exit Slots
-        self.actionExit.triggered.connect(self.close)
-
     # Extra Initiation
     def gui_extra_initiation(self, robot_status):
         self.ui.button_start.registerButtonHandler(robot_status.setProcessRunning, 1)
