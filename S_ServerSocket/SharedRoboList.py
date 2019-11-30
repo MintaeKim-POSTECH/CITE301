@@ -124,7 +124,7 @@ class SharedRoboList(QtCore.QObject):
                 self.updated_robot_info_connclose.emit(robot_arm_num)
                 break
 
-            im_pos.updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+            im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
 
 
             time.sleep(5)
