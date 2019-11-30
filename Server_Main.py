@@ -27,28 +27,7 @@ gm = None
 # Shared Robot Information List
 robot_status = None
 
-## According to the python docs,
-## Python signal handlers are always executed in the main Python thread,
-## even if the signal was received in another thread.
-def sigchld_handler(sig, frame):
-    global t_child_saveImages, t_child_runServer, t_grandchild_list
-    dead_thread_pid = os.waitpid(-1, 0)
-
-    # Comparison of PIDs
-    for t_grandchild in t_grandchild_list :
-        if (t_grandchild.ident == dead_thread_pid) :
-            t_grandchild_list.remove(t_grandchild)
-            return
-
-    # Comparison of PIDs
-    if (t_child_saveImages.ident == dead_thread_pid) :
-        t_child_saveImages = None
-    elif (t_child_runServer.ident == dead_thread_pid) :
-        t_child_runServer = None
-
 if __name__ == "__main__" :
-    signal.signal(signal.SIGCHLD, sigchld_handler)
-
     # Initiation of GUI & GUI Manager
     app = QApplication(sys.argv)
 
