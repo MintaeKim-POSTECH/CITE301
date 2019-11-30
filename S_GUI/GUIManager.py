@@ -4,6 +4,7 @@
 import yaml
 import math
 import os, shutil
+import signal
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import *
 
@@ -14,7 +15,7 @@ from S_TaskManagement.Instruction import InstType
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, t_child_saveImages, t_child_runServer, t_grandchild_list):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -44,6 +45,11 @@ class MainWindow(QMainWindow):
         self.ui.robo1_dat_pos.setText("Disconnected")
         self.ui.robo1_dat_inst_on.setText("Disconnected")
         self.ui.robo1_dat_inst_next.setText("Disconnected")
+
+        # Threading Issue
+        self.t_child_saveImages = t_child_saveImages
+        self.t_child_runServer = t_child_runServer
+        self.t_grandchild_list = t_grandchild_list
 
     # Extra Initiation
     def gui_extra_initiation(self, robot_status):
@@ -158,6 +164,12 @@ class MainWindow(QMainWindow):
         return inst
 
     def closeEvent(self, event):
+        # Afterwards Process - Killing normal threads
+        signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
+        for t_grandchild in self.t_grandchild_list:
+            signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
+        signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
+
         # Afterwards Process - Removal of Files
         print("Removal of Files")
         shutil.rmtree('./S_CameraVision/Images')
