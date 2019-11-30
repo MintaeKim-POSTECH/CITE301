@@ -178,7 +178,6 @@ class MainWindow(QMainWindow):
         print(self.t_grandchild_list)
 
         # Afterwards Process - Removal of Files
-        print("Removal of Files")
         shutil.rmtree('./S_CameraVision/Images')
         os.mkdir('./S_CameraVision/Images')
 
@@ -191,12 +190,10 @@ class MainWindow(QMainWindow):
         shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
         os.mkdir('./S_CameraVision/Images_Box/Sticker')
 
-        print ("grandchild")
         # Afterwards Process - Killing normal threads
         for t_grandchild in self.t_grandchild_list:
             signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
 
-        print ("kill saveimages")
+        # TODO: Unreached... Why?
         signal.pthread_kill(self.t_child_saveImages.ident, signal.SIGKILL)
-        print ("kill runserver")
         signal.pthread_kill(self.t_child_runServer.ident, signal.SIGKILL)
