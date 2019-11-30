@@ -1,25 +1,30 @@
 import yaml
+from PyQt5 import QtCore
 
 from S_TaskManagement.BrickListManager import BrickListManager
 from S_TaskManagement.Instruction import Instruction
+from S_RoboticArmControl.RobotControl import Robot
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-class TaskManager :
+class TaskManager (QtCore.QObject) :
+    updated_robot_info_conn = QtCore.pyqtSignal(Robot)
+    updated_progress = QtCore.pyqtSignal(BrickListManager)
+
     def __init__(self):
         self.brickListManager = BrickListManager()
 
     # TODO: Push initial Instructions which moves robot to initial position.
-    def pushInitialInstruction(self, robot_obj, gm):
+    def pushInitialInstruction(self, robot_obj):
 
         # Update of Robot Information (While Connection)
-        gm.gui_update_robot_info_conn(robot_obj)
+        self.updated_robot_info_conn.emit(robot_obj)
         pass
 
     ## For CITD III, We need an initial position info to seperate two trajectories.
     ## In CITD IV, We will try to generalize for more than three trajectories.
-    def fetchNextTask(self, robot_obj, gm) :
+    def fetchNextTask(self, robot_obj) :
         if (robot_obj.isQueueEmpty() == True) :
             # TODO: Push new Instructions for each robot_obj phase
 
@@ -48,7 +53,8 @@ class TaskManager :
         robot_obj.pop_inst()
 
         # Update of Robot Information (While Connection)
-        gm.gui_update_robot_info_conn(robot_obj)
+        self.updated_robot_info_conn.emit(robot_obj)
+        self.updated_progress.emit(self.brickListManager)
 
         if (robot_obj.getCurrentInst() == None) :
             return ""

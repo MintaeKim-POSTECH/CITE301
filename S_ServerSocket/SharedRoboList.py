@@ -1,10 +1,15 @@
 # Referenced from https://wayhome25.github.io/python/2017/02/26/py-14-list/
 # Referenced from https://codechacha.com/ko/how-to-import-python-files/
 
+# IMPORTANT
+# Avoiding Random Crashes when Multithreading Qt
+# https://medium.com/@armin.samii/avoiding-random-crashes-when-multithreading-qt-f740dc16059
+
 # For Multi-Threading & Usage of Synchronization (Semaphore, Lock)
 import threading
 import yaml
 import time
+from PyQt5 import QtCore
 
 from S_RoboticArmControl.RobotControl import Robot
 from S_CameraVision.ImageDetection import updatePosition
@@ -12,7 +17,10 @@ from S_CameraVision.ImageDetection import updatePosition
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
-class SharedRoboList :
+class SharedRoboList(QtCore.QObject):
+    updated_image_connclose = QtCore.pyqtSignal(int)
+    updated_robot_info_connclose = QtCore.pyqtSignal(int)
+
     def __init__ (self) :
         self.armList_conn = []
         # Construction of roboInfoList
@@ -33,7 +41,7 @@ class SharedRoboList :
         # Monitor for Running State
         self.monitor = threading.Condition()
 
-    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, gm):
+    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, im_pos):
         self.lock.acquire()
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
@@ -46,13 +54,13 @@ class SharedRoboList :
         self.lock.release()
 
         # Reset Current Position & Direction Information
-        updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+        im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
 
         # Push Initial Instructions based on Infos (Move to Initial Position)
-        tm.pushInitialInstruction(self.roboInfoList[robot_arm_num], gm)
+        tm.pushInitialInstruction(self.roboInfoList[robot_arm_num])
 
 
-    def action_conn(self, robot_arm_num, tm, im, gm):
+    def action_conn(self, robot_arm_num, tm, im, im_pos):
         # For Iterating while loop, get the instructions from image
         while True:
             # WAIT until user starts
@@ -65,7 +73,7 @@ class SharedRoboList :
             # Calculate the next instructions by Task Manager
             ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
             ## In CITD IV, We will try to generalize for more than three trajectories.
-            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num], gm)
+            next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num])
 
             # If the robot is waiting for the other robot to finish their task,
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
@@ -80,8 +88,8 @@ class SharedRoboList :
                 self.roboInfoList[robot_arm_num] = None
                 self.lock.release()
 
-                gm.gui_update_image_connclose(robot_arm_num)
-                gm.gui_update_robot_info(self, robot_arm_num)
+                self.updated_image_connclose.emit(robot_arm_num)
+                self.updated_robot_info_connclose.emit(robot_arm_num)
                 break
 
             try :
@@ -96,8 +104,8 @@ class SharedRoboList :
                 self.roboInfoList[robot_arm_num] = None
                 self.lock.release()
 
-                gm.gui_update_image_connclose(robot_arm_num)
-                gm.gui_update_robot_info(self, robot_arm_num)
+                self.updated_image_connclose.emit(robot_arm_num)
+                self.updated_robot_info_connclose.emit(robot_arm_num)
                 break
 
             try :
@@ -112,11 +120,12 @@ class SharedRoboList :
                 self.roboInfoList[robot_arm_num] = None
                 self.lock.release()
 
-                gm.gui_update_image_connclose(robot_arm_num)
-                gm.gui_update_robot_info(self, robot_arm_num)
+                self.updated_image_connclose.emit(robot_arm_num)
+                self.updated_robot_info_connclose.emit(robot_arm_num)
                 break
-                
-            updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+
+            im_pos.updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+
 
             time.sleep(5)
 

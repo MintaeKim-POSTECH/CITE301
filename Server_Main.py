@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QApplication
 
 import S_ServerSocket.ServerSocket as ServerSocket
 from S_CameraVision.ImageManager import ImageManager
+from S_CameraVision.ImageDetection import UpdatePositionClass
 from S_CameraVision.ImageDetection import saveImages
 from S_ServerSocket.SharedRoboList import SharedRoboList
 from S_TaskManagement.TaskManager import TaskManager
@@ -20,6 +21,7 @@ from S_GUI.GUIManager import MainWindow
 tm = None
 # Image Manager
 im = None
+im_pos = None
 # GUI Manager
 gm = None
 # Shared Robot Information List
@@ -51,13 +53,7 @@ def sigchld_handler(sig, frame):
         t_child_runServer = None
 
 if __name__ == "__main__" :
-    # signal.signal(signal.SIGCHLD, sigchld_handler)
-
-    # Initiation of ImageManager, TaskManager, and SharedRoboList
-    im = ImageManager()
-
-    tm = TaskManager()
-    robot_status = SharedRoboList()
+    signal.signal(signal.SIGCHLD, sigchld_handler)
 
     # Initiation of GUI & GUI Manager
     app = QApplication(sys.argv)
@@ -65,6 +61,20 @@ if __name__ == "__main__" :
     gm = MainWindow()
     gm.show()
 
+    # Initiation of ImageManager, TaskManager, and SharedRoboList
+    im = ImageManager()
+    im_pos = UpdatePositionClass()
+    im_pos.updated_image_conn.connect(gm.gui_update_image_conn)
+
+    tm = TaskManager()
+    tm.updated_robot_info_conn.connect(gm.gui_update_robot_info_conn)
+    tm.updated_progress.connect(gm.gui_update_progress)
+
+    robot_status = SharedRoboList()
+    robot_status.updated_image_connclose.connect(gm.gui_update_image_connclose)
+    robot_status.updated_robot_info_connclose.connect(gm.gui_update_robot_info_connclose)
+
+    # Extra Initiation - Registering Function
     gm.gui_extra_initiation(robot_status)
 
     # Initiation of t_grandchild
@@ -76,7 +86,7 @@ if __name__ == "__main__" :
     t_child_saveImages = t
 
     # Execution of Server Loop by Multi-threading
-    t = threading.Thread(target=ServerSocket.run_server, args=(tm, im, gm, robot_status, t_grandchild_list))
+    t = threading.Thread(target=ServerSocket.run_server, args=(tm, im, im_pos, gm, robot_status, t_grandchild_list))
     t.start()
     t_child_runServer = t
 
@@ -101,4 +111,5 @@ if __name__ == "__main__" :
     filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Sticker") if f.endswith(".jpg")]
     for f in filelist:
         os.remove(f)
+
     sys.exit(0)

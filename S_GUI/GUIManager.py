@@ -35,7 +35,17 @@ class MainWindow(QMainWindow):
         self.ui.robo1_img.setPixmap(qPixmapVar_l2)
         self.ui.robo1_img.repaint()
 
-        # Locks for Image
+        self.ui.robo0_dat_state.setText("Disconnected")
+        self.ui.robo0_dat_pos.setText("Disconnected")
+        self.ui.robo0_dat_inst_on.setText("Disconnected")
+        self.ui.robo0_dat_inst_next.setText("Disconnected")
+
+        self.ui.robo1_dat_state.setText("Disconnected")
+        self.ui.robo1_dat_pos.setText("Disconnected")
+        self.ui.robo1_dat_inst_on.setText("Disconnected")
+        self.ui.robo1_dat_inst_next.setText("Disconnected")
+
+        # Threading (Required?)
         self.lock = threading.Lock()
 
     # Extra Initiation
@@ -43,11 +53,7 @@ class MainWindow(QMainWindow):
         self.ui.button_start.registerButtonHandler(robot_status.setProcessRunning, 1)
         self.ui.button_stop.registerButtonHandler(robot_status.setProcessRunning, 0)
 
-        self.gui_update_robot_info(robot_status, 0)
-        self.gui_update_robot_info(robot_status, 1)
-
     def gui_update_image_connclose(self, robot_num):
-        self.lock.acquire()
         qPixmapVar_l = QPixmap("./S_GUI/Images/Loading.png")
         if (robot_num == 0):
             self.ui.robo0_img.setPixmap(qPixmapVar_l)
@@ -55,11 +61,8 @@ class MainWindow(QMainWindow):
         else :
             self.ui.robo1_img.setPixmap(qPixmapVar_l)
             self.ui.robo1_img.repaint()
-        self.lock.release()
-
 
     def gui_update_image_conn(self, robot_obj, new_image_dir):
-        self.lock.acquire()
         robot_num = robot_obj.get_robo_num()
         qPixmapVar_newImage = QPixmap(new_image_dir)
         qPixmapVar_newImage = qPixmapVar_newImage.scaledToWidth(config["RESOLUTION_WIDTH_GUI"])
@@ -70,38 +73,18 @@ class MainWindow(QMainWindow):
         elif (robot_num == 1):
             self.ui.robo1_img.setPixmap(qPixmapVar_newImage)
             self.ui.robo1_img.repaint()
-        self.lock.release()
 
-    def gui_update_robot_info(self, robot_status, robot_num):
-        isConnected = robot_status.isRunning(robot_num)
+    def gui_update_robot_info_connclose(self, robot_num):
         if (robot_num == 0) :
-            if (isConnected == True) :
-                robot0 = robot_status.getRobotEntry(robot_num)
-                state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot0.getInformation()
-                state, pos, ongoing_inst, next_inst = self.tostring(state_raw, pos_raw, ongoing_inst_raw, next_inst_raw)
-                self.ui.robo0_dat_state.setText(state)
-                self.ui.robo0_dat_pos.setText(pos)
-                self.ui.robo0_dat_inst_on.setText(ongoing_inst)
-                self.ui.robo0_dat_inst_next.setText(next_inst)
-            else :
-                self.ui.robo0_dat_state.setText("Disconnected")
-                self.ui.robo0_dat_pos.setText("Disconnected")
-                self.ui.robo0_dat_inst_on.setText("Disconnected")
-                self.ui.robo0_dat_inst_next.setText("Disconnected")
+            self.ui.robo0_dat_state.setText("Disconnected")
+            self.ui.robo0_dat_pos.setText("Disconnected")
+            self.ui.robo0_dat_inst_on.setText("Disconnected")
+            self.ui.robo0_dat_inst_next.setText("Disconnected")
         elif (robot_num == 1) :
-            if (isConnected == True):
-                robot1 = robot_status.getRobotEntry(robot_num)
-                state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot1.getInformation()
-                state, pos, ongoing_inst, next_inst = self.tostring(state_raw, pos_raw, ongoing_inst_raw, next_inst_raw)
-                self.ui.robo1_dat_state.setText(state)
-                self.ui.robo1_dat_pos.setText(pos)
-                self.ui.robo1_dat_inst_on.setText(ongoing_inst)
-                self.ui.robo1_dat_inst_next.setText(next_inst)
-            else :
-                self.ui.robo1_dat_state.setText("Disconnected")
-                self.ui.robo1_dat_pos.setText("Disconnected")
-                self.ui.robo1_dat_inst_on.setText("Disconnected")
-                self.ui.robo1_dat_inst_next.setText("Disconnected")
+            self.ui.robo0_dat_state.setText("Disconnected")
+            self.ui.robo0_dat_pos.setText("Disconnected")
+            self.ui.robo0_dat_inst_on.setText("Disconnected")
+            self.ui.robo0_dat_inst_next.setText("Disconnected")
 
     def gui_update_robot_info_conn(self, robot_obj):
         state_raw, pos_raw, ongoing_inst_raw, next_inst_raw = robot_obj.getInformation()
