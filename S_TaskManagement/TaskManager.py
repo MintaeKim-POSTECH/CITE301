@@ -21,7 +21,6 @@ class TaskManager :
     ## In CITD IV, We will try to generalize for more than three trajectories.
     def fetchNextTask(self, robot_obj, gm) :
         if (robot_obj.isQueueEmpty() == True) :
-            print ("yes")
             # TODO: Push new Instructions for each robot_obj phase
 
             ## Usage :

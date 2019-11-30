@@ -4,6 +4,7 @@
 # For Multi-Threading & Usage of Synchronization (Semaphore, Lock)
 import threading
 import yaml
+import time
 
 from S_RoboticArmControl.RobotControl import Robot
 from S_CameraVision.ImageDetection import updatePosition
@@ -61,19 +62,17 @@ class SharedRoboList :
                 self.monitor.wait()
             self.monitor.release()
 
-            print ("before fnt")
             # Calculate the next instructions by Task Manager
             ## For CITD III, We need an robo_arm_num infos to seperate two trajectories.
             ## In CITD IV, We will try to generalize for more than three trajectories.
             next_instruction = tm.fetchNextTask(self.roboInfoList[robot_arm_num], gm)
 
-            print ("after fnt")
             # If the robot is waiting for the other robot to finish their task,
             # then this robot would be waiting for a new block by a condition variable in BrickListManager.
             # That means if next_instruction is None, which means no instruction left in queue
             # infers that all tasks are done.
             if (next_instruction == "") :
-                print ("no instruction left")
+                self.lock.acquire()
                 # Exit Condition - Setting Robot Terminated
                 self.roboTerminated[robot_arm_num] = True
 
@@ -85,12 +84,26 @@ class SharedRoboList :
                 gm.gui_update_robot_info_conn(robot_arm_num)
                 break
 
-            print ("sendall")
-            self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
-            end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
+            try :
+                self.armList_conn[robot_arm_num].sendall(next_instruction.encode())
+                end_msg = self.armList_conn[robot_arm_num].recv(config["MAX_BUF_SIZE"]).decode()
+            except ConnectionResetError:
+                # Partner dropped the connection
+                self.lock.acquire()
+                # Exit Condition - Setting Robot Terminated
+                self.roboTerminated[robot_arm_num] = True
 
-            print ("updateposition")
+                self.armList_conn[robot_arm_num] = None
+                self.roboInfoList[robot_arm_num] = None
+                self.lock.release()
+
+                gm.gui_update_image_connclose()
+                gm.gui_update_robot_info_conn(robot_arm_num)
+                break
+
             updatePosition(self.roboInfoList[robot_arm_num], im, gm)
+
+            time.sleep(5)
 
     def isRunning(self, robot_num_new):
         self.lock.acquire()
