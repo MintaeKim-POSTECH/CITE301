@@ -196,4 +196,4 @@ def updatePosition(robot_obj, imageManager, guiManager):
 
     cv2.imwrite('./S_CameraVision/Images_Box/Robot/' + image_name, frame_bgr)
 
-    guiManager.gui_update_image(robot_obj, './S_CameraVision/Images_Box/Robot/' + image_name)
+    guiManager.gui_update_image_conn(robot_obj, './S_CameraVision/Images_Box/Robot/' + image_name)

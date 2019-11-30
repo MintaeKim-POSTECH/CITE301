@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.lock.release()
 
 
-    def gui_update_image(self, robot_obj, new_image_dir):
+    def gui_update_image_conn(self, robot_obj, new_image_dir):
         self.lock.acquire()
         robot_num = robot_obj.get_robo_num()
         qPixmapVar_newImage = QPixmap(new_image_dir)
