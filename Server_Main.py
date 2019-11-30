@@ -7,6 +7,7 @@ import threading
 import signal
 import os
 import sys
+import shutil
 from PyQt5.QtWidgets import QApplication
 
 import S_ServerSocket.ServerSocket as ServerSocket
@@ -99,17 +100,16 @@ if __name__ == "__main__" :
         signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
     signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
 
-    filelist = [f for f in os.listdir("./S_CameraVision/Images") if f.endswith(".jpg")]
-    for f in filelist:
-        os.remove(f)
-    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Filtered") if f.endswith(".jpg")]
-    for f in filelist:
-        os.remove(f)
-    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Robot") if f.endswith(".jpg")]
-    for f in filelist:
-        os.remove(f)
-    filelist = [f for f in os.listdir("./S_CameraVision/Images_Box/Sticker") if f.endswith(".jpg")]
-    for f in filelist:
-        os.remove(f)
+    shutil.rmtree('./S_CameraVision/Images')
+    os.mkdir('./S_CameraVision/Images')
+
+    shutil.rmtree('./S_CameraVision/Images_Box/Filtered')
+    os.mkdir('./S_CameraVision/Images_Box/Filtered')
+
+    shutil.rmtree('./S_CameraVision/Images_Box/Robot')
+    os.mkdir('./S_CameraVision/Images_Box/Robot')
+
+    shutil.rmtree('./S_CameraVision/Images_Box/Sticker')
+    os.mkdir('./S_CameraVision/Images_Box/Sticker')
 
     sys.exit(0)
