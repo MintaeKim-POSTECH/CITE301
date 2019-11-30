@@ -12,7 +12,7 @@ class TaskManager (QtCore.QObject) :
     updated_robot_info_conn = QtCore.pyqtSignal(Robot)
     updated_progress = QtCore.pyqtSignal(BrickListManager)
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(TaskManager, self).__init__(parent)
         self.brickListManager = BrickListManager()
 

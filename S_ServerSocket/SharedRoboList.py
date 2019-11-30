@@ -20,7 +20,7 @@ class SharedRoboList(QtCore.QObject):
     updated_image_connclose = QtCore.pyqtSignal(int)
     updated_robot_info_connclose = QtCore.pyqtSignal(int)
 
-    def __init__ (self, parent) :
+    def __init__ (self, parent=None) :
         super(SharedRoboList, self).__init__(parent)
         self.armList_conn = []
         # Construction of roboInfoList

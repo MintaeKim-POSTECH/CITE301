@@ -27,7 +27,7 @@ def saveImages(imageManager):
 class UpdatePositionClass (QtCore.QObject) :
     updated_image_conn = QtCore.pyqtSignal(Robot, str)
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(UpdatePositionClass, self).__init__(parent)
 
     def updatePosition(robot_obj, imageManager) :
