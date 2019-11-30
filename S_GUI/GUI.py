@@ -284,7 +284,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "[2019F CITD III] Development of Builder Robot Arms Management System"))
         self.robo0_img.setText(_translate("MainWindow", "Robot Image 1"))
         self.robo1_img.setText(_translate("MainWindow", "Robot Image 2"))
         self.label_3.setText(_translate("MainWindow", "Robot 1"))
