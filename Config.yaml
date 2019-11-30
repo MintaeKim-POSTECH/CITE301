@@ -37,9 +37,12 @@ VEL_DEFAULT_MAX_ROTATION: 1.5
 
 # Fixed Initial Position (cm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
-INIT_POS: [15.0, 0.0]
-# ---- Robot Arm Configuration ----
+INIT_POS1: [15.0, 0.0]
+INIT_POS2: [15.0, 0.0]
 
+# ---- Robot Arm Configuration ----
+ROBOTARM_L1: 145
+ROBOTARM_L2: 180
 
 # ---- Server Configuration ----
 # Maximum # of robots connected
@@ -69,6 +72,10 @@ ROBOT_BODY_SIZE_MM: 150
 
 # Diameter of Minimun area for
 ROBOT_ROTATING_DIAMETER: 250
+
+#Position of center of motor in arm
+ROBOT_MOTOR_POS: [0.0,0.0]
+ROBOT_MOVING_POSTURE: [0.0,0.0]
 
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 25

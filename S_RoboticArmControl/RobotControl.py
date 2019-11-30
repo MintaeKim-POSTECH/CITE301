@@ -127,7 +127,11 @@ class Robot:
         rgb = self.color_rgb
         self.lock.release()
         return rgb
-
+    def getSrcBlock(self):
+        self.lock.acquire()
+        brick_src=self.brick_src
+        self.lock.release()
+        return brick_src
     def getOngoingBlock(self):
         self.lock.acquire()
         brick_og = self.brick_ongoing

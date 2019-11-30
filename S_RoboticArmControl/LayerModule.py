@@ -18,6 +18,8 @@ class Layer:
         self.ongoingList = []
         self.stackedList = []
 
+        self.diameter = 0.00
+
         self.phase = Phase.NULL
 
         self.processedBrickCnt = 0
@@ -83,6 +85,11 @@ class Layer:
     def getStackedList(self):
         return self.stackedList
 
+    def calRadius(self):
+        self.diameter=self.brickList()[0].getPos().calDist(self.calCenter())
+
+    def getRadius(self):
+        return self.diameter
 
 # test
 '''
