@@ -100,6 +100,8 @@ if __name__ == "__main__" :
         signal.pthread_kill(t_grandchild.ident, signal.SIGKILL)
     signal.pthread_kill(t_child_runServer.ident, signal.SIGKILL)
 
+    # Removal of Files
+    print ("Removal of Files")
     shutil.rmtree('./S_CameraVision/Images')
     os.mkdir('./S_CameraVision/Images')
 
