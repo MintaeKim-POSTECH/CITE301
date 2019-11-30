@@ -15,7 +15,7 @@ PROCESS_FRAME_INTERVAL = 25
 # Open the device at the ID 0
 cap = cv2.VideoCapture(0)
 if not (cap.isOpened()):
-    printf("Could not open video device")
+    print("Could not open video device")
     exit()
 
 # Reset Resolution

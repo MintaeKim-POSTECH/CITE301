@@ -52,12 +52,9 @@ class DB:
                 h = dst.pos.pos[2]
             l.addBrick(dst)
 
-        # Calculation of Dst Layer Center
-        for layer in self.srcLayerList :
-            layer.calCenter()
-
         for lay in self.dstLayerList:
             lay.calCenter()
+            lay.calRadius()
 
         return (self.srcLayerList, self.dstLayerList)
 

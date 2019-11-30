@@ -2,7 +2,11 @@ import S_RoboticArmControl as rc
 from S_RoboticArmControl.Elements import Phase
 from S_RoboticArmControl.Elements import Position
 
-minDist = 10.0
+# Configurations
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
+
+
+minDist = 1
 
 
 class Brick:
@@ -34,7 +38,7 @@ class Brick:
         return self.phase
 
     def getRobotPosForWork(self):
-        ret = self.dst.getPos() + self.dst.getDir() * minDist
+        ret = self.dst.getPos() + self.dst.getDir() * config['ROBOT_BODY_SIZE_MM']
         return ret
 
     def __repr__(self):
