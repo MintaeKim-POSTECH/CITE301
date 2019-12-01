@@ -9,6 +9,7 @@
 import threading
 import yaml
 import time
+import sys
 from PyQt5 import QtCore
 
 from S_RoboticArmControl.RobotControl import Robot
@@ -43,6 +44,11 @@ class SharedRoboList(QtCore.QObject):
         self.monitor = threading.Condition()
 
     def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, im_pos):
+        if (self.isRunning(robot_arm_num) == True):
+            # Updating Grandchild Thread List
+            self.connection_ended.emit(threading.get_ident())
+            sys.exit(0)
+
         self.lock.acquire()
         # Adding current connection to the list.
         self.armList_conn[robot_arm_num] = conn
