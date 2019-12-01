@@ -37,8 +37,7 @@ VEL_DEFAULT_MAX_ROTATION: 1.5
 
 # Fixed Initial Position (cm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
-INIT_POS1: [15.0, 0.0]
-INIT_POS2: [15.0, 0.0]
+INIT_POS: [15.0, 0.0]
 
 # ---- Robot Arm Configuration ----
 ROBOTARM_L1: 145
