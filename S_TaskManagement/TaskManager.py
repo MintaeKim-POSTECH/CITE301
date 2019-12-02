@@ -4,9 +4,9 @@ import yaml
 from PyQt5 import QtCore
 
 from S_TaskManagement.BrickListManager import BrickListManager
-from S_TaskManagement.Instruction import Instruction
+from S_TaskManagement.Instruction import Instruction, InstType
 from S_RoboticArmControl.RobotControl import Robot
-from S_RoboticArmControl.Elements import RobotPhase
+from S_RoboticArmControl.Elements import RobotPhase, Position
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
@@ -88,15 +88,13 @@ class TaskManager (QtCore.QObject) :
                     endPos = calPositionForRotation(dstBlock.getPos())
 
                     x = 0.0
-                    rotate = calRotationDegree(robot_obj.getPos().getDir(), -(dstBlock.getPos().getDir()))
+                    rotate = -calRotationDegree(robot_obj.getPos().getDir(), -(dstBlock.getPos().getDir()))
 
                     if (brickDomain > 2 and roboNum == 0):
-                        rotate = (-rotate)  # CCW
                         x = center.getPos()[0] - (config["ROBOT_ROTATING_DIAMETER"] + radius)
                     elif (brickDomain > 2 and roboNum == 1):
                         x = center.getPos()[0] + (config["ROBOT_ROTATING_DIAMETER"] + radius)
                     elif (roboNum == 0):
-                        rotate = (-rotate)  # CCW
                         x = endPos[0]
                     else:
                         x = endPos[0]
@@ -126,8 +124,6 @@ class TaskManager (QtCore.QObject) :
                     y = dstBlock.getPos().pos[2]-config["ROBOT_MOTOR_POS"][1]
                     instList.append(Instruction('ARM', [x ,y,0.0,1])) #state(0 ~2)])(state 0: grab, 1: release , 2: just moving))
 
-       
-
             elif (robot_obj.phase == RobotPhase.LIFTING):
                 success = self.brickListManager.brick_comeback(robot_obj)
                 if (success == True) :
@@ -141,15 +137,13 @@ class TaskManager (QtCore.QObject) :
                     endPos=tmp
 
                     x = 0.0
-                    rotate = calRotationDegree(robot_obj.getPos().getDir(),[0.0,-1.0,0.0])
+                    rotate = -calRotationDegree(robot_obj.getPos().getDir(),[0.0,-1.0,0.0])
 
                     if (robotArmPosDomain > 2 and roboNum == 0):
-                        rotate = (-rotate)  # CCW
                         x = center.getPos()[0] - (config["ROBOT_ROTATING_DIAMETER"] + radius)
                     elif (robotArmPosDomain > 2 and roboNum == 1):
                         x = center.getPos()[0] + (config["ROBOT_ROTATING_DIAMETER"] + radius)
                     elif (roboNum == 0):
-                        rotate = (-rotate)  # CCW
                         x = endPos[0]
                     else:
                         x = endPos[0]
@@ -192,11 +186,44 @@ class TaskManager (QtCore.QObject) :
 
     # TODO: Fetching Ideal Position based on robot_obj current position & new_instruction
     def getIdealPos(self, robot_obj, new_instruction):
-        pass
+        idealPos=Position()
+        pos=robot_obj.getPos().pos
+
+        dir=robot_obj.getPos().getDir()
+        angle=calRotationDegree(np.array([0.0,1.0,0.0]), dir)
+
+        if (new_instruction.getInstType() == InstType.INST_RIGHT) :
+            idealPos.setPos(np.array([new_instruction.getArgs()[0], 0.0,0.0]))
+        elif (new_instruction.getInstType()== InstType.INST_FORWARD) :
+            idealPos.setPos(np.array( 0.0,[new_instruction.getArgs()[0], 0.0]))
+        elif (new_instruction.getInstType()== InstType.INST_ROTATE) :
+            idealPos.setDir(rotateVector(dir,-new_instruction.getArgs()[0]))
+        idealPos.setPos(pos+rotateVector(idealPos.getPos(),angle))
+
+        return idealPos
 
     # TODO: Push Front new Instructions to Callibrate. (Based on Heuristics)
     def callibrate(self, ideal_pos, robot_obj):
-        pass
+        instList=[]
+
+        dir_i=ideal_pos.getDir()
+        pos_i=ideal_pos.getPos()
+        pos_r=robot_obj.getPos().getPos()
+        dir_r = robot_obj.getPos().getDir()
+
+        dist=pos_i.getDist(pos_r)
+        pos_dif=pos_i-pos_r
+        angle=calRotationDegree(dir_i,pos_dif)
+
+        forward= dist*np.cos(angle)
+        right= dist*np.sin(angle) # actually its left direction for robot arm
+        dir_dif_angle = calRotationDegree(dir_r, dir_i)
+
+        instList.append(Instruction('ROTATE', [(dir_dif_angle* config["DEGREE_PER_MM_ROTATE"])]))
+        instList.append(Instruction('FORWARD', [(forward * config["DEGREE_PER_MM_FORWARD"])]))
+        instList.append(Instruction('RIGHT', [(forward * config["DEGREE_PER_MM_RIGHT"])]))
+
+        robot_obj.push_front_inst_lis(instList)
 
 #Returns the domian of brick
 #   1 2
@@ -216,11 +243,26 @@ def calPositionForRotation(pos):
         ret = pos.getPos() + pos.getPos().getDir() * config["ROBOT_ROTATING_DIAMETER"]
         return ret
 
+#rotate vector in ccw
+def rotateVector(dir,angle):
+    ret=np.array([dir[0],dir[1]])
+    angle=angle*np.pi/180
+    cos=np.cos(angle)
+    sin=np.sin(angle)
+    rotationMatrix=np.array([cos,-sin],[sin,cos])
+    ret=np.dot(ret,rotationMatrix)
+    return np.array([ret[0],ret[1],dir[2]])
+
 def calRotationDegree(dir1,dir2):
     #make dir1 & dir2 to unit direction vector
+    #if rotation angle is positive than it means that the car must rotate ccw to reach dir2
     dir1= dir1 /(np.linalg.norm(dir1))
-    dir2 = (dir2 / (np.linalg.norm(dir2)))*(-1.0)
+    dir2 = (dir2 / (np.linalg.norm(dir2)))
     dotProduct=(dir1*dir2)
-    return 180*(math.acos(dotProduct[0]+dotProduct[1]))/math.pi
+    angle =180*(math.acos(dotProduct[0]+dotProduct[1]))/math.pi
 
-
+    crossProduct=np.cross(dir1,dir2)
+    if(crossProduct[2]>0):
+        return angle
+    else:
+        return -angle
