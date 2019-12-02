@@ -35,10 +35,10 @@ class TaskManager (QtCore.QObject) :
         init_instList.append(Instruction('FORWARD',[init_pos[1]-cur_pos[1]]))
         init_instList.append( Instruction('RIGHT', [init_pos[0] - cur_pos[0]]))
         robot_obj.push_back_inst_list(init_instList)
+        '''
 
         # Update of Robot Information (While Connection)
         self.updated_robot_info_conn.emit(robot_obj)
-        '''
 
     ## For CITD III, We need an initial position info to seperate two trajectories.
     ## In CITD IV, We will try to generalize for more than three trajectories.
@@ -185,6 +185,7 @@ class TaskManager (QtCore.QObject) :
         return robot_obj.getCurrentInst()
 
     # TODO: Fetching Ideal Position based on robot_obj current position & new_instruction
+    # TODO: Change Direction
     def getIdealPos(self, robot_obj, new_instruction):
         idealPos=Position()
         pos=robot_obj.getPos().pos
@@ -203,6 +204,7 @@ class TaskManager (QtCore.QObject) :
         return idealPos
 
     # TODO: Push Front new Instructions to Callibrate. (Based on Heuristics)
+    # TODO: Change Direction
     def callibrate(self, ideal_pos, robot_obj):
         instList=[]
 

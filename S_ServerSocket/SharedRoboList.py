@@ -143,9 +143,9 @@ class SharedRoboList(QtCore.QObject):
                 break
 
             # TODO: Implement Callibration
-            ideal_pos = tm.getIdealPos(self.roboInfoList[robot_arm_num], next_instruction_obj )
+            # ideal_pos = tm.getIdealPos(self.roboInfoList[robot_arm_num], next_instruction_obj )
             im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
-            tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
+            # tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
 
             # For Testing Purpose
             time.sleep(10)

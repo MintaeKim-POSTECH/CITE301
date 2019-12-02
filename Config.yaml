@@ -39,14 +39,15 @@ VEL_DEFAULT_MAX_ROTATION: 1.5
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
 INIT_POS: [15.0, 0.0]
 
-#Robot Arm config for initialize and motion control
+# Distance between Center of Robot & Axis of Robot Arm
 ROBOTARM_L1 : 145
 ROBOTARM_L2 : 180
+
+# Robot Arm config for initialize and motion control
 ROBOTARM_MAX_ANGLES : [200.0,200.0,360.0]
 ROBOTARM_MIN_ANGLES : [-1.0,-1.0,-1.0]
 
-
-#ROBOT Arm Postions for stacking and lifting
+# Robot Arm Positions for stacking and lifting
 ROBOTARM_INITIAL_POSITION : [49.0, -5.0]
 ROBOT_ARM_POSITION_BEFORE_WORK: 200.0
 ROBOT_ARM_MOVING_POSITION : [70.0,100.0]
@@ -86,10 +87,6 @@ ROBOT_ROTATING_DIAMETER: 250
 #Position of center of motor in arm
 ROBOT_MOTOR_POS: [0.0,0.0]
 ROBOT_MOVING_POSTURE: [0.0,0.0]
-
-# Distance between Center of Robot & Axis of Robot Arm
-ROBOTARM_L1: 145
-ROBOTARM_L2: 180
 
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 25
