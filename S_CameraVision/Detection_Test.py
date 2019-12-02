@@ -33,12 +33,12 @@ def mouse_callback(event, x, y, flags, param):
         # HSV 색공간에서 마우스 클릭으로 얻은 픽셀값과 유사한 필셀값의 범위를 정합니다.
         if hsv[0] < 10:
             print("case1")
-            lower_blue1 = np.array([hsv[0] - 10 + 180, threshold, threshold])
+            lower_blue1 = np.array([hsv[0] - 5 + 180, threshold, threshold])
             upper_blue1 = np.array([180, 255, 255])
             lower_blue2 = np.array([0, threshold, threshold])
             upper_blue2 = np.array([hsv[0], 255, 255])
             lower_blue3 = np.array([hsv[0], threshold, threshold])
-            upper_blue3 = np.array([hsv[0] + 10, 255, 255])
+            upper_blue3 = np.array([hsv[0] + 5, 255, 255])
             #     print(i-10+180, 180, 0, i)
             #     print(i, i+10)
 
@@ -47,18 +47,18 @@ def mouse_callback(event, x, y, flags, param):
             lower_blue1 = np.array([hsv[0], threshold, threshold])
             upper_blue1 = np.array([180, 255, 255])
             lower_blue2 = np.array([0, threshold, threshold])
-            upper_blue2 = np.array([hsv[0] + 10 - 180, 255, 255])
-            lower_blue3 = np.array([hsv[0] - 10, threshold, threshold])
+            upper_blue2 = np.array([hsv[0] + 5 - 180, 255, 255])
+            lower_blue3 = np.array([hsv[0] - 5, threshold, threshold])
             upper_blue3 = np.array([hsv[0], 255, 255])
             #     print(i, 180, 0, i+10-180)
             #     print(i-10, i)
         else:
             print("case3")
             lower_blue1 = np.array([hsv[0], threshold, threshold])
-            upper_blue1 = np.array([hsv[0] + 10, 255, 255])
-            lower_blue2 = np.array([hsv[0] - 10, threshold, threshold])
+            upper_blue1 = np.array([hsv[0] + 5, 255, 255])
+            lower_blue2 = np.array([hsv[0] - 5, threshold, threshold])
             upper_blue2 = np.array([hsv[0], 255, 255])
-            lower_blue3 = np.array([hsv[0] - 10, threshold, threshold])
+            lower_blue3 = np.array([hsv[0] - 5, threshold, threshold])
             upper_blue3 = np.array([hsv[0], 255, 255])
             #     print(i, i+10)
             #     print(i-10, i)
@@ -78,6 +78,9 @@ cv.setTrackbarPos('threshold', 'img_result', 30)
 
 cap = cv.VideoCapture(0)
 
+cap.set(3, 1024)
+cap.set(4, 768)
+
 while (True):
     # img_color = cv.imread('2.jpg')
     ret, img_color = cap.read()
@@ -93,7 +96,7 @@ while (True):
     img_mask3 = cv.inRange(img_hsv, lower_blue3, upper_blue3)
     img_mask = img_mask1 | img_mask2 | img_mask3
 
-    kernel = np.ones((11, 11), np.uint8)
+    kernel = np.ones((4, 4), np.uint8)
     img_mask = cv.morphologyEx(img_mask, cv.MORPH_OPEN, kernel)
     img_mask = cv.morphologyEx(img_mask, cv.MORPH_CLOSE, kernel)
 
@@ -113,9 +116,9 @@ while (True):
         centerX, centerY = int(centroid[0]), int(centroid[1])
         print(centerX, centerY)
 
-        if area > 50:
-            cv.circle(img_color, (centerX, centerY), 10, (0, 0, 255), 10)
-            cv.rectangle(img_color, (x, y), (x + width, y + height), (0, 0, 255))
+        # if area > 5:
+        cv.circle(img_color, (centerX, centerY), 10, (0, 0, 255), 10)
+        cv.rectangle(img_color, (x, y), (x + width, y + height), (0, 0, 255))
 
     cv.imshow('img_color', img_color)
     cv.imshow('img_mask', img_mask)
