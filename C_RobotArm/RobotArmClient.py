@@ -1,5 +1,4 @@
 import numpy as np
-from C_Motor import Motor
 import RPi.GPIO as gpio
 import math
 import operator
@@ -8,10 +7,15 @@ import time
 import queue
 import yaml
 
+from C_Motor import Motor
+
+# Configurations
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
+
 class armClient:
 
     def __init__(self, dirPins, stpPins, maxAngles, minAngles, servoPin):
-        initPos=config["ROBOTARM_INITIAL_POSITION "]
+        initPos= config["ROBOTARM_INITIAL_POSITION"]
         tmp = calAngle(initPos[0], initPos[1])
         self.curAngles = [tmp[0], tmp[1], 0.0]
         self.motorList = []
