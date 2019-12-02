@@ -21,6 +21,14 @@ class TaskManager (QtCore.QObject) :
 
     # Push initial Instructions which moves robot to initial position.
     def pushInitialInstruction(self, robot_obj):
+        init_instList = []
+        # 100 mm
+        init_instList.append(Instruction('FORWARD', [100]))
+        init_instList.append(Instruction('RIGHT', [100]))
+        # One Cycle : 360 Degree
+        init_instList.append(Instruction('ROTATE', [360]))
+        robot_obj.push_back_inst_list(init_instList)
+        '''
         cur_pos = robot_obj.getPos()
         init_pos = robot_obj.getInitPos() # Elemets.Position Object
         init_instList=[]
@@ -30,6 +38,7 @@ class TaskManager (QtCore.QObject) :
 
         # Update of Robot Information (While Connection)
         self.updated_robot_info_conn.emit(robot_obj)
+        '''
 
     ## For CITD III, We need an initial position info to seperate two trajectories.
     ## In CITD IV, We will try to generalize for more than three trajectories.
@@ -39,7 +48,7 @@ class TaskManager (QtCore.QObject) :
         center = self.brickListManager.srcCurrentLayer.center
         radius = self.brickListManager.dstCurrentLayer.getRadius()
         dirX = 1.0
-
+        '''
         if (robot_obj.isQueueEmpty() == True) :
             # Push new Instructions for each robot_obj phase
             if(robot_obj.phase==RobotPhase.STOP):
@@ -168,7 +177,7 @@ class TaskManager (QtCore.QObject) :
                 pass
 
             robot_obj.push_back_inst_list(instList)
-
+        '''
         # Pop_front instruction
         robot_obj.pop_inst()
 

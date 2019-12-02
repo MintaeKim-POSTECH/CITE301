@@ -40,8 +40,7 @@ VEL_DEFAULT_MAX_ROTATION: 1.5
 INIT_POS: [15.0, 0.0]
 
 # ---- Robot Arm Configuration ----
-ROBOTARM_L1: 145
-ROBOTARM_L2: 180
+
 
 # ---- Server Configuration ----
 # Maximum # of robots connected
@@ -75,6 +74,10 @@ ROBOT_ROTATING_DIAMETER: 250
 #Position of center of motor in arm
 ROBOT_MOTOR_POS: [0.0,0.0]
 ROBOT_MOVING_POSTURE: [0.0,0.0]
+
+# Distance between Center of Robot & Axis of Robot Arm
+ROBOTARM_L1: 145
+ROBOTARM_L2: 180
 
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 25

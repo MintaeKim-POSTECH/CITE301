@@ -148,7 +148,7 @@ class SharedRoboList(QtCore.QObject):
             # tm.callibrate(robot_obj, ideal_pos)
 
             # For Testing Purpose
-            time.sleep(5)
+            time.sleep(10)
 
     def isRunning(self, robot_num_new):
         self.lock.acquire()

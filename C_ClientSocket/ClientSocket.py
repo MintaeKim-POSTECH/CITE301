@@ -39,7 +39,6 @@ def run_client() :
             print("arm " + recv_inst_tok[1:4])
             # TODO: ARM arg[1] arg[2] arg[3] state
             state = int(recv_inst_tok[4])
-
             # TODO : Implement
             if (state == 0) : # GRAB
                 pass
