@@ -7,7 +7,7 @@ MAX_BUF_SIZE: 1024
 
 # ---- Robot Arm Configuration ----
 # Robot Number (Starts from 0)
-ROBOT_ARM_NUM: 0
+ROBOT_ARM_NUM: 1
 
 # Color of Sticker for CV Detection (RGB)
 ROBOT_ARM_COLOR: [240, 0, 0]
