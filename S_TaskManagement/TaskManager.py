@@ -23,10 +23,15 @@ class TaskManager (QtCore.QObject) :
     def pushInitialInstruction(self, robot_obj):
         init_instList = []
         # 100 mm
-        init_instList.append(Instruction('FORWARD', [100]))
-        init_instList.append(Instruction('RIGHT', [100]))
+        init_instList.append(Instruction('FORWARD', [1000]))
+        init_instList.append(Instruction('FORWARD', [-1000]))
+        init_instList.append(Instruction('RIGHT', [1000]))
+        init_instList.append(Instruction('RIGHT', [-1000]))
         # One Cycle : 360 Degree
         init_instList.append(Instruction('ROTATE', [360]))
+        init_instList.append(Instruction('ROTATE', [-360]))
+        init_instList.append(Instruction('ARM', [100, 200, 400, 0]))
+        init_instList.append(Instruction('ARM', [100, 200, 400, 1]))
         robot_obj.push_back_inst_list(init_instList)
         '''
         cur_pos = robot_obj.getPos()
