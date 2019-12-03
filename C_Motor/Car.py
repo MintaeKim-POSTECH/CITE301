@@ -1,9 +1,9 @@
 # Reference : https://www.youtube.com/watch?v=o-j9TReI1aQ&app=desktop
 
-from C_Motor import Motor
 import threading
 import yaml
 
+from C_Motor.Motor import Motor
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT

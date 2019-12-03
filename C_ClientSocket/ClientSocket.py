@@ -31,26 +31,23 @@ def run_client() :
     
         if (recv_inst_tok[0] == 'ROTATE') :
             print ("rotate " + recv_inst_tok[1])
-            # TODO: car.rotate(float(recv_inst_tok[1]))
+            car.rotate(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'FORWARD') :
             print("forward " + recv_inst_tok[1])
-            # TODO: car.move_forward(float(recv_inst_tok[1]))
+            car.move_forward(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'RIGHT') :
             print("right " + recv_inst_tok[1])
-            # TODO: car.move_right(float(recv_inst_tok[1]))
+            car.move_right(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'ARM') :
-            print("arm " + recv_inst_tok[1] + ' ' + recv_inst_tok[2] + ' ' + recv_inst_tok[3] + ' ' + recv_inst_tok[4])
+            #print("arm"+recv_inst_tok[4])
+            #print("arm " + recv_inst_tok[1:4])
             # TODO: ARM arg[1] arg[2] arg[3] state
             state = int(recv_inst_tok[4])
             if (state == 0) : # GRAB
-                # robotArm.work([recv_inst_tok[1],recv_inst_tok[2],recv_inst_tok[3]],True)
-                pass
+                print("grap")
+                # robotArm.work([float(recv_inst_tok[1]),float(recv_inst_tok[2]),float(recv_inst_tok[3])], True)
             else : # Release
-                # robotArm.work([recv_inst_tok[1],recv_inst_tok[2],recv_inst_tok[3]],False)
-                pass
-
-        # TODO: Remove (Test Purpose Only)
-        # time.sleep(2)
+                # robotArm.work([float(recv_inst_tok[1]),float(recv_inst_tok[2]),float(recv_inst_tok[3])], False)
 
         # Noticing Current Task is totally done.
         clientSock.sendall("DONE".encode())
