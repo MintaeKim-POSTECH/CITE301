@@ -31,22 +31,23 @@ def run_client() :
     
         if (recv_inst_tok[0] == 'ROTATE') :
             print ("rotate " + recv_inst_tok[1])
-            car.rotate(float(recv_inst_tok[1]))
+            # car.rotate(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'FORWARD') :
             print("forward " + recv_inst_tok[1])
-            car.move_forward(float(recv_inst_tok[1]))
+            # car.move_forward(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'RIGHT') :
             print("right " + recv_inst_tok[1])
-            car.move_right(float(recv_inst_tok[1]))
+            # car.move_right(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'ARM') :
-            #print("arm"+recv_inst_tok[4])
-            #print("arm " + recv_inst_tok[1:4])
+            # print("arm"+recv_inst_tok[4])
+            # print("arm " + recv_inst_tok[1:4])
             # TODO: ARM arg[1] arg[2] arg[3] state
             state = int(recv_inst_tok[4])
             if (state == 0) : # GRAB
                 print("grap")
                 # robotArm.work([float(recv_inst_tok[1]),float(recv_inst_tok[2]),float(recv_inst_tok[3])], True)
             else : # Release
+                print("release")
                 # robotArm.work([float(recv_inst_tok[1]),float(recv_inst_tok[2]),float(recv_inst_tok[3])], False)
 
         # Noticing Current Task is totally done.
