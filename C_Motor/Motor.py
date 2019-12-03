@@ -47,8 +47,6 @@ class Motor:
 
         if (angle + self.curAng < self.minAng or angle + self.curAng < self.maxAng) and self.maxAng != 0:
             print("False")
-            return False
-        print("1")
 
         delay = self.getDelay(vel * self.gear)
         stp = self.getStep(abs(angle) * self.gear)
@@ -62,7 +60,7 @@ class Motor:
         else:
             gpio.output(self.dirPin, False)
             print("False")
-
+        print(stp)
         if (not smooth):
             delay = self.getDelay(vel * self.gear)
             while counter < stp:
