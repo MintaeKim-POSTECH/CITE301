@@ -5,8 +5,8 @@ import operator
 import threading
 import time
 import yaml
-from C_Motor.Motor import Motor
 
+from C_Motor.Motor import Motor
 
 # Configurations
 config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)

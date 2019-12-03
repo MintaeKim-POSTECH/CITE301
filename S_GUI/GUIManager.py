@@ -150,7 +150,7 @@ class MainWindow(QMainWindow):
                 inst = 'Moving ' + str(round(inst_args[0], 2)) + 'mm RIGHT'
             else:
                 inst = 'Moving ' + str(abs(round(inst_args[0], 2))) + 'mm LEFT'
-        elif (inst_type == InstType.INST_RIGHT) :
+        elif (inst_type == InstType.INST_ROTATE) :
             if (inst_args[0] > 0):
                 inst = 'Moving ' + str(round(inst_args[0], 2)) + '˚ CLOCKWISE'
             else:
