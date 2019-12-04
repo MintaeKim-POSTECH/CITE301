@@ -96,7 +96,7 @@ while (True):
     img_mask3 = cv.inRange(img_hsv, lower_blue3, upper_blue3)
     img_mask = img_mask1 | img_mask2 | img_mask3
 
-    kernel = np.ones((4, 4), np.uint8)
+    kernel = np.ones((5, 5), np.uint8)
     img_mask = cv.morphologyEx(img_mask, cv.MORPH_OPEN, kernel)
     img_mask = cv.morphologyEx(img_mask, cv.MORPH_CLOSE, kernel)
 
