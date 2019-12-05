@@ -5,12 +5,14 @@
 # https://stackoverflow.com/questions/30331944/finding-red-color-in-image-using-python-opencv
 # https://stackoverflow.com/questions/33548956/detect-avoid-premature-end-of-jpeg-in-cv2-python
 # https://medium.com/joelthchao/programmatically-detect-corrupted-image-8c1b2006c3d3
+# https://github.com/webnautes/nudapeu/blob/master/opencv-python-006.py
 import cv2
 import yaml
 import time
 from skimage import io
 import numpy as np
 from PyQt5 import QtCore
+import time
 
 # from S_CameraVision.ImageManager import ImageManager
 import S_CameraVision.ConvertPixel2Real as ConvertPixel2Real
@@ -34,106 +36,109 @@ class UpdatePositionClass (QtCore.QObject) :
         image_name = None
 
         ## Step 0 : Get the most recent image from directory Images
-        frame_rgb = None
-        # Reason for while loop is to ensure that we've successfully fetched image file.
-        # Without the while loop, there was a chance for a case where fetching image failed
-        # Instead of using cv2.imread, we use skimage.imread to detect corrupted jpeg files.
+        frame_hue = None
+
         while True:
-            image_name = imageManager.getRecentImageName()
-            try :
-                frame_rgb = io.imread('./S_CameraVision/Images/' + image_name)
-            except :
-                print("Pre-mature end of JPEG File, Re-try")
-                continue
-            break
+            # Reason for while loop is to ensure that we've successfully fetched image file.
+            # Without the while loop, there was a chance for a case where fetching image failed
+            # Instead of using cv2.imread, we use skimage.imread to detect corrupted jpeg files.
+            while True:
+                image_name = imageManager.getRecentImageName()
+                try :
+                    frame_rgb = io.imread('./S_CameraVision/Images/' + image_name)
+                except :
+                    print("Pre-mature end of JPEG File, Re-try")
+                    continue
+                break
 
-        print(image_name)
+            print(image_name)
 
-        ## Step 1 : Detect Points with Particular Color
-        # Converting RGB to HSV - Robot
-        robot_color_rgb = robot_obj.getColorRGB()
-        robot_color_rgb_pixel = np.uint8([[robot_color_rgb]])
-        robot_color_hsv = cv2.cvtColor(robot_color_rgb_pixel, cv2.COLOR_RGB2HSV)
-        robot_color_hsv = robot_color_hsv[0][0]
+            ## Step 1 : Detect Points with Particular Color
+            # Get Hue value - Robot
+            robot_color_h = robot_obj.getHue()
 
-        # Converting BGR to HSV - Image
-        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
+            # Converting BGR to HSV - Image
+            frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+            frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
 
-        # Masking - Color
-        mask = None
-        if (robot_color_hsv[2] <= 50) : # Black (Useless)
-            mask_l = np.array([0, 0, 0])
-            mask_u = np.array([180, 255, 50])
-            mask = cv2.inRange(frame_hsv, mask_l, mask_u)
-        elif (robot_color_hsv[2] >= 205) : # White (Useless)
-            mask_l = np.array([0, 0, 205])
-            mask_u = np.array([180, 255, 255])
-            mask = cv2.inRange(frame_hsv, mask_l, mask_u)
-        elif (robot_color_hsv[0] < config["COLOR_SENSITIVITY"]) :
-            mask0_l = np.array([0, 30, 30])
-            mask0_u = np.array([robot_color_hsv[0] + config["COLOR_SENSITIVITY"], 255, 255])
-            mask0 = cv2.inRange(frame_hsv, mask0_l, mask0_u)
+            # Masking - Color
+            threshold = config["COLOR_THRESHOLD"]
+            sensitivity = config["COLOR_SENSITIVITY"]
 
-            mask1_l = np.array([robot_color_hsv[0] + 180 - config["COLOR_SENSITIVITY"], 30, 30])
-            mask1_u = np.array([180, 255, 255])
-            mask1 = cv2.inRange(frame_hsv, mask1_l, mask1_u)
+            # Red - I
+            if robot_color_h < sensitivity:
+                lower_blue1 = np.array([robot_color_h - sensitivity + 180, threshold, threshold])
+                upper_blue1 = np.array([180, 255, 255])
+                lower_blue2 = np.array([0, threshold, threshold])
+                upper_blue2 = np.array([robot_color_h, 255, 255])
+                lower_blue3 = np.array([robot_color_h, threshold, threshold])
+                upper_blue3 = np.array([robot_color_h + sensitivity, 255, 255])
+                #     print(i-10+180, 180, 0, i)
+                #     print(i, i+10)
 
-            mask = mask0 + mask1
-        elif (180 - robot_color_hsv[0] < config["COLOR_SENSITIVITY"]):
-            mask0_l = np.array([robot_color_hsv[0] - config["COLOR_SENSITIVITY"], 30, 30])
-            mask0_u = np.array([180, 255, 255])
-            mask0 = cv2.inRange(frame_hsv, mask0_l, mask0_u)
+            # Red - II
+            elif robot_color_h > 180 - sensitivity:
+                print("case2")
+                lower_blue1 = np.array([robot_color_h, threshold, threshold])
+                upper_blue1 = np.array([180, 255, 255])
+                lower_blue2 = np.array([0, threshold, threshold])
+                upper_blue2 = np.array([robot_color_h + sensitivity - 180, 255, 255])
+                lower_blue3 = np.array([robot_color_h - sensitivity, threshold, threshold])
+                upper_blue3 = np.array([robot_color_h, 255, 255])
 
-            mask1_l = np.array([0, 30, 30])
-            mask1_u = np.array([robot_color_hsv[0] + config["COLOR_SENSITIVITY"] - 180, 255, 255])
-            mask1 = cv2.inRange(frame_hsv, mask1_l, mask1_u)
+            # Others :>
+            else:
+                print("case3")
+                lower_blue1 = np.array([robot_color_h, threshold, threshold])
+                upper_blue1 = np.array([robot_color_h + sensitivity, 255, 255])
+                lower_blue2 = np.array([robot_color_h - sensitivity, threshold, threshold])
+                upper_blue2 = np.array([robot_color_h, 255, 255])
+                lower_blue3 = np.array([robot_color_h - sensitivity, threshold, threshold])
+                upper_blue3 = np.array([robot_color_h, 255, 255])
 
-            mask = mask0 + mask1
-        else :
-            mask_l = np.array([robot_color_hsv[0] - config["COLOR_SENSITIVITY"], 30, 30])
-            mask_u = np.array([robot_color_hsv[0] + config["COLOR_SENSITIVITY"], 255, 255])
-            mask = cv2.inRange(frame_hsv, mask_l, mask_u)
+            img_mask1 = cv2.inRange(frame_hsv, lower_blue1, upper_blue1)
+            img_mask2 = cv2.inRange(frame_hsv, lower_blue2, upper_blue2)
+            img_mask3 = cv2.inRange(frame_hsv, lower_blue3, upper_blue3)
+            img_mask = img_mask1 | img_mask2 | img_mask3
 
-        # Masking - Morphology (Clustering)
-        kernel = np.ones((11, 11), np.uint8)
-        mask_morph_open = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-        mask_morph = cv2.morphologyEx(mask_morph_open, cv2.MORPH_CLOSE, kernel)
+            # Masking - Morphology (Clustering)
+            kernel_size = config["COLOR_MORPH_KERNEL_SIZE"]
 
-        # Filtered Image Frame
-        frame_filtered = cv2.bitwise_and(frame_bgr, frame_bgr, mask=mask_morph)
-        cv2.imwrite("./S_CameraVision/Images_Box/Filtered/" + image_name, frame_filtered)
+            kernel = np.ones((kernel_size, kernel_size), np.uint8)
+            img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_OPEN, kernel)
+            img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_CLOSE, kernel)
 
-        # Labeling - Clustering
-        numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(mask_morph)
+            img_result = cv2.bitwise_and(frame_hsv, frame_hsv, mask=img_mask)
 
-        # Fetch Indices of Stickers
-        sticker_indices = []
-        for idx, centroid in enumerate(centroids) :
-            if (stats[idx][0] == 0 and stats[idx][1] == 0) :
-                continue
+            # Labeling - Clustering
+            numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(img_result)
 
-            if (np.any(np.isnan(centroid))):
-                continue
+            # Fetch Indices of Stickers
+            sticker_indices = []
+            for idx, centroid in enumerate(centroids) :
+                if (stats[idx][0] == 0 and stats[idx][1] == 0) :
+                    continue
 
-            x, y, width, height, area = stats[idx]
-            centerX, centerY = int(centroid[0]), int(centroid[1])
+                if (np.any(np.isnan(centroid))):
+                    continue
 
-            # Adding Index in List
-            sticker_indices.append((centerX, centerY))
+                x, y, width, height, area = stats[idx]
+                centerX, centerY = int(centroid[0]), int(centroid[1])
 
-            cv2.rectangle(frame_bgr, (x, y), (x + width, y + height), (0, 0, 255))
+                # Adding Index in List
+                sticker_indices.append((centerX, centerY))
+                cv2.circle(frame_bgr, (centerX, centerY), 10, (0, 0, 255), 10)
+                cv2.rectangle(frame_bgr, (x, y), (x + width, y + height), (0, 0, 255))
 
-        # TODO: Delete (Testing Purpose Only)
-        sticker_indices = [[250, 250], [400, 400], [400, 150]]
+            if (len(sticker_indices) == 3):
+                break
+            else :
+                time.sleep(0.5)
 
         cv2.imwrite('./S_CameraVision/Images_Box/Sticker/' + image_name, frame_bgr)
 
         # Calculation of Direction Vector & Position
-        # assert (len(sticker_indices) == 3) # 3 Stickers!
-
-        ### TODO : FAILURE ?
-        # TODO: While Loop until passes assert condition
+        assert (len(sticker_indices) == 3) # 3 Stickers!
 
         ## Step 2 : Indicate the Center Point of Robot Arms with infos from Step 1
 

@@ -40,6 +40,14 @@ class ImageManager:
             return -1
 
         if (self.frame_num % config["PROCESS_FRAME_INTERVAL"] == 0):
+
+            # Image Rotation
+            (h, w) = self.frame.shape[:2]
+            center = (w / 2, h / 2)
+            M = cv2.getRotationMatrix2D(center, 180, 1.0)
+            self.frame = cv2.warpAffine(self.frame, M, (w, h))
+
+            # Saving Images
             cv2.imwrite('./S_CameraVision/Images/' + str(int(self.frame_num / config["PROCESS_FRAME_INTERVAL"])) + '.jpg', self.frame)
 
             ## Callibration ----- GIVE UP

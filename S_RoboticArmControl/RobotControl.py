@@ -134,15 +134,15 @@ class Robot:
         pos = self.cur_pos
         self.lock.release()
         return pos
-    def setColorRGB(self, color_rgb):
+    def setHue(self, hue):
         self.lock.acquire()
-        self.color_rgb = color_rgb
+        self.hue = hue
         self.lock.release()
-    def getColorRGB(self):
+    def getHue(self):
         self.lock.acquire()
-        rgb = self.color_rgb
+        hue = self.hue
         self.lock.release()
-        return rgb
+        return hue
     def getSrcBlock(self):
         self.lock.acquire()
         brick_src=self.brick_src

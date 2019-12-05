@@ -18,8 +18,7 @@ def run_client() :
     # robotArm=armClient(config["GPIO_ARM_DIRPINS"],config["GPIO_ARM_STPPINS"],config["ROBOTARM_MIN_ANGLES"],config["ROBOTARM_MAX_ANGLES"],config["GPIO_SERVO_PIN"])
 
     # Client Flow 1 : Send Robot_Arm Number & Color Data
-    infoDat = str(config["ROBOT_ARM_NUM"]) + " " + str(config["ROBOT_ARM_COLOR"][0]) + " "
-    infoDat += str(config["ROBOT_ARM_COLOR"][1]) + " " + str(config["ROBOT_ARM_COLOR"][2]) + " "
+    infoDat = str(config["ROBOT_ARM_NUM"]) + " " + str(config["ROBOT_ARM_HUE"][0]) + " "
     infoDat += str(config["INIT_POS"][0]) + " " + str(config["INIT_POS"][1])
 
     clientSock.sendall(infoDat.encode())

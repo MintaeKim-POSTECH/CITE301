@@ -43,7 +43,7 @@ class SharedRoboList(QtCore.QObject):
         # Monitor for Running State
         self.monitor = threading.Condition()
 
-    def action_conn_init(self, conn, robot_arm_num, robot_arm_color, robot_arm_init_pos, tm, im, im_pos):
+    def action_conn_init(self, conn, robot_arm_num, robot_arm_hue, robot_arm_init_pos, tm, im, im_pos):
         if (self.isRunning(robot_arm_num) == True):
             # Updating Grandchild Thread List
             self.connection_ended.emit(threading.get_ident())
@@ -54,7 +54,7 @@ class SharedRoboList(QtCore.QObject):
         self.armList_conn[robot_arm_num] = conn
         self.roboInfoList[robot_arm_num] = Robot()
         self.roboInfoList[robot_arm_num].set_robo_num(robot_arm_num)
-        self.roboInfoList[robot_arm_num].setColorRGB(robot_arm_color)
+        self.roboInfoList[robot_arm_num].setHue(robot_arm_hue)
         self.roboInfoList[robot_arm_num].setInitPos(robot_arm_init_pos)
 
         # Lock that protects roboTerminated

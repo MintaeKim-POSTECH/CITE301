@@ -3,15 +3,16 @@
 import threading
 import yaml
 
-# from C_Motor.Motor import Motor
-from Motor import Motor
+from C_Motor.Motor import Motor
+# from Motor import Motor
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
 
 # Configurations
-config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+# config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 class Car:
     # Class Constructor

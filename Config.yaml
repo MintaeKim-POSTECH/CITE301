@@ -32,9 +32,9 @@ MOTOR_ARM_ANG_PER_SEC: 1.8
 MOTOR_ARM_GEAR: 10.0
 
 # Default Max Velocity for each operation
-VEL_DEFAULT_MAX_FORWARD: 1.5
-VEL_DEFAULT_MAX_RIGHT: 1.5
-VEL_DEFAULT_MAX_ROTATION: 1.5
+VEL_DEFAULT_MAX_FORWARD: 0.9
+VEL_DEFAULT_MAX_RIGHT: 0.9
+VEL_DEFAULT_MAX_ROTATION: 0.9
 
 # Fixed Initial Position (cm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
@@ -45,8 +45,8 @@ ROBOTARM_L1 : 145
 ROBOTARM_L2 : 180
 
 # Robot Arm config for initialize and motion control
-ROBOTARM_MAX_ANGLES : [200.0,200.0,360.0]
-ROBOTARM_MIN_ANGLES : [-1.0,-1.0,-1.0]
+ROBOTARM_MAX_ANGLES : [200.0, 200.0, 360.0]
+ROBOTARM_MIN_ANGLES : [-1.0, -1.0, -1.0]
 
 # Robot Arm Positions for stacking and lifting
 ROBOTARM_INITIAL_POSITION : [200.0, -71.0]
@@ -67,6 +67,13 @@ RESOLUTION_HEIGHT: 480
 # Frame to process (time)
 PROCESS_FRAME_INTERVAL: 10
 
+# Color Sensitivity (HSV - Hue)
+COLOR_SENSITIVITY: 8
+# Color Threshold (HSV - Hue Blue:88, Red:179)
+COLOR_THRESHOLD: 179
+# Morphology Kernel Size (Default : 4)
+COLOR_MORPH_KERNEL_SIZE: 4
+
 # TODO: Experimental Decision
 # 1 Pixel : X mm
 MM_PER_PIXEL: 0.3
@@ -85,14 +92,9 @@ ROBOT_BODY_SIZE_MM: 150
 # Diameter of Minimun area for
 ROBOT_ROTATING_DIAMETER: 250
 
-#Position of center of motor in arm
+# Position of center of motor in arm
 ROBOT_MOTOR_POS: [0.0,0.0]
 ROBOT_MOVING_POSTURE: [0.0,0.0]
-
-# Color Sensitivity (HSV - Hue)
-COLOR_SENSITIVITY: 8
-# Color Threshold (HSV - Hue)
-COLOR_THRESHOLD: 88
 
 # ---- Server Configuration ----
 
