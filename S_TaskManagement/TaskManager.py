@@ -56,7 +56,20 @@ class TaskManager (QtCore.QObject) :
         center = self.brickListManager.srcCurrentLayer.center
         radius = self.brickListManager.dstCurrentLayer.getRadius()
         dirX = 1.0
-        '''
+
+        if robot_obj.getRobotNum() == 1 :
+            # Pop_front instruction
+            robot_obj.pop_inst()
+
+            # Update of Robot Information (While Connection)
+            self.updated_robot_info_conn.emit(robot_obj)
+            self.updated_progress.emit(self.brickListManager)
+
+            if (robot_obj.getCurrentInst() == None):
+                return None
+
+            return robot_obj.getCurrentInst()
+
         if (robot_obj.isQueueEmpty() == True) :
             # Push new Instructions for each robot_obj phase
             if(robot_obj.phase==RobotPhase.STOP):
@@ -70,9 +83,9 @@ class TaskManager (QtCore.QObject) :
                     dist_x=endPos()[0]-robot_obj.getPos().pos[0]
                     dist_y=endPos()[1]-robot_obj.getPos().pos[1]
 
-                    instList.append(Instruction(('FORWARD', [(dist_x * config["DEGREE_PER_MM_FORWARD"])])))
-                    instList.append(Instruction(('RIGHT', [-(dist_y * config["DEGREE_PER_MM_RIGHT"])])))
-                    instList.append(Instruction(('FORWARD', [(rotatePosToWorking * config["DEGREE_PER_MM_FORWARD"])])))
+                    instList.append(Instruction('FORWARD', [(dist_x * config["DEGREE_PER_MM_FORWARD"])]))
+                    instList.append(Instruction('RIGHT', [-(dist_y * config["DEGREE_PER_MM_RIGHT"])]))
+                    instList.append(Instruction('FORWARD', [(rotatePosToWorking * config["DEGREE_PER_MM_FORWARD"])]))
 
                     #grap brick
 
@@ -182,8 +195,7 @@ class TaskManager (QtCore.QObject) :
                 pass
 
             robot_obj.push_back_inst_list(instList)
-            
-        '''
+
         # Pop_front instruction
         robot_obj.pop_inst()
 
