@@ -1,4 +1,4 @@
-from Car import Car
+from C_Motor.Car import Car
 import time
 
 car = Car()

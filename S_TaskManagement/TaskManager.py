@@ -22,6 +22,8 @@ class TaskManager (QtCore.QObject) :
     # Push initial Instructions which moves robot to initial position.
     def pushInitialInstruction(self, robot_obj):
         init_instList = []
+
+        '''
         # 100 mm
         init_instList.append(Instruction('FORWARD', [1000]))
         init_instList.append(Instruction('FORWARD', [-1000]))
@@ -34,13 +36,13 @@ class TaskManager (QtCore.QObject) :
         init_instList.append(Instruction('ARM', [100, 200, 400, 1]))
         robot_obj.push_back_inst_list(init_instList)
         '''
+
         cur_pos = robot_obj.getPos()
         init_pos = robot_obj.getInitPos() # Elemets.Position Object
         init_instList=[]
         init_instList.append(Instruction('FORWARD',[init_pos[1]-cur_pos[1]]))
-        init_instList.append( Instruction('RIGHT', [init_pos[0] - cur_pos[0]]))
+        init_instList.append(Instruction('RIGHT', [init_pos[0] - cur_pos[0]]))
         robot_obj.push_back_inst_list(init_instList)
-        '''
 
         # Update of Robot Information (While Connection)
         self.updated_robot_info_conn.emit(robot_obj)
@@ -53,7 +55,6 @@ class TaskManager (QtCore.QObject) :
         center = self.brickListManager.srcCurrentLayer.center
         radius = self.brickListManager.dstCurrentLayer.getRadius()
         dirX = 1.0
-        '''
         if (robot_obj.isQueueEmpty() == True) :
             # Push new Instructions for each robot_obj phase
             if(robot_obj.phase==RobotPhase.STOP):
@@ -68,14 +69,15 @@ class TaskManager (QtCore.QObject) :
                     dist_y=endPos()[1]-robot_obj.getPos().pos[1]
 
                     instList.append(Instruction(('FORWARD', [(dist_x * config["DEGREE_PER_MM_FORWARD"])])))
-                    instList.append(Instruction(('RIGHT', [(dist_y * config["DEGREE_PER_MM_RIGHT"])])))
+                    instList.append(Instruction(('RIGHT', [-(dist_y * config["DEGREE_PER_MM_RIGHT"])])))
                     instList.append(Instruction(('FORWARD', [(rotatePosToWorking * config["DEGREE_PER_MM_FORWARD"])])))
 
                     #grap brick
 
                     x = config["ROBOT_BODY_SIZE_MM"] - config["ROBOT_MOTOR_POS"][0]
                     y = srcBlock.getPos().pos[2] - config["ROBOT_MOTOR_POS"][1]
-                    instList.append(Instruction('ARM', [x, y, 0.0, 0]))  # state(0 ~2)])(state 0: grab, 1: release , 2: just moving))
+                    ### CITD III DEMO : DELETE ARMS
+                    ## instList.append(Instruction('ARM', [x, y, 0.0, 0]))  # state(0 ~2)])(state 0: grab, 1: release , 2: just moving))
 
                     # move to moving posture
                     #posture=config["ROBOT_MOVING_POSTURE"]
@@ -113,9 +115,9 @@ class TaskManager (QtCore.QObject) :
                         'FORWARD', [(config["ROBOT_ROTATING_DIAMETER"] * config["DEGREE_PER_MM_FORWARD"])]))
 
                     # move to rotation point for destination brick => 3 step(x axis move => y axis mov => x axis mov)
-                    instList.append(Instruction('RIGHT', [(dist_x1 * config["DEGREE_PER_MM_RIGHT"])]))
+                    instList.append(Instruction('RIGHT', [-(dist_x1 * config["DEGREE_PER_MM_RIGHT"])]))
                     instList.append(Instruction('FORWARD', [(dist_y * config["DEGREE_PER_MM_FORWARD"])]))
-                    instList.append(Instruction('RIGHT', [(dist_x2 * config["DEGREE_PER_MM_RIGHT"])]))
+                    instList.append(Instruction('RIGHT', [-(dist_x2 * config["DEGREE_PER_MM_RIGHT"])]))
 
                     # rotate until robot arm is just perpendicular to brick
                     # (robot Arm direction is just Opposite to direction of brick)
@@ -127,7 +129,9 @@ class TaskManager (QtCore.QObject) :
                     # release brick
                     x = config["ROBOT_BODY_SIZE_MM"]-config["ROBOT_MOTOR_POS"][0]
                     y = dstBlock.getPos().pos[2]-config["ROBOT_MOTOR_POS"][1]
-                    instList.append(Instruction('ARM', [x ,y,0.0,1])) #state(0 ~2)])(state 0: grab, 1: release , 2: just moving))
+
+                    ### CITD III DEMO : DELETE ARMS
+                    ## instList.append(Instruction('ARM', [x ,y,0.0,1])) #state(0 ~2)])(state 0: grab, 1: release , 2: just moving))
 
             elif (robot_obj.phase == RobotPhase.LIFTING):
                 success = self.brickListManager.brick_comeback(robot_obj)
@@ -164,9 +168,9 @@ class TaskManager (QtCore.QObject) :
                     instList.append(Instruction('ROTATE', [(rotate * config["DEGREE_PER_MM_ROTATE"])]))
 
                     # move to end point (here initial point)
-                    instList.append(Instruction('RIGHT', [(dist_x1 * config["DEGREE_PER_MM_RIGHT"])]))
+                    instList.append(Instruction('RIGHT', [-(dist_x1 * config["DEGREE_PER_MM_RIGHT"])]))
                     instList.append(Instruction('FORWARD', [(dist_y * config["DEGREE_PER_MM_FORWARD"])]))
-                    instList.append(Instruction('RIGHT', [(dist_x2 * config["DEGREE_PER_MM_RIGHT"])]))
+                    instList.append(Instruction('RIGHT', [-(dist_x2 * config["DEGREE_PER_MM_RIGHT"])]))
 
             elif (robot_obj.phase == RobotPhase.COMEBACK):
                 success=self.brickListManager.brick_fin(robot_obj)
@@ -176,7 +180,7 @@ class TaskManager (QtCore.QObject) :
                 pass
 
             robot_obj.push_back_inst_list(instList)
-        '''
+
         # Pop_front instruction
         robot_obj.pop_inst()
 
@@ -189,8 +193,7 @@ class TaskManager (QtCore.QObject) :
 
         return robot_obj.getCurrentInst()
 
-    # TODO: Fetching Ideal Position based on robot_obj current position & new_instruction
-    # TODO: Change Direction
+    # Fetching Ideal Position based on robot_obj current position & new_instruction
     def getIdealPos(self, robot_obj, new_instruction):
         idealPos=Position()
         pos=robot_obj.getPos().pos
@@ -208,8 +211,7 @@ class TaskManager (QtCore.QObject) :
 
         return idealPos
 
-    # TODO: Push Front new Instructions to Callibrate. (Based on Heuristics)
-    # TODO: Change Direction
+    # Push Front new Instructions to Callibrate. (Based on Heuristics)
     def callibrate(self, ideal_pos, robot_obj):
         instList=[]
 
@@ -226,11 +228,15 @@ class TaskManager (QtCore.QObject) :
         right= dist*np.sin(angle) # actually its left direction for robot arm
         dir_dif_angle = calRotationDegree(dir_r, dir_i)
 
+        # Heuristics :>
+        if (dist <= config["HEURISTICS_DIST"] and dir_dif_angle <= config["HEURISTICS_DIR"]):
+            return
+
         instList.append(Instruction('ROTATE', [(dir_dif_angle* config["DEGREE_PER_MM_ROTATE"])]))
         instList.append(Instruction('FORWARD', [(forward * config["DEGREE_PER_MM_FORWARD"])]))
-        instList.append(Instruction('RIGHT', [(forward * config["DEGREE_PER_MM_RIGHT"])]))
+        instList.append(Instruction('RIGHT', [-(forward * config["DEGREE_PER_MM_RIGHT"])]))
 
-        robot_obj.push_front_inst_lis(instList)
+        robot_obj.push_front_inst_list(instList)
 
 #Returns the domian of brick
 #   1 2

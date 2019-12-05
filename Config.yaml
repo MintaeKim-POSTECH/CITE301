@@ -74,6 +74,9 @@ COLOR_THRESHOLD: 88
 # Morphology Kernel Size (Default : 4)
 COLOR_MORPH_KERNEL_SIZE: 4
 
+HEURISTICS_DIST: 10
+HEURISTICS_DIR: 18
+
 # TODO: Experimental Decision
 # 1 Pixel : X mm
 MM_PER_PIXEL: 0.3
