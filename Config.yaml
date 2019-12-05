@@ -9,6 +9,10 @@ MAX_BUF_SIZE: 1024
 # Robot Number (Starts from 0)
 ROBOT_ARM_NUM: 0
 
+# Robot Arm Hue Value
+# Red : 4, Blue : 88
+ROBOT_ARM_HUE: 4
+
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
@@ -68,10 +72,6 @@ COLOR_SENSITIVITY: 8
 
 # RED : (4-101)
 # Blue :
-
-# Robot Arm Hue Value
-# Red : 4, Blue : 88
-ROBOT_ARM_HUE: 4
 
 # Color Threshold (HSV - Hue Blue:88, Red:101)
 COLOR_THRESHOLD: 101
