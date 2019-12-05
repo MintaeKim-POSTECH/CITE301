@@ -34,7 +34,7 @@ class Instruction :
             return ('RIGHT ' + str(self.args[0]))
         elif (self.inst_type == InstType.INST_ROTATE):
             return ('ROTATE ' + str(self.args[0]))
-        elif (self.inst_type == InstType.ARM):
+        elif (self.inst_type == InstType.INST_ARM):
             return ('ARM ' + str(self.args[0]) + ' ' + str(self.args[1]) + ' ' + str(self.args[2]) + ' ' + str(self.args[3]) + ' ' + str(self.args[4]))
         else:
             pass  # Not Reached
