@@ -78,7 +78,6 @@ class UpdatePositionClass (QtCore.QObject) :
 
             # Red - II
             elif robot_color_h > 180 - sensitivity:
-                print("case2")
                 lower_blue1 = np.array([robot_color_h, threshold, threshold])
                 upper_blue1 = np.array([180, 255, 255])
                 lower_blue2 = np.array([0, threshold, threshold])
@@ -88,7 +87,6 @@ class UpdatePositionClass (QtCore.QObject) :
 
             # Others :>
             else:
-                print("case3")
                 lower_blue1 = np.array([robot_color_h, threshold, threshold])
                 upper_blue1 = np.array([robot_color_h + sensitivity, 255, 255])
                 lower_blue2 = np.array([robot_color_h - sensitivity, threshold, threshold])

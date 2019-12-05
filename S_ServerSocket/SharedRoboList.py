@@ -60,6 +60,13 @@ class SharedRoboList(QtCore.QObject):
         # Lock that protects roboTerminated
         self.lock.release()
 
+        # WAIT until user starts
+        # Checking Whole Process State (Run / Stop)
+        self.monitor.acquire()
+        while (self.running == False):
+            self.monitor.wait()
+        self.monitor.release()
+
         # Reset Current Position & Direction Information
         im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
 

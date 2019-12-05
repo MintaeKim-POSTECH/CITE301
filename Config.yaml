@@ -7,7 +7,7 @@ MAX_BUF_SIZE: 1024
 
 # ---- Robot Arm Configuration ----
 # Robot Number (Starts from 0)
-ROBOT_ARM_NUM: 1
+ROBOT_ARM_NUM: 0
 
 # Robot Arm Hue Value
 # Red : 177, Blue : 88
