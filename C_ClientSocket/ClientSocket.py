@@ -21,11 +21,22 @@ def run_client() :
     infoDat = str(config["ROBOT_ARM_NUM"]) + " " + str(config["ROBOT_ARM_HUE"]) + " "
     infoDat += str(config["INIT_POS"][0]) + " " + str(config["INIT_POS"][1])
 
-    clientSock.sendall(infoDat.encode())
+    try :
+        clientSock.sendall(infoDat.encode())
+    except BrokenPipeError:
+        time.sleep(2)
+        print("Broken Pipe")
+        return
 
     # Client Flow 2 : Iteration with While Loop, Executing action for robot arm instructions
     while (True) :
-        recv_inst = clientSock.recv(config["MAX_BUF_SIZE"]).decode()
+        try :
+            recv_inst = clientSock.recv(config["MAX_BUF_SIZE"]).decode()
+        except BrokenPipeError:
+            time.sleep(2)
+            print ("Broken Pipe")
+            break
+
         recv_inst_tok = recv_inst.split(' ')
     
         if (recv_inst_tok[0] == 'ROTATE') :
@@ -50,7 +61,12 @@ def run_client() :
                 # robotArm.work([float(recv_inst_tok[1]),float(recv_inst_tok[2]),float(recv_inst_tok[3])], False)
 
         # Noticing Current Task is totally done.
-        clientSock.sendall("DONE".encode())
+        try :
+            clientSock.sendall("DONE".encode())
+        except BrokenPipeError:
+            time.sleep(2)
+            print ("Broken Pipe")
+            break
 
 if __name__ == "__main__" :
     run_client()

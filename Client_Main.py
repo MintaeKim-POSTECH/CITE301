@@ -25,5 +25,8 @@ if __name__ == "__main__" :
             time.sleep(2)
             print ("Time-Out (No Response)")
             continue
-
+        except BrokenPipeError:
+            time.sleep(2)
+            print ("Broken Pipe")
+            continue
         # TODO: Broken Pipe
