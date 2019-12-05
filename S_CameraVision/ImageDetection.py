@@ -135,11 +135,11 @@ class UpdatePositionClass (QtCore.QObject) :
                 cv2.circle(frame_bgr, (centerX, centerY), 10, (0, 0, 255), 10)
                 cv2.rectangle(frame_bgr, (x, y), (x + width, y + height), (0, 0, 255))
 
+            cv2.imshow('non-detected', frame_bgr)
             if (len(sticker_indices) == 3):
                 break
             else :
                 # Print Stickers
-                cv2.imshow('non-detected', frame_bgr)
                 print (len(sticker_indices))
                 time.sleep(0.5)
 
