@@ -6,7 +6,10 @@ import time
 # from C_RobotArm.RobotArmClient import armClient
 
 # Configurations
-config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
+try :
+    config = yaml.load(open("~/Desktop/CITE301/Config.yaml", 'r'), Loader=yaml.FullLoader)
+except :
+    config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
 def run_client() :
     clientSock = socket(AF_INET, SOCK_STREAM)

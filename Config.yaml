@@ -9,10 +9,6 @@ MAX_BUF_SIZE: 1024
 # Robot Number (Starts from 0)
 ROBOT_ARM_NUM: 0
 
-# Robot Arm Hue Value
-# Red : 177, Blue : 88
-ROBOT_ARM_HUE: 179
-
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
 ## GPIO[2] : Down-LEFT / GPIO[3] : Down-RIGHT
@@ -69,7 +65,15 @@ PROCESS_FRAME_INTERVAL: 10
 
 # Color Sensitivity (HSV - Hue)
 COLOR_SENSITIVITY: 8
-# Color Threshold (HSV - Hue Blue:88, Red:179)
+
+# RED : (4-101)
+# Blue :
+
+# Robot Arm Hue Value
+# Red : 4, Blue : 88
+ROBOT_ARM_HUE: 179
+
+# Color Threshold (HSV - Hue Blue:88, Red:101)
 COLOR_THRESHOLD: 88
 # Morphology Kernel Size (Default : 4)
 COLOR_MORPH_KERNEL_SIZE: 4
@@ -77,23 +81,25 @@ COLOR_MORPH_KERNEL_SIZE: 4
 HEURISTICS_DIST: 10
 HEURISTICS_DIR: 18
 
-# TODO: Experimental Decision
-# 1 Pixel : X mm
-MM_PER_PIXEL: 0.3
+# Experimental Decision
+# 1 Pixel : X mm (2705 : 2040 := 640 : 480 ==> X := 4.23)
+MM_PER_PIXEL: 4.23
+
+# TODO: CHECK
 # 1 MM : Y Degree (Wheel)
 DEGREE_PER_MM_FORWARD: 0.3
 DEGREE_PER_MM_RIGHT : 0.5
 # 1 Degree (Body) : Z Degree (Wheel)
 DEGREE_PER_ANGLE_ROTATION : 0.7
 
-# Distance between Center Position and Head Sticker (mm)
-CENTER_DIST_FROM_STICKER_MM: 7
+# Distance between Center Position and Head Sticker (mm) (Fin)
+CENTER_DIST_FROM_STICKER_MM: 33
 
-# Estimated Robot Size (mm) (Blocks Unabled)
-ROBOT_BODY_SIZE_MM: 150
+# Estimated Robot Size Diameter (mm) (Blocks Unabled)
+ROBOT_BODY_SIZE_MM: 530
 
 # Diameter of Minimun area for
-ROBOT_ROTATING_DIAMETER: 250
+ROBOT_ROTATING_DIAMETER: 600
 
 # Position of center of motor in arm
 ROBOT_MOTOR_POS: [0.0,0.0]
