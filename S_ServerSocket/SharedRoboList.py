@@ -68,7 +68,10 @@ class SharedRoboList(QtCore.QObject):
         self.monitor.release()
 
         # Reset Current Position & Direction Information
-        im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
+        if robot_arm_num == 0:
+            im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
+        else :
+            self.roboInfoList[robot_arm_num].setPos_position([1600, 1900, 0])
 
         # Push Initial Instructions based on Infos (Move to Initial Position)
         tm.pushInitialInstruction(self.roboInfoList[robot_arm_num])
@@ -150,8 +153,11 @@ class SharedRoboList(QtCore.QObject):
                 break
 
             # TODO: Implement Callibration
-            # ideal_pos = tm.getIdealPos(self.roboInfoList[robot_arm_num], next_instruction_obj )
-            im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
+            ideal_pos = tm.getIdealPos(self.roboInfoList[robot_arm_num], next_instruction_obj )
+            if (robot_arm_num == 0) :
+                im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
+            else :
+                self.roboInfoList[robot_arm_num].getPos_position(ideal_pos)
             # tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
 
             # For Testing Purpose
