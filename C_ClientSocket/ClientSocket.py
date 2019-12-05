@@ -3,7 +3,7 @@ from os.path import expanduser
 import yaml
 import time
 
-# from C_Motor.Car import Car
+from C_Motor.Car import Car
 # from C_RobotArm.RobotArmClient import armClient
 
 # Configurations
@@ -18,7 +18,7 @@ def run_client() :
     clientSock.connect((config["SERVER_IP_ADDR"], config["SERVER_PORT"]))
 
     # New Car Module
-    # car = Car()
+    car = Car()
 
     # robotArm=armClient(config["GPIO_ARM_DIRPINS"],config["GPIO_ARM_STPPINS"],config["ROBOTARM_MIN_ANGLES"],config["ROBOTARM_MAX_ANGLES"],config["GPIO_SERVO_PIN"])
 
@@ -46,13 +46,13 @@ def run_client() :
     
         if (recv_inst_tok[0] == 'ROTATE') :
             print ("rotate " + recv_inst_tok[1])
-            # car.rotate(float(recv_inst_tok[1]))
+            car.rotate(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'FORWARD') :
             print("forward " + recv_inst_tok[1])
-            # car.move_forward(float(recv_inst_tok[1]))
+            car.move_forward(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'RIGHT') :
             print("right " + recv_inst_tok[1])
-            # car.move_right(float(recv_inst_tok[1]))
+            car.move_right(float(recv_inst_tok[1]))
         elif (recv_inst_tok[0] == 'ARM') :
             # print("arm"+recv_inst_tok[4])
             # print("arm " + recv_inst_tok[1:4])
