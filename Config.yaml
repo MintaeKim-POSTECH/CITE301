@@ -7,7 +7,7 @@ MAX_BUF_SIZE: 1024
 
 # ---- Robot Arm Configuration ----
 # Robot Number (Starts from 0)
-ROBOT_ARM_NUM: 0
+ROBOT_ARM_NUM: 1
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
@@ -34,7 +34,7 @@ VEL_DEFAULT_MAX_ROTATION: 0.9
 
 # Fixed Initial Position (mm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
-INIT_POS: [500, 500]
+INIT_POS: [1900, 1500]
 
 # Distance between Center of Robot & Axis of Robot Arm
 ROBOTARM_L1 : 145
@@ -70,11 +70,11 @@ COLOR_SENSITIVITY: 8
 # Blue :
 
 # Robot Arm Hue Value
-# Red : 4, Blue : 88
-ROBOT_ARM_HUE: 4
+# Red : 4, Blue : 107
+ROBOT_ARM_HUE: 107
 
 # Color Threshold (HSV - Hue Blue:88, Red:101)
-COLOR_THRESHOLD: 101
+COLOR_THRESHOLD: 88
 # Morphology Kernel Size (Default : 4)
 COLOR_MORPH_KERNEL_SIZE: 4
 
