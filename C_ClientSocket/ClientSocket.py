@@ -1,4 +1,5 @@
 from socket import *
+from os.path import expanduser
 import yaml
 import time
 
@@ -6,8 +7,9 @@ import time
 # from C_RobotArm.RobotArmClient import armClient
 
 # Configurations
+home = expanduser("~")
 try :
-    config = yaml.load(open("~/Desktop/CITE301/Config.yaml", 'r'), Loader=yaml.FullLoader)
+    config = yaml.load(open(home + "/Desktop/CITE301/Config.yaml", 'r'), Loader=yaml.FullLoader)
 except :
     config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
