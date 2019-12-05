@@ -116,7 +116,7 @@ class UpdatePositionClass (QtCore.QObject) :
             img_result = cv2.bitwise_and(frame_hsv, frame_hsv, mask=img_mask)
 
             # Labeling - Clustering
-            numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(img_result)
+            numOfLabels, img_label, stats, centroids = cv2.connectedComponentsWithStats(img_mask)
 
             # Fetch Indices of Stickers
             sticker_indices = []
