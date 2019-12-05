@@ -9,8 +9,9 @@ MAX_BUF_SIZE: 1024
 # Robot Number (Starts from 0)
 ROBOT_ARM_NUM: 1
 
-# Color of Sticker for CV Detection (RGB)
-ROBOT_ARM_COLOR: [240, 0, 0]
+# Robot Arm Hue Value
+# Red : 177, Blue : 88
+ROBOT_ARM_HUE: 179
 
 # GPIO Pins
 ## GPIO[0] : Up-LEFT / GPIO[1] : Up-RIGHT
@@ -89,7 +90,10 @@ ROBOT_MOTOR_POS: [0.0,0.0]
 ROBOT_MOVING_POSTURE: [0.0,0.0]
 
 # Color Sensitivity (HSV - Hue)
-COLOR_SENSITIVITY: 25
+COLOR_SENSITIVITY: 8
+# Color Threshold (HSV - Hue)
+COLOR_THRESHOLD: 88
+
 # ---- Server Configuration ----
 
 # ---- GUI Configuration ----
