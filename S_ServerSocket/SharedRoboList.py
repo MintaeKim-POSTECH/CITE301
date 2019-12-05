@@ -157,9 +157,9 @@ class SharedRoboList(QtCore.QObject):
             ideal_pos = tm.getIdealPos(self.roboInfoList[robot_arm_num], next_instruction_obj )
             if robot_arm_num == 0:
                 im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
+                tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
             else :
                 self.roboInfoList[robot_arm_num].setPos_position(ideal_pos.getPos())
-            # tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
 
             # TODO: For Testing Purpose
             time.sleep(10)
