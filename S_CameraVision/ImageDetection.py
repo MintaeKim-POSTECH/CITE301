@@ -131,6 +131,9 @@ class UpdatePositionClass (QtCore.QObject) :
             if (len(sticker_indices) == 3):
                 break
             else :
+                # Print Stickers
+                cv2.imshow(frame_bgr)
+                print (len(sticker_indices))
                 time.sleep(0.5)
 
         cv2.imwrite('./S_CameraVision/Images_Box/Sticker/' + image_name, frame_bgr)
