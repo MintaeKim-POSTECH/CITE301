@@ -32,9 +32,9 @@ VEL_DEFAULT_MAX_FORWARD: 0.9
 VEL_DEFAULT_MAX_RIGHT: 0.9
 VEL_DEFAULT_MAX_ROTATION: 0.9
 
-# Fixed Initial Position (cm)
+# Fixed Initial Position (mm)
 ## Only for CITD III, Fixed Initial Position for Trajectory Seperation
-INIT_POS: [15.0, 0.0]
+INIT_POS: [500, 500]
 
 # Distance between Center of Robot & Axis of Robot Arm
 ROBOTARM_L1 : 145
@@ -71,10 +71,10 @@ COLOR_SENSITIVITY: 8
 
 # Robot Arm Hue Value
 # Red : 4, Blue : 88
-ROBOT_ARM_HUE: 179
+ROBOT_ARM_HUE: 4
 
 # Color Threshold (HSV - Hue Blue:88, Red:101)
-COLOR_THRESHOLD: 88
+COLOR_THRESHOLD: 101
 # Morphology Kernel Size (Default : 4)
 COLOR_MORPH_KERNEL_SIZE: 4
 
