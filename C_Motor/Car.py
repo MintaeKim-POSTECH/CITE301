@@ -2,6 +2,7 @@
 
 import threading
 import yaml
+from os.path import expanduser
 
 from C_Motor.Motor import Motor
 # from Motor import Motor
@@ -12,8 +13,9 @@ from C_Motor.Motor import Motor
 
 # Configurations
 # config = yaml.load(open("../Config.yaml", 'r'), Loader=yaml.FullLoader)
+home = expanduser("~")
 try :
-    config = yaml.load(open("~/Desktop/CITE301/Config.yaml", 'r'), Loader=yaml.FullLoader)
+    config = yaml.load(open(home + "/Desktop/CITE301/Config.yaml", 'r'), Loader=yaml.FullLoader)
 except :
     config = yaml.load(open("./Config.yaml", 'r'), Loader=yaml.FullLoader)
 
