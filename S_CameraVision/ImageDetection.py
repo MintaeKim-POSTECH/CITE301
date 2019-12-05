@@ -139,7 +139,7 @@ class UpdatePositionClass (QtCore.QObject) :
                 break
             else :
                 # Print Stickers
-                cv2.imshow(frame_bgr)
+                cv2.imshow('non-detected', frame_bgr)
                 print (len(sticker_indices))
                 time.sleep(0.5)
 
