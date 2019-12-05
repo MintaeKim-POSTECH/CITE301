@@ -207,7 +207,7 @@ class TaskManager (QtCore.QObject) :
         if (new_instruction.getInstType() == InstType.INST_RIGHT) :
             idealPos.setPos(np.array([new_instruction.getArgs()[0], 0.0,0.0]))
         elif (new_instruction.getInstType()== InstType.INST_FORWARD) :
-            idealPos.setPos(np.array( 0.0,[new_instruction.getArgs()[0], 0.0]))
+            idealPos.setPos(np.array([0.0,new_instruction.getArgs()[0], 0.0]))
         elif (new_instruction.getInstType()== InstType.INST_ROTATE) :
             idealPos.setDir(rotateVector(dir,-new_instruction.getArgs()[0]))
         idealPos.setPos(pos+rotateVector(idealPos.getPos(),angle))
@@ -263,9 +263,9 @@ def calPositionForRotation(pos):
 def rotateVector(dir,angle):
     ret=np.array([dir[0],dir[1]])
     angle=angle*np.pi/180
-    cos=np.cos(angle)
-    sin=np.sin(angle)
-    rotationMatrix=np.array([cos,-sin],[sin,cos])
+    cos1=np.cos(angle)
+    sin1=np.sin(angle)
+    rotationMatrix=np.array([[cos1,-sin1],[sin1,cos1]])
     ret=np.dot(ret,rotationMatrix)
     return np.array([ret[0],ret[1],dir[2]])
 
