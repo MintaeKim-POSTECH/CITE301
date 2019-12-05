@@ -23,7 +23,6 @@ class TaskManager (QtCore.QObject) :
     def pushInitialInstruction(self, robot_obj):
         init_instList = []
 
-        '''
         # 100 mm
         init_instList.append(Instruction('FORWARD', [1000]))
         init_instList.append(Instruction('FORWARD', [-1000]))
@@ -43,6 +42,8 @@ class TaskManager (QtCore.QObject) :
         init_instList.append(Instruction('FORWARD',[init_pos[1]-cur_pos[1]]))
         init_instList.append(Instruction('RIGHT', [init_pos[0] - cur_pos[0]]))
         robot_obj.push_back_inst_list(init_instList)
+        
+        '''
 
         # Update of Robot Information (While Connection)
         self.updated_robot_info_conn.emit(robot_obj)
@@ -55,6 +56,7 @@ class TaskManager (QtCore.QObject) :
         center = self.brickListManager.srcCurrentLayer.center
         radius = self.brickListManager.dstCurrentLayer.getRadius()
         dirX = 1.0
+        '''
         if (robot_obj.isQueueEmpty() == True) :
             # Push new Instructions for each robot_obj phase
             if(robot_obj.phase==RobotPhase.STOP):
@@ -180,7 +182,8 @@ class TaskManager (QtCore.QObject) :
                 pass
 
             robot_obj.push_back_inst_list(instList)
-
+            
+        '''
         # Pop_front instruction
         robot_obj.pop_inst()
 

@@ -154,7 +154,7 @@ class SharedRoboList(QtCore.QObject):
             im_pos.updatePosition(self.roboInfoList[robot_arm_num], im)
             # tm.callibrate(self.roboInfoList[robot_arm_num], ideal_pos)
 
-            # For Testing Purpose
+            # TODO: For Testing Purpose
             time.sleep(10)
 
     def isRunning(self, robot_num_new):
