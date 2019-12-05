@@ -18,7 +18,7 @@ def connection_handler(conn, addr, tm, im, im_pos, robot_status):
     # Server Flow 1: First line is the Robot Arm Information info
     recv_info = conn.recv(config["MAX_BUF_SIZE"]).decode().split(' ')
     robot_arm_num = int(recv_info[0])
-    robot_arm_hue = float(recv_info[1])
+    robot_arm_hue = int(recv_info[1])
     robot_arm_init_pos = [float(recv_info[2]), float(recv_info[3])]
 
     # Server Flow 2: Actions for Robo_arms
