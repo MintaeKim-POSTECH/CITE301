@@ -2,7 +2,7 @@
 # Cotrolling with A4988 and Rasberry Pi 3 B
 
 import sys
-# import RPi.GPIO as gpio  # https://pypi.python.org/pypi/RPi.GPIO more info
+import RPi.GPIO as gpio  # https://pypi.python.org/pypi/RPi.GPIO more info
 import time
 import math
 
