@@ -94,6 +94,13 @@ class UpdatePositionClass (QtCore.QObject) :
                 lower_blue3 = np.array([robot_color_h - sensitivity, threshold, threshold])
                 upper_blue3 = np.array([robot_color_h, 255, 255])
 
+            print (lower_blue1)
+            print (upper_blue1)
+            print (lower_blue2)
+            print(upper_blue2)
+            print(lower_blue3)
+            print(upper_blue3)
+
             img_mask1 = cv2.inRange(frame_hsv, lower_blue1, upper_blue1)
             img_mask2 = cv2.inRange(frame_hsv, lower_blue2, upper_blue2)
             img_mask3 = cv2.inRange(frame_hsv, lower_blue3, upper_blue3)
